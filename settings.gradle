@@ -1,0 +1,17 @@
+pluginManagement {
+    resolutionStrategy {
+        eachPlugin {
+            if (requested.id.id == "kotlinx-serialization") {
+                useModule("org.jetbrains.kotlin:kotlin-serialization:${requested.version}")
+            }
+        }
+    }
+}
+
+include ':app', ':shared'
+rootProject.name='PartyApp'
+
+enableFeaturePreview("GRADLE_METADATA")
+
+include ':library'
+project(':library').projectDir = new File(settingsDir, '../mvvm-clean-arch-library/library')

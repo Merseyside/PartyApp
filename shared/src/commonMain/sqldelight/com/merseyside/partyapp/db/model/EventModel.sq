@@ -1,0 +1,28 @@
+import com.merseyside.partyapp.data.db.event.MembersModel;
+
+CREATE TABLE EventModel(
+    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    name TEXT NOT NULL,
+    members TEXT as MembersModel NOT NULL,
+    timestamp INTEGER NOT NULL
+);
+
+insertItem:
+INSERT INTO
+EventModel(name, members, timestamp)
+VALUES(?, ?, ?);
+
+changeItem:
+REPLACE INTO
+EventModel(id, name, members, timestamp)
+VALUES(?, ?, ?, ?);
+
+selectAll:
+SELECT *
+FROM EventModel;
+
+deleteItem:
+DELETE
+FROM EventModel
+WHERE id = ?;
+
