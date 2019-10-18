@@ -1,3 +1,4 @@
+@file:JvmName("Utils")
 package com.merseyside.partyapp.utils
 
 import android.annotation.SuppressLint
@@ -7,7 +8,7 @@ import java.util.*
 @SuppressLint("SimpleDateFormat")
 fun getDateTime(timestamp: Long): String? {
     return try {
-        val sdf = SimpleDateFormat("DD MMM")
+        val sdf = SimpleDateFormat("dd MMM")
         val netDate = Date(timestamp)
         sdf.format(netDate)
     } catch (e: Exception) {

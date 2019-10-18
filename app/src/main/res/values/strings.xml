@@ -7,4 +7,21 @@
     <string name="event_list_title">Events</string>
 
     <string name="no_events">Add your first party\nby click + button</string>
+    <string name="new_event_title">New event</string>
+    <string name="save">Save</string>
+
+    <string name="event_title">Event name</string>
+    <string name="members">Members</string>
+    <string name="event_title_hint">Type new event name</string>
+    <string name="members_hint">Enter event members</string>
+    <string name="notes_hint">Notes</string>
+
+    <string name="empty_title_error">Please, fill event title correctly</string>
+    <string name="members_error">Add at least two members</string>
+
+    <string name="in_progress">In Progress</string>
+    <string name="completed">Completed</string>
+
+    <string name="member_count">Member count: </string>
+    <string name="date">Date: </string>
 </resources>

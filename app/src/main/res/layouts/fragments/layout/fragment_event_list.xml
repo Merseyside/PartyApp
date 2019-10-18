@@ -17,7 +17,11 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:paddingTop="@dimen/small_spacing"
+            android:paddingStart="@dimen/normal_spacing"
+            android:paddingEnd="@dimen/normal_spacing"
+            android:paddingBottom="@dimen/small_spacing">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/event_list"
@@ -45,12 +49,12 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
             android:layout_margin="@dimen/normal_spacing"
-            app:srcCompat="@drawable/ic_add" />
+            app:srcCompat="@drawable/ic_add"
+            android:onClick="@{view -> viewModel.onAddButtonClick()}"/>
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 </layout>

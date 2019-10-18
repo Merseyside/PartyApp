@@ -2,6 +2,7 @@ package com.merseyside.partyapp.data.entity.mapper
 
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.MembersModel
+import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.db.model.EventModel
 import kotlinx.serialization.ImplicitReflectionSerializer
 import kotlinx.serialization.json.Json
@@ -12,9 +13,20 @@ class EventDataMapper {
 
     fun transform(eventModels: List<EventModel>): List<Event> {
         return eventModels.map {
-            it.let {
-                Event(it.id, it.name, it.members.members, it.timestamp)
-            }
+            transform(it)
+        }
+    }
+
+    fun transform(eventModel: EventModel): Event {
+        return eventModel.let {
+            Event(
+                it.id,
+                it.name,
+                it.members.members.toMutableList(),
+                it.notes,
+                Status.getStatusByString(it.status) ?: throw IllegalArgumentException(),
+                it.timestamp
+            )
         }
     }
 

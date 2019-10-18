@@ -17,20 +17,14 @@ class EventListModule(private val fragment: BaseFragment) {
     @Provides
     internal fun eventListViewModelProvider(
         router: Router,
-        addEventUseCase: AddEventInteractor,
         getEventsUseCase: GetEventsInteractor
     ): ViewModelProvider.Factory {
-        return EventListViewModelProviderFactory(router, addEventUseCase, getEventsUseCase)
+        return EventListViewModelProviderFactory(router, getEventsUseCase)
     }
 
     @Provides
     internal fun provideEventListViewModel(factory: ViewModelProvider.Factory): EventListViewModel {
         return ViewModelProviders.of(fragment, factory).get(EventListViewModel::class.java)
-    }
-
-    @Provides
-    internal fun provideAddEventInteractor(): AddEventInteractor {
-        return AddEventInteractor()
     }
 
     @Provides
@@ -40,13 +34,12 @@ class EventListModule(private val fragment: BaseFragment) {
 
     class EventListViewModelProviderFactory(
         private val router: Router,
-        private val addEventUseCase: AddEventInteractor,
         private val getEventsUseCase: GetEventsInteractor
     ) : ViewModelProvider.Factory {
 
         override fun <T : ViewModel> create(modelClass: Class<T>): T {
             if (modelClass == EventListViewModel::class.java) {
-                return EventListViewModel(router, addEventUseCase, getEventsUseCase) as T
+                return EventListViewModel(router, getEventsUseCase) as T
             }
             throw IllegalArgumentException("Unknown class title")
         }

@@ -1,12 +1,15 @@
 package com.merseyside.partyapp.data.db.event
 
+import com.merseyside.partyapp.data.entity.Status
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Event(
     val id: Long,
-    val name: String,
-    val members: List<Member>,
+    var name: String,
+    var members: MutableList<Member>,
+    var notes: String,
+    var status: Status,
     val timestamp: Long
 ) {
     override fun equals(other: Any?): Boolean {

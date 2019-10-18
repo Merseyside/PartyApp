@@ -14,6 +14,10 @@ import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventL
 
 class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListViewModel>() {
 
+    override fun hasTitleBackButton(): Boolean {
+        return false
+    }
+
     private val adapter = EventAdapter()
 
     override fun setBindingVariable(): Int {

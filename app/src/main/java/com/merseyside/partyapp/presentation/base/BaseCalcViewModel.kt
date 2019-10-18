@@ -16,7 +16,7 @@ abstract class BaseCalcViewModel(private val router: Router? = null) : BaseViewM
         return context.getString(id)
     }
 
-    fun back() {
+    fun goBack() {
         router?.exit()
     }
 

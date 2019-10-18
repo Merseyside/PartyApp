@@ -4,22 +4,29 @@ CREATE TABLE EventModel(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
     members TEXT as MembersModel NOT NULL,
+    notes TEXT NOT NULL,
+    status TEXT NOT NULL,
     timestamp INTEGER NOT NULL
 );
 
 insertItem:
 INSERT INTO
-EventModel(name, members, timestamp)
-VALUES(?, ?, ?);
+EventModel(name, members, notes, status, timestamp)
+VALUES(?, ?, ?, ?, ?);
 
 changeItem:
 REPLACE INTO
-EventModel(id, name, members, timestamp)
-VALUES(?, ?, ?, ?);
+EventModel(id, name, members, notes, status, timestamp)
+VALUES(?, ?, ?, ?, ?, ?);
 
 selectAll:
 SELECT *
 FROM EventModel;
+
+selectById:
+SELECT *
+FROM EventModel
+WHERE id = ?;
 
 deleteItem:
 DELETE

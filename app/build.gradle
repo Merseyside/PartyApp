@@ -70,6 +70,8 @@ ext {
     cicerone = '5.0.0'
 
     mvvmCleanArchLibrary = '1.29'
+
+    chips = '1.0.8'
 }
 
 dependencies {
@@ -90,6 +92,8 @@ dependencies {
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
+
+    implementation "com.github.pchmn:MaterialChipsInput:$chips"
 
     implementation "com.google.dagger:dagger:$dagger2"
     kapt "com.google.dagger:dagger-compiler:$dagger2Compiler"
