@@ -4,7 +4,7 @@ import com.merseyside.partyapp.data.db.event.Event
 
 interface EventRepository {
 
-    suspend fun addEvent(name: String, members: List<String>, notes: String): Boolean
+    suspend fun addEvent(id: Long? = null, name: String, memberNames: List<String>?, notes: String): Boolean
 
     suspend fun removeEvent(id: Long): Boolean
 
@@ -12,4 +12,5 @@ interface EventRepository {
 
     suspend fun closeEvent(id: Long): Boolean
 
+    suspend fun getEvent(id: Long): Event
 }

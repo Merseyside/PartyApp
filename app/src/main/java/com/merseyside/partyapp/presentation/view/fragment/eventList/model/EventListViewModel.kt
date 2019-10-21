@@ -38,6 +38,10 @@ class EventListViewModel(
         router.navigateTo(Screens.AddEventScreen())
     }
 
+    fun onEventClick() {
+        router.navigateTo(Screens.ItemListScreen())
+    }
+
     companion object {
         private const val TAG = "EventListViewModel"
     }

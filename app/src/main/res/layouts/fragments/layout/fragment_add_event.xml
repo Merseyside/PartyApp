@@ -34,25 +34,6 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/members"
-                android:layout_marginTop="@dimen/normal_spacing"/>
-
-            <com.pchmn.materialchips.ChipsInput
-                android:id="@+id/chips"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:textColor="?attr/colorOnBackground"
-                app:chip_backgroundColor="?attr/colorPrimary"
-                app:chip_hasAvatarIcon="true"
-                app:chip_deletable="true"
-                app:chip_labelColor="@color/white"
-                app:chip_deleteIconColor="?attr/colorOnError"
-                app:members="@={viewModel.membersObservable}" />
-
-
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -71,6 +52,24 @@
                     android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
 
             </com.google.android.material.textfield.TextInputLayout>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/add_members"
+                android:layout_marginTop="@dimen/normal_spacing"/>
+
+            <com.pchmn.materialchips.ChipsInput
+                android:id="@+id/chips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:textColor="?attr/colorOnBackground"
+                app:chip_backgroundColor="?attr/colorPrimary"
+                app:chip_hasAvatarIcon="true"
+                app:chip_deletable="true"
+                app:chip_labelColor="@color/white"
+                app:chip_deleteIconColor="?attr/colorOnError"
+                app:members="@={viewModel.membersObservable}" />
         </LinearLayout>
 
         <Button

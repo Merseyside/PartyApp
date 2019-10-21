@@ -58,6 +58,11 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     }
 
     private fun doLayout() {
+        if (arguments != null && arguments!!.containsKey(KEY_EDIT_ID)) {
+            val id = arguments!!.getLong(KEY_EDIT_ID)
+
+            viewModel.initWithEventId(id)
+        }
 
     }
 
@@ -65,8 +70,10 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     companion object {
         private const val TAG = "AddEventFragment"
 
-         fun newInstance(): AddEventFragment {
-             return AddEventFragment()
-         }
+        const val KEY_EDIT_ID = "action"
+
+        fun newInstance(): AddEventFragment {
+            return AddEventFragment()
+        }
     }
 }

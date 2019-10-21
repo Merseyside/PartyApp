@@ -2,6 +2,7 @@ package com.merseyside.partyapp.presentation.view.fragment.eventList.model
 
 import androidx.annotation.DrawableRes
 import androidx.databinding.Bindable
+import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -25,6 +26,10 @@ class EventItemViewModel(private var event: Event) : BaseComparableAdapterViewMo
 
     override fun setItem(item: Event) {
         event = item
+
+        notifyPropertyChanged(BR.name)
+        notifyPropertyChanged(BR.memberInfo)
+        notifyPropertyChanged(BR.status)
     }
 
     override fun areItemsTheSame(obj: Event): Boolean {
@@ -87,6 +92,10 @@ class EventItemViewModel(private var event: Event) : BaseComparableAdapterViewMo
                 R.attr.colorPrimary
             }
         }
+    }
+
+    companion object {
+        private const val TAG = "EventItemViewModel"
     }
 
 }

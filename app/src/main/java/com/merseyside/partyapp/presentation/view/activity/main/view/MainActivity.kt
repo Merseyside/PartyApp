@@ -3,6 +3,7 @@ package com.merseyside.partyapp.presentation.view.activity.main.view
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.databinding.ActivityMainBinding
@@ -10,6 +11,7 @@ import com.merseyside.partyapp.presentation.base.BaseCalcActivity
 import com.merseyside.partyapp.presentation.di.component.DaggerMainComponent
 import com.merseyside.partyapp.presentation.di.module.MainModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.MainViewModel
+import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
@@ -59,6 +61,8 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     override fun onCreate(savedInstance: Bundle?) {
         super.onCreate(savedInstance)
         setSupportActionBar(binding.toolbar)
+
+        ViewModelProviders.of(this).get(SharedViewModel::class.java)
 
         if (savedInstance == null) {
             init()

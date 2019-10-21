@@ -10,8 +10,8 @@ class AddEventInteractor : CoroutineUseCase<Boolean, AddEventInteractor.Params>(
     val repository: EventRepository by eventComponent.instance()
 
     override suspend fun executeOnBackground(params: Params?): Boolean {
-        return repository.addEvent(params!!.name, params.memberNames, params.notes)
+        return repository.addEvent(params!!.id, params.name, params.memberNames, params.notes)
     }
 
-    data class Params(val name: String, val memberNames: List<String>, val notes: String)
+    data class Params(val id: Long? = null, val name: String, val memberNames: List<String>?, val notes: String)
 }

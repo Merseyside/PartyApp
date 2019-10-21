@@ -14,7 +14,7 @@ internal val eventModule = Kodein.Module("event") {
     bind<EventDao>() with singleton { EventDao( instance() ) }
 
     bind<EventRepository>() with singleton {
-        EventRepositoryImpl()
+        EventRepositoryImpl(instance())
     }
 }
 
