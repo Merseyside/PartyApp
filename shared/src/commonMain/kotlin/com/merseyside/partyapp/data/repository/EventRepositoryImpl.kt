@@ -16,7 +16,6 @@ class EventRepositoryImpl(private val eventDao: EventDao) : EventRepository {
         return true
     }
 
-
     override suspend fun addEvent(id: Long?, name: String, memberNames: List<String>?, notes: String): Boolean {
         if (id == null) {
             eventDao.insert(name, memberNames!!, notes)

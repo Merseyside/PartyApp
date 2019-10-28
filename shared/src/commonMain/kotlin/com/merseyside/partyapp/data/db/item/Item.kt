@@ -6,6 +6,7 @@ data class Item(
     val name: String,
     val description: String,
     val price: Long,
+    val payMember: MemberItemInfo,
     val membersInfo: List<MemberItemInfo>,
     val timestamp: Long
 ) {
@@ -20,6 +21,7 @@ data class Item(
         if (name != other.name) return false
         if (description != other.description) return false
         if (price != other.price) return false
+        if (payMember != other.payMember) return false
         if (membersInfo != other.membersInfo) return false
         if (timestamp != other.timestamp) return false
 
@@ -32,6 +34,7 @@ data class Item(
         result = 31 * result + name.hashCode()
         result = 31 * result + description.hashCode()
         result = 31 * result + price.hashCode()
+        result = 31 * result + payMember.hashCode()
         result = 31 * result + membersInfo.hashCode()
         result = 31 * result + timestamp.hashCode()
         return result

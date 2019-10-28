@@ -6,7 +6,7 @@ import androidx.databinding.InverseBindingListener
 import com.pchmn.materialchips.ChipsInput
 import com.pchmn.materialchips.model.ChipInterface
 
-@BindingAdapter(value = ["membersAttrChanged"]) // AttrChanged required postfix
+@BindingAdapter(value = ["memberNamesAttrChanged"]) // AttrChanged required postfix
 fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
     if (listener != null) {
        view.addChipsListener(object: ChipsInput.ChipsListener {
@@ -27,7 +27,7 @@ fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
     }
 }
 
-@BindingAdapter("app:members")
+@BindingAdapter("app:memberNames")
 fun setMembers(chipView: ChipsInput, members: List<String>?) {
     members?.forEach {
         chipView.addChip(it, "kek")
@@ -35,7 +35,7 @@ fun setMembers(chipView: ChipsInput, members: List<String>?) {
 }
 
 
-@InverseBindingAdapter(attribute = "app:members")
+@InverseBindingAdapter(attribute = "app:memberNames")
 fun getMembers(view: ChipsInput): List<String> {
-    return view.selectedChipList.map { it.label }
+    return view.allChips.map { it.label }
 }

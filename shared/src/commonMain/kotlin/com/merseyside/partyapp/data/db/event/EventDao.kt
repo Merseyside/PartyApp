@@ -3,6 +3,7 @@ package com.merseyside.partyapp.data.db.event
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.data.entity.mapper.EventDataMapper
+import com.merseyside.partyapp.utils.generateId
 import com.merseyside.partyapp.utils.getTimestamp
 
 class EventDao(database: CalcDatabase) {
@@ -14,7 +15,7 @@ class EventDao(database: CalcDatabase) {
     internal fun insert(name: String, memberNames: List<String>, notes: String) {
 
         val members = memberNames.map {
-            Member(it)
+            Member(generateId(), it)
         }
 
         val membersModel = MembersModel(members)
@@ -33,7 +34,7 @@ class EventDao(database: CalcDatabase) {
         val event = getEventById(id)
 
         name?.let {event.name = name}
-        memberNames?.let { memberNames.map { event.members.add( Member(it) )}}
+        memberNames?.let { memberNames.map { event.members.add( Member(it, generateId() ) )}}
         notes?.let {event.notes = notes}
         status?.let { event.status = status }
 

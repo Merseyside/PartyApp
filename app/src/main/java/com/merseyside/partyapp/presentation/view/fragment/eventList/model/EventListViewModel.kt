@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.eventList.model
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.domain.interactor.GetEventsInteractor
@@ -25,6 +26,8 @@ class EventListViewModel(
         getEventsUseCase.execute(
             onComplete = {
                 eventsVisibility.set(it.isNotEmpty())
+
+                Log.d(TAG, it.toString())
 
                 eventsContainer.set(it)
             },

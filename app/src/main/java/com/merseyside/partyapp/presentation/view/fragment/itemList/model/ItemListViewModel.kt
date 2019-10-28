@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.itemList.model
 
+import android.util.Log
 import androidx.databinding.ObservableField
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.domain.interactor.GetItemsByEventIdInteractor
@@ -26,8 +27,12 @@ class ItemListViewModel(
         router.navigateTo(Screens.EditEventScreen(id))
     }
 
-    fun onAddButtonClick() {
+    fun navigateToEditItemScreen() {
+        router.navigateTo(Screens.EditItemScreen())
+    }
 
+    fun onAddButtonClick() {
+        router.navigateTo(Screens.AddItemScreen())
     }
 
     fun getItemsById(id: Long) {
@@ -36,11 +41,17 @@ class ItemListViewModel(
             onComplete = {
                 itemsVisibility.set(it.isNotEmpty())
 
+                Log.d(TAG, it.toString())
+
                 itemsContainer.set(it)
             },
             onError = {
                 showErrorMsg(errorMsgCreator.createErrorMsg(it))
             }
         )
+    }
+
+    companion object {
+        private const val TAG = "ItemListViewModel"
     }
 }

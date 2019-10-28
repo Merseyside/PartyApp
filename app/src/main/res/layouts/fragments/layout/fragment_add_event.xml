@@ -9,78 +9,93 @@
             type="com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel" />
     </data>
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/normal_spacing">
+            android:layout_height="match_parent">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextInputLayout"
-                android:layout_marginTop="@dimen/normal_spacing"
-                android:hint="@string/event_title">
+                android:padding="@dimen/normal_spacing">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={viewModel.eventNameObservable}"
-                    style="@style/TextInputEditText"/>
+                    style="@style/TextInputLayout"
+                    android:layout_marginTop="@dimen/normal_spacing"
+                    android:hint="@string/event_title"
+                    android:background="@null">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@={viewModel.eventNameObservable}"
+                        style="@style/TextInputEditText"
+                        android:background="@null"/>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/TextInputLayout"
-                android:layout_marginTop="@dimen/normal_spacing"
-                android:hint="@string/notes_hint">
+                </com.google.android.material.textfield.TextInputLayout>
 
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionGo"
-                    android:text="@={viewModel.notesObservable}"
-                    android:minLines="5"
-                    android:gravity="top|start"
-                    style="@style/TextInputEditText"
-                    android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
+                    style="@style/TextInputLayout"
+                    android:layout_marginTop="@dimen/normal_spacing"
+                    android:hint="@string/notes_hint">
 
-            </com.google.android.material.textfield.TextInputLayout>
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:imeOptions="actionGo"
+                        android:text="@={viewModel.notesObservable}"
+                        android:minLines="5"
+                        android:gravity="top|start"
+                        style="@style/TextInputEditText"
+                        android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/add_members"
-                android:layout_marginTop="@dimen/normal_spacing"/>
+                </com.google.android.material.textfield.TextInputLayout>
 
-            <com.pchmn.materialchips.ChipsInput
-                android:id="@+id/chips"
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="#DFDFDF"
+                    android:padding="@dimen/small_spacing">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/add_members"
+                        android:layout_marginTop="@dimen/small_spacing"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                    <com.pchmn.materialchips.ChipsInput
+                        android:id="@+id/chips"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:textColor="?attr/colorOnBackground"
+                        app:showChipDetailed="false"
+                        app:chip_backgroundColor="?attr/colorPrimary"
+                        app:chip_hasAvatarIcon="true"
+                        app:chip_deletable="true"
+                        app:chip_labelColor="@color/white"
+                        app:chip_deleteIconColor="?attr/colorOnError"
+                        app:memberNames="@={viewModel.membersObservable}" />
+
+                </LinearLayout>
+            </LinearLayout>
+
+            <Button
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:textColor="?attr/colorOnBackground"
-                app:chip_backgroundColor="?attr/colorPrimary"
-                app:chip_hasAvatarIcon="true"
-                app:chip_deletable="true"
-                app:chip_labelColor="@color/white"
-                app:chip_deleteIconColor="?attr/colorOnError"
-                app:members="@={viewModel.membersObservable}" />
-        </LinearLayout>
-
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/normal_spacing"
-            android:onClick="@{view -> viewModel.onSaveClicked()}"/>
+                android:text="@string/save"
+                android:layout_alignParentBottom="true"
+                android:layout_margin="@dimen/normal_spacing"
+                android:onClick="@{view -> viewModel.onSaveClick()}"/>
 
 
-    </RelativeLayout>
+        </RelativeLayout>
 
 </layout>

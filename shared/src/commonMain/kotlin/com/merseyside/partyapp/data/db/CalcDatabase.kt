@@ -1,6 +1,7 @@
 package com.merseyside.partyapp.data.db
 
 import com.merseyside.partyapp.data.db.event.MembersModel
+import com.merseyside.partyapp.data.db.item.MemberItemInfo
 import com.merseyside.partyapp.data.entity.mapper.EventDataMapper
 import com.merseyside.partyapp.data.entity.mapper.ItemDataMapper
 import com.merseyside.partyapp.db.model.EventModel
@@ -25,7 +26,7 @@ fun createDatabase(driver: SqlDriver): CalcDatabase {
         }
     }
 
-    val membersItemInfoAdapter = object : ColumnAdapter<com.merseyside.partyapp.data.db.item.MembersModel, String> {
+    val membersModelAdapter = object : ColumnAdapter<com.merseyside.partyapp.data.db.item.MembersModel, String> {
         override fun decode(databaseValue: String): com.merseyside.partyapp.data.db.item.MembersModel {
             return itemDataMapper.strToMembers(databaseValue)
         }
@@ -35,11 +36,25 @@ fun createDatabase(driver: SqlDriver): CalcDatabase {
         }
     }
 
+    val memberItemInfoAdapter = object : ColumnAdapter<MemberItemInfo, String> {
+        override fun decode(databaseValue: String): MemberItemInfo {
+            return itemDataMapper.strToMemberItemInfo(databaseValue)
+        }
+
+        override fun encode(value: MemberItemInfo): String {
+            return itemDataMapper.memberItemInfoToStr(value)
+        }
+    }
+
+
+
     return CalcDatabase(
         driver,
         EventModelAdapter = EventModel.Adapter(
             membersAdapter = membersAdapter
         ), ItemModelAdapter = ItemModel.Adapter(
-            memberModelAdapter = membersItemInfoAdapter
-        ))
+            memberModelAdapter = membersModelAdapter,
+            payMemberAdapter = memberItemInfoAdapter
+        )
+    )
 }

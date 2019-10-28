@@ -10,13 +10,19 @@ class ItemRepositoryImpl(
 ) : ItemRepository {
 
     override suspend fun addItem(
+        id: Long?,
         eventId: Long,
         name: String,
         description: String,
         price: Long,
+        payMember: MemberItemInfo,
         membersInfo: List<MemberItemInfo>
     ): Boolean {
-        itemDao.insertItem(eventId, name, description, price, membersInfo)
+        if (id == null) {
+            itemDao.insertItem(eventId, name, description, price, payMember, membersInfo)
+        } else {
+            itemDao.changeItem(id, name, description, price, payMember, membersInfo)
+        }
 
         return true
     }

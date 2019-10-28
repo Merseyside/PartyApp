@@ -41,7 +41,7 @@ class AddEventViewModel(
         getEventByIdUseCase.cancel()
     }
 
-    fun onSaveClicked() {
+    fun onSaveClick() {
         Log.d(TAG, "${eventNameObservable.get()}")
 
         if (eventNameObservable.get().isNullOrEmpty()) {

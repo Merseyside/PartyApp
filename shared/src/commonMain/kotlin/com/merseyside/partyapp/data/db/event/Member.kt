@@ -1,12 +1,13 @@
 package com.merseyside.partyapp.data.db.event
 
-import com.merseyside.partyapp.utils.generateId
+import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Member(
-    val name: String
-) {
+open class Member(
+    @SerialName("memberId")
+    open val id: String,
 
-    val id: Long = generateId()
-}
+    @SerialName("memberName")
+    open val name: String
+)

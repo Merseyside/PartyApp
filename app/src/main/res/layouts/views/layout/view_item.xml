@@ -2,6 +2,7 @@
 <layout
     xmlns:android="http://schemas.android.com/apk/res/android">
     <data>
+        <import type="android.view.View"/>
         <variable
             name="obj"
             type="com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemViewModel" />
@@ -11,14 +12,17 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/small_spacing">
+        android:layout_marginTop="@dimen/small_spacing"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{view -> obj.onItemClick()}">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            android:text="wqer"
+            android:text="@{obj.title}"
             android:layout_toStartOf="@id/date"
             android:ellipsize="marquee"/>
 
@@ -26,13 +30,23 @@
             android:id="@+id/price"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/title"/>
+            android:layout_below="@+id/title"
+            android:text="@{obj.price}"/>
 
         <TextView
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"/>
+            android:layout_alignParentEnd="true"
+            android:text="@{obj.date}"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/transparent_grey"
+            android:layout_below="@id/price"
+            android:layout_marginTop="@dimen/small_spacing"
+            android:visibility="@{obj.last ? View.GONE : View.VISIBLE}"/>
 
     </RelativeLayout>
 

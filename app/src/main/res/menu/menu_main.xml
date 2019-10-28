@@ -4,6 +4,7 @@
     tools:context="com.merseyside.partyapp.presentation.view.activity.main.view.MainActivity" >
     <item android:id="@+id/action_edit"
         android:title="@string/action_edit"
+        android:icon="@drawable/ic_edit"
         android:orderInCategory="100"
-        app:showAsAction="never" />
+        app:showAsAction="always" />
 </menu>

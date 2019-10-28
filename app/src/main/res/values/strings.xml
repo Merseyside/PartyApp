@@ -5,6 +5,7 @@
     <string name="unknown_error">Unknown error</string>
 
     <string name="event_list_title">Events</string>
+    <string name="add_items_title">Add item</string>
 
     <string name="no_events">Add your first party\nby click + button</string>
     <string name="no_items">Nothing here yet. Add new item\nby click + button</string>
@@ -13,12 +14,17 @@
 
     <string name="event_title">Event name</string>
     <string name="add_members">Add members</string>
-    <string name="event_title_hint">Type new event name</string>
-    <string name="members_hint">Enter event members</string>
     <string name="notes_hint">Notes</string>
+
+    <string name="item_title">Item name</string>
+    <string name="item_description">Item description</string>
+    <string name="item_total_price">Total price</string>
 
     <string name="empty_title_error">Please, fill event title correctly</string>
     <string name="members_error">Add at least two members</string>
+    <string name="name_error_msg">Name field can not be empty</string>
+    <string name="price_error_msg">Please, fill price field correctly</string>
+    <string name="members_error_msg">Please, choose at least one member</string>
 
     <string name="in_progress">In Progress</string>
     <string name="completed">Completed</string>
@@ -28,4 +34,7 @@
     <string name="items">Items</string>
 
     <string name="action_edit">Edit</string>
+
+
+
 </resources>

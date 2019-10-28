@@ -6,10 +6,12 @@ import com.merseyside.partyapp.data.db.item.MemberItemInfo
 interface ItemRepository {
 
     suspend fun addItem(
+        id: Long?,
         eventId: Long,
         name: String,
         description: String,
         price: Long,
+        payMember: MemberItemInfo,
         membersInfo: List<MemberItemInfo>
     ): Boolean
 

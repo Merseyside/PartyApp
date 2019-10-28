@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.merseyside.partyapp.presentation.view.fragment.addItem.model.AddItemViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/normal_spacing">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextInputLayout"
+                android:layout_marginTop="@dimen/normal_spacing"
+                android:hint="@string/item_title">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={viewModel.name}"
+                    style="@style/TextInputEditText" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextInputLayout"
+                android:gravity="top|start"
+                android:layout_marginTop="@dimen/normal_spacing"
+                android:hint="@string/item_description">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={viewModel.description}"
+                    style="@style/TextInputEditText"
+                    android:maxLines="2"
+                    android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                style="@style/TextInputLayout"
+                android:layout_marginTop="@dimen/normal_spacing"
+                android:hint="@string/item_total_price">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@={viewModel.price}"
+                    android:inputType="numberDecimal"
+                    style="@style/TextInputEditText" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/members_list"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/member_list_height"
+                android:layout_marginTop="@dimen/normal_spacing"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:orientation="horizontal"
+                app:payMembers="@{viewModel.membersContainer}"
+                app:payMember="@={viewModel.payMember}">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#DFDFDF"
+                android:padding="@dimen/small_spacing"
+                android:layout_marginTop="@dimen/large_spacing">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/add_members"
+                    android:layout_marginTop="@dimen/small_spacing"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                <com.pchmn.materialchips.ChipsInput
+                    android:id="@+id/chips"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:showChipDetailed="false"
+                    app:chip_backgroundColor="?attr/colorSurface"
+                    app:chip_hasAvatarIcon="true"
+                    app:chip_labelColor="?attr/colorOnSurface"
+                    app:chip_selectable="true"
+                    app:chip_selectedColor="?attr/colorPrimary"
+                    app:chip_selectedTextColor="?attr/colorOnPrimary"
+                    app:chip_editable="false"
+                    app:selectableMembers="@={viewModel.selectableMembers}"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:layout_alignParentBottom="true"
+            android:layout_margin="@dimen/normal_spacing"
+            android:onClick="@{view -> viewModel.onSaveClick()}"/>
+
+    </RelativeLayout>
+</layout>

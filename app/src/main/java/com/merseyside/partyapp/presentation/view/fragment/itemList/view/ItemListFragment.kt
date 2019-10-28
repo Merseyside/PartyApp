@@ -9,6 +9,7 @@ import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
+import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.databinding.FragmentItemListBinding
 import com.merseyside.partyapp.presentation.base.BaseCalcFragment
 import com.merseyside.partyapp.presentation.di.component.DaggerItemListComponent
@@ -87,12 +88,17 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
     private fun init() {
         adapter.setOnItemClickListener(object: BaseAdapter.AdapterClickListener {
             override fun onItemClicked(obj: Any) {
-
+                if (obj is Item) {
+                    sharedViewModel.itemContainer = obj
+                    viewModel.navigateToEditItemScreen()
+                }
             }
         })
     }
 
     private fun doLayout() {
+        binding.itemList.adapter = adapter
+
         viewModel.getItemsById(sharedViewModel.eventContainer!!.id)
     }
 

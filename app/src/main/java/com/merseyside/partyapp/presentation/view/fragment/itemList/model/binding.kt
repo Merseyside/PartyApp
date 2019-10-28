@@ -7,25 +7,25 @@ import com.merseyside.partyapp.presentation.view.fragment.itemList.adapter.ItemA
 import com.upstream.basemvvmimpl.presentation.adapter.UpdateRequest
 
 @BindingAdapter("app:items")
-fun setEvents(recyclerView: RecyclerView, events: List<Item>?) {
+fun setItems(recyclerView: RecyclerView, items: List<Item>?) {
 
     if (recyclerView.adapter is ItemAdapter) {
 
-        val eventsAdapter = recyclerView.adapter as ItemAdapter
-        if (events != null) {
-            if (eventsAdapter.hasItems()) {
+        val itemsAdapter = recyclerView.adapter as ItemAdapter
+        if (items != null) {
+            if (itemsAdapter.hasItems()) {
                 val request = UpdateRequest.Builder<Item>()
                     .isAddNew(true)
                     .isDeleteOld(false)
-                    .setList(events)
+                    .setList(items)
                     .build()
 
-                eventsAdapter.updateAsync(request)
+                itemsAdapter.updateAsync(request)
             } else {
-                eventsAdapter.add(events)
+                itemsAdapter.add(items)
             }
         } else {
-            eventsAdapter.removeAll()
+            itemsAdapter.removeAll()
         }
     }
 }

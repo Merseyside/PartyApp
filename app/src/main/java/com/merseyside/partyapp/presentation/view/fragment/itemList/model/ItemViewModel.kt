@@ -1,44 +1,63 @@
 package com.merseyside.partyapp.presentation.view.fragment.itemList.model
 
 import androidx.databinding.Bindable
+import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.data.db.item.Item
-import com.merseyside.partyapp.utils.getDateTime
+import com.merseyside.partyapp.utils.getHoursDateTime
 import com.upstream.basemvvmimpl.presentation.model.BaseComparableAdapterViewModel
 
-class ItemViewModel(private var item: Item) : BaseComparableAdapterViewModel<Item>() {
+class ItemViewModel(
+    override var obj: Item
+) : BaseComparableAdapterViewModel<Item>(obj) {
+
+    private var isLastItem: Boolean = false
 
     override fun areContentTheSame(obj: Item): Boolean {
-        return item == obj
+        return this.obj == obj
     }
 
     override fun compareTo(obj: Item): Int {
         return 0
     }
 
-    override fun getItem(): Item {
-        return item
-    }
-
-    override fun setItem(item: Item) {
-        this.item = item
-    }
-
     override fun areItemsTheSame(obj: Item): Boolean {
-        return obj.id == item.id
+        return obj.id == this.obj.id
     }
 
     @Bindable
     fun getTitle(): String {
-        return item.name
+        return obj.name
     }
 
     @Bindable
     fun getDate(): String {
-        return getDateTime(item.timestamp)!!
+        return getHoursDateTime(obj.timestamp)!!
     }
 
     @Bindable
     fun getPrice(): String {
-        return "${item.price}"
+        return "${obj.price}"
+    }
+
+    @Bindable
+    fun isLast(): Boolean {
+        return isLastItem
+    }
+
+    fun setLast(isLast: Boolean) {
+        isLastItem = isLast
+
+        notifyUpdate()
+    }
+
+    fun onItemClick() {
+        getClickListener()?.onItemClicked(obj)
+    }
+
+    override fun notifyUpdate() {
+        notifyPropertyChanged(BR.title)
+        notifyPropertyChanged(BR.date)
+        notifyPropertyChanged(BR.price)
+        notifyPropertyChanged(BR.last)
     }
 }

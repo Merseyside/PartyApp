@@ -10,13 +10,25 @@ class AddItemInteractor : CoroutineUseCase<Boolean, AddItemInteractor.Params>() 
 
     private val repository: ItemRepository by itemComponent.instance()
 
-    override suspend fun executeOnBackground(params: AddItemInteractor.Params?): Boolean {
-        return repository.addItem(params!!.eventId, params.name,  params.description, params.price, params.membersInfo)
+    override suspend fun executeOnBackground(params: Params?): Boolean {
+        return repository.addItem(
+            params!!.id,
+            params.eventId,
+            params.name,
+            params.description,
+            params.price,
+            params.payMember,
+            params.membersInfo
+        )
     }
 
-    data class Params(val eventId: Long,
-                      val name: String,
-                      val description: String,
-                      val price: Long,
-                      val membersInfo: List<MemberItemInfo>)
+    data class Params(
+        val id: Long?,
+        val eventId: Long,
+        val name: String,
+        val description: String,
+        val price: Long,
+        val payMember: MemberItemInfo,
+        val membersInfo: List<MemberItemInfo>
+    )
 }

@@ -2,6 +2,7 @@ package com.merseyside.partyapp.presentation.view.fragment.addEvent.view
 
 import android.content.Context
 import android.os.Bundle
+import android.text.InputType
 import android.view.View
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R

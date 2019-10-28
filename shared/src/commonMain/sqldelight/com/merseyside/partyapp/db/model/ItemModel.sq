@@ -1,4 +1,5 @@
 import com.merseyside.partyapp.data.db.item.MembersModel;
+import com.merseyside.partyapp.data.db.item.MemberItemInfo;
 
 CREATE TABLE ItemModel(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -6,15 +7,21 @@ CREATE TABLE ItemModel(
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     price INTEGER NOT NULL,
-    memberModel TEXT AS MembersModel,
+    payMember TEXT AS MemberItemInfo NOT NULL,
+    memberModel TEXT AS MembersModel NOT NULL,
     timestamp INTEGER NOT NULL,
             FOREIGN KEY (eventId) REFERENCES EventModel(id)
 );
 
 insertItem:
 INSERT INTO
-ItemModel(eventId, name, description, price, memberModel, timestamp)
-VALUES(?, ?, ?, ?, ?, ?);
+ItemModel(eventId, name, description, price, payMember, memberModel, timestamp)
+VALUES(?, ?, ?, ?, ?, ?, ?);
+
+changeItem:
+UPDATE ItemModel
+SET name = ?, description = ?, price = ?, payMember = ?, memberModel = ?, timestamp = ?
+WHERE id = ?;
 
 selectItemsByEventId:
 SELECT *
