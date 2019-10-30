@@ -16,4 +16,6 @@ interface ItemRepository {
     ): Boolean
 
     suspend fun getItemsByEventId(eventId: Long): List<Item>
+
+    suspend fun deleteItem(id: Long): Boolean
 }

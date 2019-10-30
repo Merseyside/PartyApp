@@ -56,4 +56,8 @@ class EventDao(database: CalcDatabase) {
     internal fun getEventById(id: Long): Event {
         return db.selectById(id).executeAsOne().let { eventDataMapper.transform(it) }
     }
+
+    internal fun deleteEvent(id: Long) {
+        return db.deleteItem(id)
+    }
 }

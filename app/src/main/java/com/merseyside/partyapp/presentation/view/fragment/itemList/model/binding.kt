@@ -12,7 +12,7 @@ fun setItems(recyclerView: RecyclerView, items: List<Item>?) {
     if (recyclerView.adapter is ItemAdapter) {
 
         val itemsAdapter = recyclerView.adapter as ItemAdapter
-        if (items != null) {
+        if (!items.isNullOrEmpty()) {
             if (itemsAdapter.hasItems()) {
                 val request = UpdateRequest.Builder<Item>()
                     .isAddNew(true)

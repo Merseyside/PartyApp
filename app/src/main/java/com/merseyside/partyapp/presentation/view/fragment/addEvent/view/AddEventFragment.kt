@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.addEvent.view
 
+import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
 import android.text.InputType
@@ -11,6 +12,7 @@ import com.merseyside.partyapp.presentation.base.BaseCalcFragment
 import com.merseyside.partyapp.presentation.di.component.DaggerAddEventComponent
 import com.merseyside.partyapp.presentation.di.module.AddEventModule
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
+import com.upstream.basemvvmimpl.utils.ValueAnimatorHelper
 
 
 class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewModel>() {
@@ -39,7 +41,11 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     }
 
     override fun getTitle(context: Context): String? {
-        return context.getString(R.string.new_event_title)
+        return if (arguments != null && arguments!!.containsKey(KEY_EDIT_ID)) {
+            context.getString(R.string.edit_event_title)
+        } else {
+            context.getString(R.string.new_event_title)
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -64,9 +70,36 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
 
             viewModel.initWithEventId(id)
         }
+        
+        binding.closeEvent.setOnClickListener { 
+            showAlertDialog(
+                title = getString(R.string.close_event_title),
+                message = getString(R.string.close_event_message),
+                isCancelable = false,
+                onPositiveClick = {
+                    val animation = ValueAnimatorHelper()
+
+                    animation.addAnimation(ValueAnimatorHelper.Builder(binding.closeEvent)
+                        .translateAnimationPercent(
+                            percents  = *floatArrayOf(0f, -1f),
+                            mainPoint = ValueAnimatorHelper.MainPoint.TOP_LEFT,
+                            animAxis  = ValueAnimatorHelper.AnimAxis.Y_AXIS,
+                            duration  = 500
+                        ).build()
+                    )
+
+                    animation.addAnimation(ValueAnimatorHelper.Builder(binding.closeEvent)
+                        .alphaAnimation(
+                            1f, 0f,
+                            duration = 190
+                        ).build())
+
+                    animation.playTogether()
+                }
+            )
+        }
 
     }
-
 
     companion object {
         private const val TAG = "AddEventFragment"

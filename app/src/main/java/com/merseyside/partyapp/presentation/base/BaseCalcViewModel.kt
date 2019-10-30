@@ -12,8 +12,8 @@ abstract class BaseCalcViewModel(private val router: Router? = null) : BaseViewM
     protected val context = CalcApplication.getInstance()
     protected val errorMsgCreator = ErrorMessageFactory(context)
 
-    protected fun getString(@StringRes id: Int): String {
-        return context.getString(id)
+    protected fun getString(@StringRes id: Int, vararg args: String): String {
+        return context.getString(id, *args)
     }
 
     fun goBack() {

@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 
+import android.util.Log
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener

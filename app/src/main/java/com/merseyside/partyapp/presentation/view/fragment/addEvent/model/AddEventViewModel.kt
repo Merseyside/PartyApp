@@ -10,7 +10,7 @@ import kotlinx.coroutines.cancel
 import ru.terrakok.cicerone.Router
 
 class AddEventViewModel(
-    private val router: Router,
+    router: Router,
     private val addEventUseCase: AddEventInteractor,
     private val getEventByIdUseCase: GetEventByIdInteractor
 ) : BaseCalcViewModel(router) {

@@ -28,3 +28,7 @@ SELECT *
 FROM ItemModel
 WHERE eventId = ?;
 
+deleteItem:
+DELETE
+FROM ItemModel
+WHERE id = ?;

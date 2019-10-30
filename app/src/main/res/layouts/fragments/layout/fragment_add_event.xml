@@ -87,13 +87,29 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <Button
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@string/save"
                 android:layout_alignParentBottom="true"
-                android:layout_margin="@dimen/normal_spacing"
-                android:onClick="@{view -> viewModel.onSaveClick()}"/>
+                android:layout_margin="@dimen/normal_spacing">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/close_event"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:text="@string/close_event"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorPrimary" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/save"
+                    android:onClick="@{view -> viewModel.onSaveClick()}"/>
+
+            </LinearLayout>
 
 
         </RelativeLayout>

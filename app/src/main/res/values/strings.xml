@@ -10,7 +10,11 @@
     <string name="no_events">Add your first party\nby click + button</string>
     <string name="no_items">Nothing here yet. Add new item\nby click + button</string>
     <string name="new_event_title">New event</string>
+    <string name="edit_event_title">Edit event</string>
     <string name="save">Save</string>
+    <string name="close_event">Close event</string>
+    <string name="close_event_title">Close event?</string>
+    <string name="close_event_message">Are you sure want to close that event? This action is irreversible!</string>
 
     <string name="event_title">Event name</string>
     <string name="add_members">Add members</string>
@@ -34,7 +38,10 @@
     <string name="items">Items</string>
 
     <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
 
+    <string name="delete_event_title">Delete %1$s?</string>
+    <string name="delete_event_message">Are you sure want to delete that event?</string>
 
 
 </resources>

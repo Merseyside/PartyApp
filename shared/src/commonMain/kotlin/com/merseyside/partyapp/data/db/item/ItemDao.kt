@@ -25,6 +25,11 @@ class ItemDao(database: CalcDatabase) {
             itemDataMapper.transform(it)
         }
     }
+
+    fun deleteItem(id: Long) {
+        db.deleteItem(id)
+    }
+
     companion object {
         private const val TAG = "ItemDao"
     }

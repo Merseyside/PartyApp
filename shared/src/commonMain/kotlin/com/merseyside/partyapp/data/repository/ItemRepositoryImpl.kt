@@ -9,6 +9,12 @@ class ItemRepositoryImpl(
     private val itemDao: ItemDao
 ) : ItemRepository {
 
+    override suspend fun deleteItem(id: Long): Boolean {
+        itemDao.deleteItem(id)
+
+        return true
+    }
+
     override suspend fun addItem(
         id: Long?,
         eventId: Long,

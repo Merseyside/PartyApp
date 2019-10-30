@@ -77,6 +77,17 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
 
         })
 
+        adapter.setOnEventOptionsClickListener(object: EventAdapter.OnEventOptionsClickListener {
+            override fun onEditClick(event: Event) {
+                viewModel.onEditClick(event.id)
+            }
+
+            override fun onDeleteClick(event: Event) {
+                viewModel.onDeleteClick(event)
+            }
+
+        })
+
         viewModel.showEvents()
     }
 

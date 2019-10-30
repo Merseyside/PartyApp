@@ -50,7 +50,7 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
     }
 
     override fun getTitle(context: Context): String? {
-        return context.getString(R.string.items)
+        return sharedViewModel.eventContainer?.name ?: throw IllegalStateException()
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -98,8 +98,15 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
 
     private fun doLayout() {
         binding.itemList.adapter = adapter
+        
+        adapter.setOnItemOptionsClickListener(object: ItemAdapter.OnItemOptionsClickListener {
+            override fun onDeleteClick(item: Item) {
+                viewModel.deleteItem(item.id)
+            }
 
-        viewModel.getItemsById(sharedViewModel.eventContainer!!.id)
+        })
+
+        viewModel.init(sharedViewModel.eventContainer!!.id)
     }
 
     companion object {

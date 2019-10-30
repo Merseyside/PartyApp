@@ -83,6 +83,8 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
             if (arguments!!.getInt(MODE_KEY) == EDIT_VALUE) {
                 viewModel.init(sharedViewModel.eventContainer!!, sharedViewModel.itemContainer)
             }
+        } else {
+            viewModel.init(sharedViewModel.eventContainer!!)
         }
     }
 

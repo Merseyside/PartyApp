@@ -13,4 +13,6 @@ interface EventRepository {
     suspend fun closeEvent(id: Long): Boolean
 
     suspend fun getEvent(id: Long): Event
+
+    suspend fun deleteEvent(id: Long): Boolean
 }

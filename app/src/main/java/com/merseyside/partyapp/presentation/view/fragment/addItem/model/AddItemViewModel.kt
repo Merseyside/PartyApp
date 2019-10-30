@@ -1,6 +1,5 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 
-import android.util.Log
 import androidx.databinding.ObservableField
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -36,9 +35,6 @@ class AddItemViewModel(
         membersContainer.set(event.members)
 
         if (item != null) {
-            item.membersInfo.forEach {
-                Log.d(TAG, it.name)
-            }
 
             name.set(item.name)
             price.set(item.price.toString())
@@ -46,8 +42,9 @@ class AddItemViewModel(
 
             selectableMembers.set(event.members.map { member ->
                 item.membersInfo.forEach { info ->
-                    if (info.id == member.id)
+                    if (info.id == member.id) {
                         return@map Pair(member, true)
+                    }
                 }
 
                 return@map Pair(member, false)
@@ -56,6 +53,8 @@ class AddItemViewModel(
             setPayMember(item.payMember)
         } else {
             setPayMember(event.members.first())
+
+            selectableMembers.set(event.members.map { Pair(it, false) })
         }
     }
 

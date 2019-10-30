@@ -10,7 +10,7 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
 
     val appComponent = CalcApplication.getInstance().appComponent
 
-    fun goBack() {
+    protected fun goBack() {
         viewModel.goBack()
     }
 

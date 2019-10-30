@@ -9,6 +9,11 @@ import org.kodein.di.erased.instance
 
 class EventRepositoryImpl(private val eventDao: EventDao) : EventRepository {
 
+    override suspend fun deleteEvent(id: Long): Boolean {
+        eventDao.deleteEvent(id)
+
+        return true
+    }
 
     override suspend fun closeEvent(id: Long): Boolean {
         eventDao.change(id, status = Status.COMPLETE)
