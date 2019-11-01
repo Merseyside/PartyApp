@@ -19,7 +19,7 @@ fun setEvents(recyclerView: RecyclerView, events: List<Event>?) {
             if (eventsAdapter.hasItems()) {
                 val request = UpdateRequest.Builder<Event>()
                     .isAddNew(true)
-                    .isDeleteOld(false)
+                    .isDeleteOld(true)
                     .setList(events)
                     .build()
 

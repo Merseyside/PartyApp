@@ -5,8 +5,9 @@
     <color name="transparent">#00000000</color>
     <color name="red_700_primary">#d32f2f</color>
 
-    <color name="grey">#FAFAFA</color>
+    <color name="grey">#C2C2C2</color>
     <color name="grey_dark">#808080</color>
+    <color name="grey_light">#ECECEC</color>
     <color name="transparent_grey">#99808080</color>
 
     <!--End of base colors-->

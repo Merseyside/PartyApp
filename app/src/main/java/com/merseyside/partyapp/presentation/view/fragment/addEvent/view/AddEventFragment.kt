@@ -1,9 +1,7 @@
 package com.merseyside.partyapp.presentation.view.fragment.addEvent.view
 
-import android.animation.ValueAnimator
 import android.content.Context
 import android.os.Bundle
-import android.text.InputType
 import android.view.View
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
@@ -94,7 +92,15 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
                             duration = 190
                         ).build())
 
+                    animation.addAnimation(ValueAnimatorHelper.Builder(binding.chipsContainer)
+                        .alphaAnimation(
+                            1f, 0f,
+                            duration = 250
+                        ).build())
+
                     animation.playTogether()
+
+                    viewModel.closeEvent()
                 }
             )
         }

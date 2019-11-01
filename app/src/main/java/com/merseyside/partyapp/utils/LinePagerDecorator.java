@@ -56,8 +56,8 @@ public class LinePagerDecorator extends RecyclerView.ItemDecoration {
         context.getTheme().resolveAttribute(R.attr.colorPrimary, value, true);
 
         colorActive = value.data;
-        context.getTheme().resolveAttribute(R.attr.colorOnBackground, value, true);
 
+        context.getTheme().resolveAttribute(R.attr.colorPrimaryVariant, value, true);
         colorInactive = value.data;
         colorTransition =  ContextCompat.getColor(context, R.color.transparent);
     }

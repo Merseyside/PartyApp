@@ -2,6 +2,8 @@ package com.pchmn.materialchips.adapter;
 
 import android.content.Context;
 import android.os.Build;
+
+import androidx.annotation.ColorInt;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
@@ -18,6 +20,7 @@ import android.widget.RelativeLayout;
 import com.pchmn.materialchips.ChipView;
 import com.pchmn.materialchips.ChipsInput;
 import com.pchmn.materialchips.OnChipClickListener;
+import com.pchmn.materialchips.R;
 import com.pchmn.materialchips.model.ChipInterface;
 import com.pchmn.materialchips.views.ChipsInputEditText;
 import com.pchmn.materialchips.views.DetailedChipView;
@@ -129,7 +132,7 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 ViewGroup.LayoutParams.WRAP_CONTENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT));
         mEditText.setHint(mHintLabel);
-        mEditText.setBackgroundResource(android.R.color.transparent);
+        //mEditText.setBackgroundColor(R.attr.);
         // prevent fullscreen on landscape
         mEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         mEditText.setPrivateImeOptions("nm");

@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 
+import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -22,11 +23,44 @@ class AddItemViewModel(
     private var item: Item? = null
 
     val name = ObservableField<String>()
+    val nameErrorText = ObservableField<String>()
+
     val price = ObservableField<String>()
+    val priceErrorText = ObservableField<String>()
+
     val description = ObservableField<String>()
+
     val membersContainer = ObservableField<List<Member>>()
     val selectableMembers = ObservableField<List<Pair<Member, Boolean>>>()
+    val selectableMembersErrorText = ObservableField<String>()
+
     val payMember = ObservableField<Member>()
+
+    init {
+        name.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                if (!nameErrorText.get().isNullOrEmpty()) {
+                    nameErrorText.set("")
+                }
+            }
+        })
+
+        price.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                if (!priceErrorText.get().isNullOrEmpty()) {
+                    priceErrorText.set("")
+                }
+            }
+        })
+
+        selectableMembers.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                if (!selectableMembersErrorText.get().isNullOrEmpty()) {
+                    selectableMembersErrorText.set("")
+                }
+            }
+        })
+    }
 
     fun init(event: Event, item: Item? = null) {
         this.event = event
@@ -64,17 +98,17 @@ class AddItemViewModel(
 
     private fun saveItem() {
         if (name.get().isNullOrEmpty()) {
-            showErrorMsg(getString(R.string.name_error_msg))
+            nameErrorText.set(getString(R.string.name_error_msg))
             return
         }
 
         if (!isPriceValid(price.get())) {
-            showErrorMsg(getString(R.string.price_error_msg))
+            priceErrorText.set(getString(R.string.price_error_msg))
             return
         }
 
-        if (selectableMembers.get().isNullOrEmpty()) {
-            showErrorMsg(getString(R.string.members_error_msg))
+        if (selectableMembers.get()?.filter { it.second }.isNullOrEmpty()) {
+            selectableMembersErrorText.set(getString(R.string.members_error_msg))
             return
         }
 

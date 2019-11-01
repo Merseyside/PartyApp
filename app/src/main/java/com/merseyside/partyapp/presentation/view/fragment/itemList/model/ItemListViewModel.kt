@@ -2,6 +2,7 @@ package com.merseyside.partyapp.presentation.view.fragment.itemList.model
 
 import android.util.Log
 import androidx.databinding.ObservableField
+import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.domain.interactor.DeleteItemInteractor
 import com.merseyside.partyapp.domain.interactor.GetItemsByEventIdInteractor
@@ -61,14 +62,20 @@ class ItemListViewModel(
         )
     }
 
-    fun deleteItem(id: Long) {
-        deleteItemUseCase.execute(
-            params = DeleteItemInteractor.Params(id),
-            onComplete = {
-                getItemsById(eventId!!)
-            },
-            onError = {
-                showErrorMsg(errorMsgCreator.createErrorMsg(it))
+    fun deleteItem(item: Item) {
+        showAlertDialog(
+            title = getString(R.string.delete_item_title, item.name),
+            message = getString(R.string.delete_item_message),
+            onPositiveClick = {
+                deleteItemUseCase.execute(
+                    params = DeleteItemInteractor.Params(item.id),
+                    onComplete = {
+                        getItemsById(eventId!!)
+                    },
+                    onError = {
+                        showErrorMsg(errorMsgCreator.createErrorMsg(it))
+                    }
+                )
             }
         )
     }

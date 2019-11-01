@@ -101,7 +101,7 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
         
         adapter.setOnItemOptionsClickListener(object: ItemAdapter.OnItemOptionsClickListener {
             override fun onDeleteClick(item: Item) {
-                viewModel.deleteItem(item.id)
+                viewModel.deleteItem(item)
             }
 
         })

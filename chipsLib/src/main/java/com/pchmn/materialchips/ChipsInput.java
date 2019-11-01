@@ -168,12 +168,20 @@ public class ChipsInput extends ScrollViewMaxHeight {
         activity.getWindow().setCallback(new MyWindowCallback(mCallBack, activity));
     }
 
+
+
     private void initEditText() {
         editText = new ChipsInputEditText(mContext);
         if(mHintColor != null)
             editText.setHintTextColor(mHintColor);
         if(mTextColor != null)
             editText.setTextColor(mTextColor);
+
+        if (!mIsEditable) {
+            editText.setBackgroundResource(android.R.color.transparent);
+        } else if (mChipBackgroundColor != null) {
+            editText.setSupportBackgroundTintList(mChipBackgroundColor);
+        }
 
         if (!mIsEditable) {
             editText.setFocusable(false);

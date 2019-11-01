@@ -15,7 +15,7 @@ import java.util.*
 import kotlin.math.roundToLong
 import androidx.core.os.ConfigurationCompat.getLocales
 import android.os.Build.VERSION.SDK_INT
-
+import android.util.Log
 
 
 @SuppressLint("SimpleDateFormat")
@@ -51,6 +51,17 @@ fun isPriceValid(price: String?): Boolean {
     }
 
     return false
+}
+
+fun isNameValid(name: String?): Boolean {
+    if (name.isNullOrEmpty()) {
+        return false
+    } else if (name.startsWith(" ")) {
+        isNameValid(name.drop(1))
+    }
+
+    Log.d("Utils", "${name.length}")
+    return name.length in 3..24
 }
 
 @Throws(NumberFormatException::class)

@@ -3,6 +3,7 @@ package com.merseyside.partyapp.presentation.view.fragment.addEvent.model
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import com.google.android.material.textfield.TextInputLayout
 import com.pchmn.materialchips.ChipsInput
 import com.pchmn.materialchips.model.ChipInterface
 
@@ -20,7 +21,11 @@ fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
 
            override fun onTextChanged(text: CharSequence?) {
                if (text!!.contains(" ")) {
-                   view.addChip(text.toString().replace(" ", ""), "")
+                   if (text.length != 1) {
+                       view.addChip(text.toString().replace(" ", ""), "")
+                   } else {
+                       view.editText.setText("")
+                   }
                }
            }
        })
@@ -38,4 +43,10 @@ fun setMembers(chipView: ChipsInput, members: List<String>?) {
 @InverseBindingAdapter(attribute = "app:memberNames")
 fun getMembers(view: ChipsInput): List<String> {
     return view.allChips.map { it.label }
+}
+
+@BindingAdapter("app:errorText")
+fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
+    if (errorMessage != null)
+        view.error = errorMessage
 }

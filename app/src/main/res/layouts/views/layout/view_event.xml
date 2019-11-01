@@ -9,19 +9,18 @@
             type="com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventItemViewModel" />
     </data>
 
-       <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:focusable="true"
-        android:clickable="true"
-        app:contentPadding="@dimen/small_spacing"
-        app:cardCornerRadius="@dimen/small_spacing"
-        app:cardElevation="@dimen/very_small_spacing"
-        android:layout_marginTop="@dimen/very_small_spacing"
-        android:layout_marginBottom="@dimen/very_small_spacing"
-        app:rippleColor="@color/black"
-        style="@style/MyCardView"
-        android:onClick="@{view -> obj.onClick()}">
+       <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:focusable="true"
+            android:clickable="true"
+            app:contentPadding="@dimen/small_spacing"
+            app:cardCornerRadius="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/very_small_spacing"
+            android:layout_marginBottom="@dimen/very_small_spacing"
+            app:cardBackgroundColor="?attr/colorOnBackground"
+            android:foreground="@drawable/card_view_ripple"
+            android:onClick="@{view -> obj.onClick()}">
 
     <RelativeLayout
         android:orientation="horizontal"
@@ -89,5 +88,5 @@
 
     </RelativeLayout>
 
-    </com.google.android.material.card.MaterialCardView>
+    </androidx.cardview.widget.CardView>
 </layout>

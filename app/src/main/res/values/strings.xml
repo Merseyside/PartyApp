@@ -17,7 +17,7 @@
     <string name="close_event_message">Are you sure want to close that event? This action is irreversible!</string>
 
     <string name="event_title">Event name</string>
-    <string name="add_members">Add members</string>
+    <string name="choose_members">Choose item members</string>
     <string name="notes_hint">Notes</string>
 
     <string name="item_title">Item name</string>
@@ -42,6 +42,12 @@
 
     <string name="delete_event_title">Delete %1$s?</string>
     <string name="delete_event_message">Are you sure want to delete that event?</string>
+    <string name="complete">Complete</string>
+    <string name="event_name_error_msg">Event name must be from 3 to 24 non-space characters</string>
+    <string name="notes_error_msg">Your notes must be no more than 512 non-space characters</string>
+
+    <string name="delete_item_title">Delete %1$s?</string>
+    <string name="delete_item_message">Do you want to delete this item?</string>
 
 
 </resources>

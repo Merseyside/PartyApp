@@ -1,6 +1,5 @@
 package com.merseyside.partyapp.presentation.view.fragment.eventList.model
 
-import android.util.Log
 import androidx.annotation.DrawableRes
 import androidx.databinding.Bindable
 import com.merseyside.partyapp.BR
@@ -18,6 +17,8 @@ class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewMod
         notifyPropertyChanged(BR.name)
         notifyPropertyChanged(BR.memberInfo)
         notifyPropertyChanged(BR.status)
+        notifyPropertyChanged(BR.statusColor)
+        notifyPropertyChanged(BR.statusIcon)
     }
 
     override fun areContentTheSame(obj: Event): Boolean {
