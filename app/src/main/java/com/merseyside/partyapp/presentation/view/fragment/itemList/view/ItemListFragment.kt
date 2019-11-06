@@ -26,6 +26,10 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
 
     private val adapter = ItemAdapter()
 
+    override fun isActionBarVisible(): Boolean {
+        return true
+    }
+
     override fun hasTitleBackButton(): Boolean {
         return true
     }
@@ -76,9 +80,15 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
 
-        if (id == R.id.action_edit) {
-            viewModel.navigateToEditScreen(sharedViewModel.eventContainer?.id ?: throw IllegalStateException())
-            return true
+        when (id) {
+            R.id.action_edit -> {
+                viewModel.navigateToEditScreen(sharedViewModel.eventContainer?.id ?: throw IllegalStateException())
+                return true
+            }
+            R.id.action_statistic -> {
+                viewModel.navigateToStatisticScreen()
+                return true
+            }
         }
 
         return super.onOptionsItemSelected(item)
@@ -86,12 +96,10 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
 
 
     private fun init() {
-        adapter.setOnItemClickListener(object: BaseAdapter.AdapterClickListener {
-            override fun onItemClicked(obj: Any) {
-                if (obj is Item) {
-                    sharedViewModel.itemContainer = obj
-                    viewModel.navigateToEditItemScreen()
-                }
+        adapter.setOnItemClickListener(object: BaseAdapter.AdapterClickListener<Item> {
+            override fun onItemClicked(obj: Item) {
+                sharedViewModel.itemContainer = obj
+                viewModel.navigateToEditItemScreen()
             }
         })
     }

@@ -19,6 +19,5 @@ internal val databaseModule = Kodein.Module("database") {
 
 @ExperimentalCoroutinesApi
 internal val appComponent = Kodein {
-
     import(databaseModule)
 }

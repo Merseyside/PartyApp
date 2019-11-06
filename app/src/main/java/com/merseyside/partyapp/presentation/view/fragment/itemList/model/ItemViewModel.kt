@@ -50,10 +50,6 @@ class ItemViewModel(
         notifyUpdate()
     }
 
-    fun onItemClick() {
-        getClickListener()?.onItemClicked(obj)
-    }
-
     override fun notifyUpdate() {
         notifyPropertyChanged(BR.title)
         notifyPropertyChanged(BR.date)

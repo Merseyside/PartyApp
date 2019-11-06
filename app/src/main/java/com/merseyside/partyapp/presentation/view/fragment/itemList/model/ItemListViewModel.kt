@@ -42,6 +42,10 @@ class ItemListViewModel(
         router.navigateTo(Screens.EditItemScreen())
     }
 
+    fun navigateToStatisticScreen() {
+        router.navigateTo(Screens.StatisticScreen())
+    }
+
     fun onAddButtonClick() {
         router.navigateTo(Screens.AddItemScreen())
     }

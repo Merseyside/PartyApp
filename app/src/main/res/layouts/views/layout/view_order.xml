@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="obj"
+            type="com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.OrderItemViewModel" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="@dimen/list_item_width"
+        android:layout_height="@dimen/list_item_height"
+        android:focusable="true"
+        android:clickable="true"
+        app:contentPadding="@dimen/small_spacing"
+        app:cardCornerRadius="@dimen/small_spacing"
+        app:drawableBackground="@{obj.backgroundDrawable}"
+        android:foreground="@drawable/card_view_ripple"
+        android:layout_marginStart="@dimen/small_spacing"
+        android:layout_marginEnd="@dimen/small_spacing">
+
+        <RelativeLayout
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:text="@{obj.title}"
+                android:textAlignment="center" />
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/large_spacing">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:text="@{obj.anotherMember}"
+                    android:textAlignment="center" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:text="@{obj.price}"
+                    android:textAlignment="center" />
+            </LinearLayout>
+
+        </RelativeLayout>
+
+    </androidx.cardview.widget.CardView>
+</layout>

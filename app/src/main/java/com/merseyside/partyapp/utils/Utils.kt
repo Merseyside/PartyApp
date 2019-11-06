@@ -12,9 +12,6 @@ import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.math.roundToLong
-import androidx.core.os.ConfigurationCompat.getLocales
-import android.os.Build.VERSION.SDK_INT
 import android.util.Log
 
 
@@ -42,7 +39,7 @@ fun getHoursDateTime(timestamp: Long): String? {
 fun isPriceValid(price: String?): Boolean {
     if (price != null) {
         return try {
-            val priceNum = convertPriceToLong(price)
+            val priceNum = convertPriceToDouble(price)
 
             priceNum > 0
         } catch (e: NumberFormatException) {
@@ -65,11 +62,9 @@ fun isNameValid(name: String?): Boolean {
 }
 
 @Throws(NumberFormatException::class)
-fun convertPriceToLong(price: String): Long {
+fun convertPriceToDouble(price: String): Double {
 
-    val priceLong = BigDecimal(price.toDouble()).setScale(0, RoundingMode.UP)
-
-    return priceLong.toLong()
+    return price.toDouble()
 }
 
 fun RecyclerView.attachSnapHelperWithListener(
@@ -94,4 +89,20 @@ fun getCurrentLocale(context: Context): Locale {
     } else {
         context.resources.configuration.locale
     }
+}
+
+fun getCircleText(str: String): String {
+    val words = str.split(" ")
+
+    val text = StringBuilder()
+
+    if (words.size >= 2) {
+        (0..1).forEach { index ->
+            text.append(words[index][0])
+        }
+    } else {
+        text.append(words[0][0])
+    }
+
+    return text.toString().toUpperCase()
 }

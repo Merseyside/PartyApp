@@ -24,8 +24,6 @@
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:items="@{viewModel.itemsContainer}"
-                android:paddingStart="@dimen/normal_spacing"
-                android:paddingEnd="@dimen/normal_spacing"
                 android:visibility="@{viewModel.itemsVisibility ? View.VISIBLE : View.GONE}">
             </androidx.recyclerview.widget.RecyclerView>
 

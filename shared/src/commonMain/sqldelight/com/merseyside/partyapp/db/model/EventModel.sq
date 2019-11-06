@@ -33,3 +33,6 @@ DELETE
 FROM EventModel
 WHERE id = ?;
 
+lastInsertRowId:
+SELECT last_insert_rowid();
+

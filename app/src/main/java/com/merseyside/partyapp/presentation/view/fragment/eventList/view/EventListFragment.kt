@@ -20,6 +20,10 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
 
     private lateinit var sharedViewModel: SharedViewModel
 
+    override fun isActionBarVisible(): Boolean {
+        return true
+    }
+
     override fun hasTitleBackButton(): Boolean {
         return false
     }
@@ -67,12 +71,10 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
 
     private fun doLayout() {
         binding.eventList.adapter = adapter
-        adapter.setOnItemClickListener(object: BaseAdapter.AdapterClickListener {
-            override fun onItemClicked(obj: Any) {
-                if (obj is Event) {
-                    sharedViewModel.eventContainer = obj
-                    viewModel.onEventClick()
-                }
+        adapter.setOnItemClickListener(object: BaseAdapter.AdapterClickListener<Event> {
+            override fun onItemClicked(obj: Event) {
+                sharedViewModel.eventContainer = obj
+                viewModel.onEventClick()
             }
 
         })

@@ -6,7 +6,7 @@
             <item>
                 <shape>
                     <solid
-                        android:color="?attr/colorOnBackground" />
+                        android:color="?attr/calcTextColor" />
                 </shape>
             </item>
         </layer-list>

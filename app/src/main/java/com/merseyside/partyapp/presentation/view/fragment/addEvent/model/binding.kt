@@ -4,6 +4,7 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import com.google.android.material.textfield.TextInputLayout
+import com.merseyside.partyapp.presentation.view.view.circleView.CircleView
 import com.pchmn.materialchips.ChipsInput
 import com.pchmn.materialchips.model.ChipInterface
 
@@ -47,6 +48,7 @@ fun getMembers(view: ChipsInput): List<String> {
 
 @BindingAdapter("app:errorText")
 fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
-    if (errorMessage != null)
+    if (errorMessage != null) {
         view.error = errorMessage
+    }
 }

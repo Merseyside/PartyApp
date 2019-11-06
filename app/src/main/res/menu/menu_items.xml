@@ -7,4 +7,11 @@
         android:icon="@drawable/ic_edit"
         android:orderInCategory="100"
         app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_statistic"
+        android:title="@string/action_edit"
+        android:icon="@drawable/ic_stats"
+        android:orderInCategory="100"
+        app:showAsAction="always" />
 </menu>

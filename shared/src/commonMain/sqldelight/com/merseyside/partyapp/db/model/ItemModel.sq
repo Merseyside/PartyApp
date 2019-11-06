@@ -6,7 +6,7 @@ CREATE TABLE ItemModel(
     eventId INTEGER NOT NULL,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
-    price INTEGER NOT NULL,
+    price REAL NOT NULL,
     payMember TEXT AS MemberItemInfo NOT NULL,
     memberModel TEXT AS MembersModel NOT NULL,
     timestamp INTEGER NOT NULL,

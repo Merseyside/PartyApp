@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.merseyside.partyapp.presentation.view.fragment.statisticMain.view.StatisticMainFragment">
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="obj"
+            type="com.merseyside.partyapp.presentation.view.fragment.statisticMain.model.StatisticMemberItemViewModel" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/member_item_height"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{view -> obj.onClick()}"
+        android:paddingStart="@dimen/small_spacing"
+        android:paddingEnd="@dimen/small_spacing"
+        android:foreground="@drawable/card_view_ripple"
+        android:gravity="center">
+
+        <com.merseyside.partyapp.presentation.view.view.circleView.CircleView
+            android:id="@+id/circle"
+            android:layout_width="@dimen/circle_size"
+            android:layout_height="@dimen/circle_size"
+            app:color="@{obj.circleColor}"
+            app:circleText="@{obj.circleText}"/>
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+            android:text="@{obj.title}"
+            android:ellipsize="marquee"
+            android:textAlignment="center"/>
+
+    </LinearLayout>
+
+</layout>

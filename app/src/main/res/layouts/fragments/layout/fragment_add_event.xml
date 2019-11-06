@@ -82,21 +82,21 @@
 
 
             <androidx.cardview.widget.CardView
+                android:id="@+id/chips_container"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:contentPadding="@dimen/small_spacing"
                 app:cardCornerRadius="@dimen/small_spacing"
                 android:layout_marginTop="@dimen/small_spacing"
                 android:layout_marginBottom="@dimen/very_small_spacing"
-                style="@style/MyCardView">
+                style="@style/MyCardView"
+                android:visibility="@{viewModel.addMembersVisibility ? View.VISIBLE : View.GONE}">
 
                 <LinearLayout
-                    android:id="@+id/chips_container"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="@color/transparent"
-                    android:visibility="@{viewModel.addMembersVisibility ? View.VISIBLE : View.GONE}">
+                    android:background="@color/transparent">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -110,7 +110,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/choose_members"
+                            android:text="@string/add_members"
                             android:layout_marginTop="@dimen/small_spacing"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
 
@@ -124,6 +124,7 @@
                             app:chip_deletable="true"
                             app:chip_labelColor="@color/white"
                             app:chip_deleteIconColor="?attr/colorOnError"
+                            app:textColor="?attr/calcTextColor"
                             android:layout_marginTop="@dimen/very_small_spacing"
                             app:memberNames="@={viewModel.members}" />
 

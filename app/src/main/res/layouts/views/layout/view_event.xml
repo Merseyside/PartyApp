@@ -9,84 +9,84 @@
             type="com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventItemViewModel" />
     </data>
 
-       <androidx.cardview.widget.CardView
+    <androidx.cardview.widget.CardView
+         android:layout_width="match_parent"
+         android:layout_height="wrap_content"
+         android:focusable="true"
+         android:clickable="true"
+         app:contentPadding="@dimen/small_spacing"
+         app:cardCornerRadius="@dimen/small_spacing"
+         android:layout_marginTop="@dimen/very_small_spacing"
+         android:layout_marginBottom="@dimen/very_small_spacing"
+         app:cardBackgroundColor="?attr/colorOnBackground"
+         android:foreground="@drawable/card_view_ripple"
+         android:onClick="@{view -> obj.onClick()}">
+
+        <RelativeLayout
+            android:orientation="horizontal"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:focusable="true"
-            android:clickable="true"
-            app:contentPadding="@dimen/small_spacing"
-            app:cardCornerRadius="@dimen/small_spacing"
-            android:layout_marginTop="@dimen/very_small_spacing"
-            android:layout_marginBottom="@dimen/very_small_spacing"
-            app:cardBackgroundColor="?attr/colorOnBackground"
-            android:foreground="@drawable/card_view_ripple"
-            android:onClick="@{view -> obj.onClick()}">
+            android:layout_height="wrap_content">
 
-    <RelativeLayout
-        android:orientation="horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-
-        <LinearLayout
-            android:orientation="vertical"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_toStartOf="@+id/status_container">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@{obj.name}"
-                android:textColor="?attr/colorPrimary"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"/>
-
-            <TextView
-                android:id="@+id/date"
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{obj.date}"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+                android:layout_toStartOf="@+id/status_container">
 
-            <TextView
-                android:id="@+id/members"
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{obj.name}"
+                    android:textColor="?attr/colorPrimary"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"/>
+
+                <TextView
+                    android:id="@+id/date"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{obj.date}"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                <TextView
+                    android:id="@+id/members"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@{obj.memberInfo}"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/status_container"
+                android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{obj.memberInfo}"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+                android:gravity="center"
+                android:layout_centerVertical="true"
+                android:layout_alignParentEnd="true">
 
-        </LinearLayout>
+                <ImageView
+                    android:layout_width="@dimen/icon_size"
+                    android:layout_height="@dimen/icon_size"
+                    android:minWidth="@dimen/icon_size"
+                    android:minHeight="@dimen/icon_size"
+                    android:adjustViewBounds="true"
+                    android:scaleType="centerCrop"
+                    android:background="@color/transparent"
+                    bind:vectorDrawable="@{obj.statusIcon}"
+                    tools:ignore="ContentDescription"/>
 
-        <LinearLayout
-            android:id="@+id/status_container"
-            android:orientation="vertical"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:layout_centerVertical="true"
-            android:layout_alignParentEnd="true">
+                <TextView
+                    android:id="@+id/status"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                    android:text="@{obj.status}"
+                    bind:attrTextColor="@{obj.statusColor}"/>
 
-            <ImageView
-                android:layout_width="@dimen/icon_size"
-                android:layout_height="@dimen/icon_size"
-                android:minWidth="@dimen/icon_size"
-                android:minHeight="@dimen/icon_size"
-                android:adjustViewBounds="true"
-                android:scaleType="centerCrop"
-                android:background="@color/transparent"
-                bind:vectorDrawable="@{obj.statusIcon}"
-                tools:ignore="ContentDescription"/>
+            </LinearLayout>
 
-            <TextView
-                android:id="@+id/status"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                android:text="@{obj.status}"
-                bind:attrTextColor="@{obj.statusColor}"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
+        </RelativeLayout>
 
     </androidx.cardview.widget.CardView>
 </layout>

@@ -11,6 +11,7 @@ import org.kodein.di.erased.singleton
 
 @ExperimentalCoroutinesApi
 internal val itemModule = Kodein.Module("event") {
+
     bind<ItemDao>() with singleton { ItemDao( instance() ) }
 
     bind<ItemRepository>() with singleton {
@@ -21,6 +22,5 @@ internal val itemModule = Kodein.Module("event") {
 @ExperimentalCoroutinesApi
 internal val itemComponent = Kodein {
     extend(appComponent)
-
     import(itemModule)
 }

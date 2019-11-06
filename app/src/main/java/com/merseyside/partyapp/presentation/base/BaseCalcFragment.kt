@@ -22,6 +22,11 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
         super.onStart()
 
         setTitleBackButtonEnabled()
+        if (isActionBarVisible()) {
+            getActionBar()?.show()
+        } else {
+            getActionBar()?.hide()
+        }
     }
 
     private fun setTitleBackButtonEnabled() {
@@ -46,4 +51,6 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
     }
 
     abstract fun hasTitleBackButton(): Boolean
+
+    abstract fun isActionBarVisible(): Boolean
 }

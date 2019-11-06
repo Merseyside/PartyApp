@@ -11,11 +11,11 @@ class ItemDao(database: CalcDatabase) {
 
     private val itemDataMapper = ItemDataMapper()
 
-    fun insertItem(eventId: Long, name: String, description: String, price: Long, payMember: MemberItemInfo, membersInfo: List<MemberItemInfo>) {
+    fun insertItem(eventId: Long, name: String, description: String, price: Double, payMember: MemberItemInfo, membersInfo: List<MemberItemInfo>) {
         db.insertItem(eventId, name, description, price, payMember, MembersModel(membersInfo), getTimestamp())
     }
 
-    fun changeItem(id: Long, name: String, description: String, price: Long, payMember: MemberItemInfo, membersInfo: List<MemberItemInfo>) {
+    fun changeItem(id: Long, name: String, description: String, price: Double, payMember: MemberItemInfo, membersInfo: List<MemberItemInfo>) {
         Logger.logMsg(TAG, "$id")
         db.changeItem(name, description, price, payMember, MembersModel(membersInfo), getTimestamp(), id)
     }

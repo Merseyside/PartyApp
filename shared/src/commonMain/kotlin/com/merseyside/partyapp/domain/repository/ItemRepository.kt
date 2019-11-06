@@ -10,7 +10,7 @@ interface ItemRepository {
         eventId: Long,
         name: String,
         description: String,
-        price: Long,
+        price: Double,
         payMember: MemberItemInfo,
         membersInfo: List<MemberItemInfo>
     ): Boolean

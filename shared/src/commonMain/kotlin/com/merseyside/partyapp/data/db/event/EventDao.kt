@@ -12,7 +12,7 @@ class EventDao(database: CalcDatabase) {
 
     private val eventDataMapper = EventDataMapper()
 
-    internal fun insert(name: String, memberNames: List<String>, notes: String) {
+    internal fun insert(name: String, memberNames: List<String>, notes: String): Event {
 
         val members = memberNames.map {
             Member(generateId(), it)
@@ -21,6 +21,8 @@ class EventDao(database: CalcDatabase) {
         val membersModel = MembersModel(members)
 
         db.insertItem(name, membersModel, notes, Status.IN_PROCESS.toString(), getTimestamp())
+
+        return getEventById(db.lastInsertRowId().executeAsOne())
     }
 
     internal fun change(
@@ -29,18 +31,20 @@ class EventDao(database: CalcDatabase) {
         memberNames: List<String>? = null,
         notes: String? = null,
         status: Status? = null
-    ) {
+    ): Event {
 
         val event = getEventById(id)
 
         name?.let {event.name = name}
-        memberNames?.let { memberNames.map { event.members.add( Member(it, generateId() ) )}}
+        memberNames?.let { memberNames.map { event.members.add( Member(generateId(), it) )}}
         notes?.let {event.notes = notes}
         status?.let { event.status = status }
 
         event.let {
             db.changeItem(it.id, it.name, MembersModel(it.members), it.notes, it.status.toString(), it.timestamp)
         }
+
+        return event
     }
 
     internal fun getAll(): List<Event> {

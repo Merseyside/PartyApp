@@ -2,4 +2,11 @@
 <resources>
     <attr name="calcBackgroundColor" format="reference"/>
     <attr name="calcTextColor" format="reference"/>
+
+    <declare-styleable name="CircleView">
+        <attr name="color" format="color"/>
+        <attr name="text" format="string"/>
+        <attr name="textColor" format="color"/>
+    </declare-styleable>
+
 </resources>

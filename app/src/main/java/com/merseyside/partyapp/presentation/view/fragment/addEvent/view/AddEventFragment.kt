@@ -3,17 +3,33 @@ package com.merseyside.partyapp.presentation.view.fragment.addEvent.view
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
+import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.databinding.FragmentAddEventBinding
 import com.merseyside.partyapp.presentation.base.BaseCalcFragment
 import com.merseyside.partyapp.presentation.di.component.DaggerAddEventComponent
 import com.merseyside.partyapp.presentation.di.module.AddEventModule
+import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
 import com.upstream.basemvvmimpl.utils.ValueAnimatorHelper
 
 
 class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewModel>() {
+
+    private val eventObserver = Observer<Event?> {
+        if (it != null) {
+            sharedViewModel.eventContainer = it
+        }
+    }
+
+    private lateinit var sharedViewModel: SharedViewModel
+
+    override fun isActionBarVisible(): Boolean {
+        return true
+    }
 
     override fun hasTitleBackButton(): Boolean {
         return true
@@ -49,6 +65,8 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        sharedViewModel = ViewModelProviders.of(baseActivityView).get(SharedViewModel::class.java)
+
         init()
     }
 
@@ -59,7 +77,7 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     }
 
     private fun init() {
-
+        viewModel.eventLiveData.observe(this, eventObserver)
     }
 
     private fun doLayout() {

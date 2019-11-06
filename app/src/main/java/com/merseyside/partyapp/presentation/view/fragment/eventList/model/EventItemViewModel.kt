@@ -48,10 +48,6 @@ class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewMod
         return "${CalcApplication.getInstance().getString(R.string.date)} ${getDateTime(obj.timestamp)}"
     }
 
-    fun onClick() {
-        getClickListener()?.onItemClicked(obj)
-    }
-
     @Bindable
     @DrawableRes
     fun getStatusIcon(): Int? {

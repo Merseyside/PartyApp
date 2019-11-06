@@ -21,14 +21,12 @@ class EventRepositoryImpl(private val eventDao: EventDao) : EventRepository {
         return true
     }
 
-    override suspend fun addEvent(id: Long?, name: String, memberNames: List<String>?, notes: String): Boolean {
-        if (id == null) {
+    override suspend fun addEvent(id: Long?, name: String, memberNames: List<String>?, notes: String): Event {
+        return if (id == null) {
             eventDao.insert(name, memberNames!!, notes)
         } else {
             eventDao.change(id, name, memberNames, notes)
         }
-
-        return true
     }
 
     override suspend fun removeEvent(id: Long): Boolean {

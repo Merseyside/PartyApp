@@ -3,6 +3,7 @@ package com.merseyside.partyapp.presentation.view.fragment.addEvent.model
 import android.util.Log
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.entity.Status
@@ -30,10 +31,12 @@ class AddEventViewModel(
     val members = ObservableField<List<String>>()
     val membersErrorText = ObservableField<String>()
 
+    val eventLiveData = MutableLiveData<Event>()
+
     private var modeField = MODE_ADD
+
     val closeEventVisibility = ObservableField(false)
     val addMembersVisibility = ObservableField(true)
-
 
     private var event: Event? = null
 
@@ -118,6 +121,8 @@ class AddEventViewModel(
                 notes.get() ?: ""
             ),
             onComplete = {
+                eventLiveData.value = it
+
                 goBack()
             },
 

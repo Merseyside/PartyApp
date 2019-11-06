@@ -25,8 +25,6 @@
                 android:layout_height="wrap_content"
                 app:contentPadding="@dimen/normal_spacing"
                 app:cardCornerRadius="@dimen/small_spacing"
-                android:layout_marginTop="@dimen/very_small_spacing"
-                android:layout_marginBottom="@dimen/very_small_spacing"
                 style="@style/MyCardView">
 
                 <LinearLayout
@@ -109,7 +107,7 @@
                     android:id="@+id/members_list"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/member_list_height"
-                    android:layout_marginTop="@dimen/normal_spacing"
+
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:orientation="horizontal"
                     app:payMembers="@{viewModel.membersContainer}"
@@ -122,7 +120,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="@dimen/small_spacing"
-                    android:layout_marginTop="@dimen/large_spacing">
+                    android:layout_marginTop="@dimen/normal_spacing">
 
                     <TextView
                         android:layout_width="wrap_content"

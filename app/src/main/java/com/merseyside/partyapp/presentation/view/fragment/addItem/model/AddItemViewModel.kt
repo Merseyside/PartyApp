@@ -9,7 +9,7 @@ import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.data.db.item.MemberItemInfo
 import com.merseyside.partyapp.domain.interactor.AddItemInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
-import com.merseyside.partyapp.utils.convertPriceToLong
+import com.merseyside.partyapp.utils.convertPriceToDouble
 import com.merseyside.partyapp.utils.isPriceValid
 import kotlinx.coroutines.cancel
 import ru.terrakok.cicerone.Router
@@ -47,8 +47,17 @@ class AddItemViewModel(
 
         price.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                val priceStr = price.get()!!
+
                 if (!priceErrorText.get().isNullOrEmpty()) {
                     priceErrorText.set("")
+                }
+
+                if (priceStr.contains(".")) {
+                    val subs = priceStr.split(".")
+                    if (subs.last().length > 2) {
+                        price.set(priceStr.dropLast(1))
+                    }
                 }
             }
         })
@@ -118,7 +127,7 @@ class AddItemViewModel(
                 eventId = event.id,
                 name = name.get()!!,
                 description = description.get() ?: "",
-                price = convertPriceToLong(price.get()!!),
+                price = convertPriceToDouble(price.get()!!),
                 payMember = MemberItemInfo(payMember.get()!!.id, payMember.get()!!.name, 1f),
                 membersInfo = selectableMembers.get()!!.mapNotNull {
                     if (it.second) {

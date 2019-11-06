@@ -12,41 +12,30 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/small_spacing"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="@{view -> obj.onItemClick()}">
+        android:onClick="@{view -> obj.onClick()}"
+        android:paddingTop="@dimen/small_spacing"
+        android:paddingStart="@dimen/normal_spacing"
+        android:paddingEnd="@dimen/normal_spacing"
+        android:foreground="@drawable/card_view_ripple">
 
         <TextView
             android:id="@+id/title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:text="@{obj.title}"
-            android:layout_toStartOf="@id/date"
+            android:textSize="@dimen/large_text_size"
             android:ellipsize="marquee"/>
-
-        <TextView
-            android:id="@+id/price"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/title"
-            android:text="@{obj.price}"/>
-
-        <TextView
-            android:id="@+id/date"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:text="@{obj.date}"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/transparent_grey"
-            android:layout_below="@id/price"
+            android:layout_below="@id/title"
             android:layout_marginTop="@dimen/small_spacing"
-            android:visibility="@{obj.last ? View.GONE : View.VISIBLE}"/>
+            android:visibility="@{obj.last ? View.INVISIBLE : View.VISIBLE}"/>
 
     </RelativeLayout>
 

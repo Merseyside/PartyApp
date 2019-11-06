@@ -24,6 +24,10 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
 
     private val adapter = PaidAdapter()
 
+    override fun isActionBarVisible(): Boolean {
+        return true
+    }
+
     override fun hasTitleBackButton(): Boolean {
         return true
     }

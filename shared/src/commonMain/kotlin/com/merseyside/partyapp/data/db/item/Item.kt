@@ -5,7 +5,7 @@ data class Item(
     val eventId: Long,
     val name: String,
     val description: String,
-    val price: Long,
+    val price: Double,
     val payMember: MemberItemInfo,
     val membersInfo: List<MemberItemInfo>,
     val timestamp: Long
