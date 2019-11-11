@@ -20,10 +20,6 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
 
     private lateinit var sharedViewModel: SharedViewModel
 
-    override fun isActionBarVisible(): Boolean {
-        return true
-    }
-
     override fun hasTitleBackButton(): Boolean {
         return false
     }
@@ -42,7 +38,7 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
     }
 
     private fun getEventListModule(bundle: Bundle?): EventListModule {
-        return EventListModule(this)
+        return EventListModule(this, bundle)
     }
 
     override fun setLayoutId(): Int {
@@ -71,13 +67,7 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
 
     private fun doLayout() {
         binding.eventList.adapter = adapter
-        adapter.setOnItemClickListener(object: BaseAdapter.AdapterClickListener<Event> {
-            override fun onItemClicked(obj: Event) {
-                sharedViewModel.eventContainer = obj
-                viewModel.onEventClick()
-            }
-
-        })
+        adapter.setOnItemClickListener(onItemClickListener)
 
         adapter.setOnEventOptionsClickListener(object: EventAdapter.OnEventOptionsClickListener {
             override fun onEditClick(event: Event) {
@@ -91,6 +81,19 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
         })
 
         viewModel.showEvents()
+    }
+
+    private val onItemClickListener = object: BaseAdapter.OnItemClickListener<Event> {
+        override fun onItemClicked(obj: Event) {
+            sharedViewModel.eventContainer = obj
+            viewModel.onEventClick()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+        adapter.removeOnItemClickListener(onItemClickListener)
     }
 
     companion object {

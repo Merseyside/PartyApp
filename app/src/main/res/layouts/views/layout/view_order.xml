@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
         <variable
@@ -12,10 +13,8 @@
         android:layout_height="@dimen/list_item_height"
         android:focusable="true"
         android:clickable="true"
-        app:contentPadding="@dimen/small_spacing"
-        app:cardCornerRadius="@dimen/small_spacing"
-        app:drawableBackground="@{obj.backgroundDrawable}"
-        android:foreground="@drawable/card_view_ripple"
+        app:attrCardBackgroundColor="@{obj.backgroundColor}"
+        app:cardCornerRadius="@dimen/corner_radius"
         android:layout_marginStart="@dimen/small_spacing"
         android:layout_marginEnd="@dimen/small_spacing">
 
@@ -23,33 +22,44 @@
             android:orientation="vertical"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center">
+            android:layout_gravity="center"
+            android:padding="@dimen/small_spacing">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:text="@{obj.title}"
+                app:attrTextColor="@{obj.textColor}"
+                android:ellipsize="marquee"
+                android:singleLine="true"
                 android:textAlignment="center" />
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/large_spacing">
+                android:layout_marginTop="@dimen/large_spacing"
+                android:background="@color/transparent">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:text="@{obj.anotherMember}"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
+                    app:attrTextColor="@{obj.textColor}"
                     android:textAlignment="center" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:text="@{obj.price}"
+                    app:attrTextColor="@{obj.textColor}"
+                    android:ellipsize="marquee"
+                    android:singleLine="true"
                     android:textAlignment="center" />
             </LinearLayout>
 

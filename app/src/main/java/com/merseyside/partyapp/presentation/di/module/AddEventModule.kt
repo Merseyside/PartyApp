@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.di.module
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -8,12 +9,16 @@ import com.merseyside.partyapp.domain.interactor.CloseEventInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventByIdInteractor
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
 import com.upstream.basemvvmimpl.presentation.fragment.BaseFragment
+import com.upstream.basemvvmimpl.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router
 
 @Module
-class AddEventModule(private val fragment: BaseFragment) {
+class AddEventModule(
+    private val fragment: BaseFragment,
+    private val bundle: Bundle?
+) {
 
     @Provides
     internal fun addEventViewModelProvider(
@@ -22,7 +27,7 @@ class AddEventModule(private val fragment: BaseFragment) {
         getEventByIdUseCase: GetEventByIdInteractor,
         closeUseCaseUseCase: CloseEventInteractor
         ): ViewModelProvider.Factory {
-        return AddEventViewModelProviderFactory(router, addEventUseCase, getEventByIdUseCase, closeUseCaseUseCase)
+        return AddEventViewModelProviderFactory(bundle, router, addEventUseCase, getEventByIdUseCase, closeUseCaseUseCase)
     }
 
     @Provides
@@ -46,17 +51,14 @@ class AddEventModule(private val fragment: BaseFragment) {
     }
 
     class AddEventViewModelProviderFactory(
+        bundle: Bundle?,
         private val router: Router,
         private val addEventUseCase: AddEventInteractor,
         private val getEventByIdUseCase: GetEventByIdInteractor,
         private val closeUseCaseUseCase: CloseEventInteractor
-    ) : ViewModelProvider.Factory {
-
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass == AddEventViewModel::class.java) {
-                return AddEventViewModel(router, addEventUseCase, getEventByIdUseCase, closeUseCaseUseCase) as T
-            }
-            throw IllegalArgumentException("Unknown class title")
+    ) : BundleAwareViewModelFactory<AddEventViewModel>(bundle) {
+        override fun getViewModel(): AddEventViewModel {
+            return AddEventViewModel(router, addEventUseCase, getEventByIdUseCase, closeUseCaseUseCase)
         }
     }
 }

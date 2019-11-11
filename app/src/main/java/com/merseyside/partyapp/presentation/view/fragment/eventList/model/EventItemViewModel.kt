@@ -79,10 +79,10 @@ class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewMod
 
         return when(obj.status) {
             Status.IN_PROCESS -> {
-                R.attr.colorSecondary
+                R.attr.colorPrimary
             }
             else -> {
-                R.attr.colorPrimary
+                R.attr.colorSecondaryVariant
             }
         }
     }

@@ -1,16 +1,22 @@
 package com.merseyside.partyapp.presentation.view.fragment.addEvent.model
 
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import com.google.android.material.textfield.TextInputLayout
-import com.merseyside.partyapp.presentation.view.view.circleView.CircleView
 import com.pchmn.materialchips.ChipsInput
 import com.pchmn.materialchips.model.ChipInterface
 
 @BindingAdapter(value = ["memberNamesAttrChanged"]) // AttrChanged required postfix
 fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
     if (listener != null) {
+       view.editText.setOnFocusChangeListener { v, hasFocus ->
+           if (!hasFocus) {
+               view.editText.setText(StringBuilder(view.editText.text.toString()).append(",").toString(), TextView.BufferType.EDITABLE)
+           }
+       }
+
        view.addChipsListener(object: ChipsInput.ChipsListener {
            override fun onChipAdded(chip: ChipInterface?, newSize: Int) {
                listener.onChange()
@@ -21,9 +27,9 @@ fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
            }
 
            override fun onTextChanged(text: CharSequence?) {
-               if (text!!.contains(" ")) {
+               if (text!!.contains(",")) {
                    if (text.length != 1) {
-                       view.addChip(text.toString().replace(" ", ""), "")
+                       view.addChip(text.toString().replace(",", ""), "")
                    } else {
                        view.editText.setText("")
                    }
@@ -42,8 +48,8 @@ fun setMembers(chipView: ChipsInput, members: List<String>?) {
 
 
 @InverseBindingAdapter(attribute = "app:memberNames")
-fun getMembers(view: ChipsInput): List<String> {
-    return view.allChips.map { it.label }
+fun getMembers(chipsInput: ChipsInput): List<String> {
+    return chipsInput.allChips.map { it.label }
 }
 
 @BindingAdapter("app:errorText")

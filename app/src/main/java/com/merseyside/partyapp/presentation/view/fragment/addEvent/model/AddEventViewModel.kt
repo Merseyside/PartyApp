@@ -1,6 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.addEvent.model
 
-import android.util.Log
+import android.os.Bundle
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
@@ -23,13 +23,13 @@ class AddEventViewModel(
 ) : BaseCalcViewModel(router) {
 
     val eventName = ObservableField<String>()
-    val eventNameErrorText = ObservableField<String>()
+    val eventNameErrorText = ObservableField("")
 
     val notes = ObservableField<String>()
-    val notesErrorText = ObservableField<String>()
+    val notesErrorText = ObservableField("")
 
     val members = ObservableField<List<String>>()
-    val membersErrorText = ObservableField<String>()
+    val membersErrorText = ObservableField("")
 
     val eventLiveData = MutableLiveData<Event>()
 
@@ -66,25 +66,56 @@ class AddEventViewModel(
         })
     }
 
+    override fun readFrom(bundle: Bundle) {
+        bundle.apply {
+            if (containsKey(EVENT_KEY)) {
+                initWithEvent(serializer.deserialize(bundle.getString(EVENT_KEY)!!))
+
+                eventName.set(bundle.getString(NAME_KEY))
+                notes.set(bundle.getString(NOTES_KEY))
+                members.set(serializer.deserialize(bundle.getString(MEMBERS_KEY)!!))
+            }
+        }
+    }
+
+    override fun writeTo(bundle: Bundle) {
+        bundle.apply {
+            putString(NAME_KEY, eventName.get() ?: "")
+            putString(NOTES_KEY, notes.get() ?: "")
+            putString(
+                MEMBERS_KEY,
+                serializer.serialize<List<String>>(members.get() ?: arrayOf(""))
+            )
+
+            if (modeField == MODE_EDIT) {
+                bundle.putString(EVENT_KEY, serializer.serialize<Event>(event!!))
+            }
+        }
+
+    }
+
     fun initWithEventId(id: Long) {
 
         getEventByIdUseCase.execute(
             params = GetEventByIdInteractor.Params(id),
             onComplete = {
                 event = it
-
-                eventName.set(it.name)
-                notes.set(it.notes)
-
-                modeField = MODE_EDIT
-
-                closeEventVisibility.set(modeField == MODE_EDIT && event!!.status == Status.IN_PROCESS)
-                addMembersVisibility.set(event!!.status == Status.IN_PROCESS)
+                initWithEvent(it)
             },
             onError = {
                 showErrorMsg(errorMsgCreator.createErrorMsg(it))
             }
         )
+    }
+
+    private fun initWithEvent(event: Event) {
+        eventName.set(event.name)
+        notes.set(event.notes)
+
+        modeField = MODE_EDIT
+
+        closeEventVisibility.set(modeField == MODE_EDIT && event.status == Status.IN_PROCESS)
+        addMembersVisibility.set(event.status == Status.IN_PROCESS)
     }
 
     override fun dispose() {
@@ -94,8 +125,10 @@ class AddEventViewModel(
     }
 
     fun onSaveClick() {
-        Log.d(TAG, "${eventName.get()}")
+        save()
+    }
 
+    private fun save() {
         if (!isNameValid(eventName.get())) {
             eventNameErrorText.set(getString(R.string.event_name_error_msg))
             return
@@ -131,7 +164,6 @@ class AddEventViewModel(
             }
         )
 
-        Log.d(TAG, members.get().toString())
     }
 
     fun closeEvent() {
@@ -149,6 +181,12 @@ class AddEventViewModel(
     companion object {
         private const val MODE_ADD = 0
         private const val MODE_EDIT = 1
+
+        private const val NAME_KEY = "name"
+        private const val NOTES_KEY = "notes"
+        private const val MEMBERS_KEY = "members"
+
+        private const val EVENT_KEY = "event"
 
         private const val TAG = "AddEventViewModel"
     }

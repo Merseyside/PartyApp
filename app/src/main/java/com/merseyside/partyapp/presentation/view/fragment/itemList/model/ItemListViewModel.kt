@@ -1,6 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.itemList.model
 
-import android.util.Log
+import android.os.Bundle
 import androidx.databinding.ObservableField
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.Item
@@ -30,6 +30,10 @@ class ItemListViewModel(
         getItemsById(eventId)
     }
 
+    override fun readFrom(bundle: Bundle) {}
+
+    override fun writeTo(bundle: Bundle) {}
+
     override fun dispose() {
         getItemsByEventIdUseCase.cancel()
     }
@@ -55,8 +59,6 @@ class ItemListViewModel(
             params = GetItemsByEventIdInteractor.Params(id),
             onComplete = {
                 itemsVisibility.set(it.isNotEmpty())
-
-                Log.d(TAG, it.toString())
 
                 itemsContainer.set(it)
             },

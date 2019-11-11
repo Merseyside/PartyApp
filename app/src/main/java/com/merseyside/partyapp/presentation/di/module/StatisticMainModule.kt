@@ -1,24 +1,29 @@
 package com.merseyside.partyapp.presentation.di.module
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.domain.interactor.GetStatisticInteractor
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.model.StatisticMainViewModel
 import com.upstream.basemvvmimpl.presentation.fragment.BaseFragment
+import com.upstream.basemvvmimpl.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router
 
 @Module
-class StatisticMainModule(private val fragment: BaseFragment) {
+class StatisticMainModule(
+    private val fragment: BaseFragment,
+    private val bundle: Bundle?
+) {
 
     @Provides
     internal fun itemListViewModelProvider(
         router: Router,
         getStatisticUseCase: GetStatisticInteractor
     ): ViewModelProvider.Factory {
-        return StatisticMainViewModelProviderFactory(router, getStatisticUseCase)
+        return StatisticMainViewModelProviderFactory(bundle, router, getStatisticUseCase)
     }
 
     @Provides
@@ -32,15 +37,12 @@ class StatisticMainModule(private val fragment: BaseFragment) {
     }
 
     class StatisticMainViewModelProviderFactory(
+        bundle: Bundle?,
         private val router: Router,
         private val getStatisticUseCase: GetStatisticInteractor
-    ) : ViewModelProvider.Factory {
-
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass == StatisticMainViewModel::class.java) {
-                return StatisticMainViewModel(router, getStatisticUseCase) as T
-            }
-            throw IllegalArgumentException("Unknown class title")
+    ) : BundleAwareViewModelFactory<StatisticMainViewModel>(bundle) {
+        override fun getViewModel(): StatisticMainViewModel {
+            return StatisticMainViewModel(router, getStatisticUseCase)
         }
     }
 }

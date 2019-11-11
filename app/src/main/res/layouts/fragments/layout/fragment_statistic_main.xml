@@ -23,14 +23,19 @@
                 android:id="@+id/toolbar_layout"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+                app:contentScrim="?attr/calcBackgroundColor"
+                app:titleEnabled="true"
+                app:title="@string/statistic"
+                app:collapsedTitleTextAppearance="@style/collapsingToolbarLayoutTitleColor"
+                app:expandedTitleTextAppearance="@style/expandedToolbarLayoutTitleColor"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:toolbarId="@id/toolbar">
 
                 <FrameLayout
                     android:id="@+id/frame_layout"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:background="?attr/colorPrimary"
+                    android:background="?attr/colorSecondaryVariant"
                     app:layout_collapseMode="parallax"
                     app:layout_collapseParallaxMultiplier="0.3">
 
@@ -39,12 +44,12 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textAlignment="center"
-                            android:text="@{viewModel.totalSpend}"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"/>
+<!--                        <TextView-->
+<!--                            android:layout_width="match_parent"-->
+<!--                            android:layout_height="wrap_content"-->
+<!--                            android:textAlignment="center"-->
+<!--                            android:text="@{viewModel.totalSpend}"-->
+<!--                            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"/>-->
 
                     </LinearLayout>
 
@@ -55,7 +60,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
                     app:layout_collapseMode="pin"
-                    app:title="@string/statistic"/>
+                    app:titleTextColor="?attr/colorOnBackground"/>
 
             </com.google.android.material.appbar.CollapsingToolbarLayout>
         </com.google.android.material.appbar.AppBarLayout>
@@ -74,14 +79,12 @@
                 android:padding="@dimen/normal_spacing">
 
                 <androidx.cardview.widget.CardView
+                    android:id="@+id/member_container"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:focusable="true"
-                    android:clickable="true"
                     android:paddingStart="@dimen/normal_spacing"
                     android:paddingEnd="@dimen/normal_spacing"
                     app:cardCornerRadius="@dimen/member_container_corner_radius"
-                    android:foreground="@drawable/card_view_ripple"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -101,11 +104,19 @@
                             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                             app:statisticMembers="@{viewModel.memberContainer}"
                             android:layout_gravity="center"
+                            android:overScrollMode="never"
                             android:visibility="@{viewModel.membersVisibility ? View.VISIBLE : View.GONE}">
                         </androidx.recyclerview.widget.RecyclerView>
                     </FrameLayout>
 
                 </androidx.cardview.widget.CardView>
+
+                <com.merseyside.partyapp.presentation.view.view.nonSwipeableViewPager.NonSwipeableViewPager
+                    android:id="@+id/page_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:layout_constraintTop_toBottomOf="@id/member_container"
+                    android:layout_marginTop="@dimen/normal_spacing"/>
 
                 <TextView
                     android:layout_width="wrap_content"

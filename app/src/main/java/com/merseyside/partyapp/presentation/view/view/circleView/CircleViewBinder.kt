@@ -1,8 +1,8 @@
 package com.merseyside.partyapp.presentation.view.view.circleView
 
-import androidx.annotation.ColorRes
-import androidx.core.content.ContextCompat
+import androidx.annotation.AttrRes
 import androidx.databinding.BindingAdapter
+import com.upstream.basemvvmimpl.utils.getColorFromAttr
 
 @BindingAdapter("app:circleText")
 fun setCircleText(view: CircleView, value: String?) {
@@ -12,9 +12,15 @@ fun setCircleText(view: CircleView, value: String?) {
 }
 
 @BindingAdapter("app:circleColor")
-fun setCircleColor(view: CircleView, @ColorRes value: Int?) {
+fun setCircleColor(view: CircleView, @AttrRes value: Int?) {
     if (value != null) {
-        view.setColor(ContextCompat.getColor(view.context, value))
+        view.setColor(view.context.getColorFromAttr(value))
     }
+}
 
+@BindingAdapter("app:circleTextColor")
+fun setCircleTextColor(view: CircleView, @AttrRes value: Int?) {
+    if (value != null) {
+        view.setTextColor(view.context.getColorFromAttr(value))
+    }
 }

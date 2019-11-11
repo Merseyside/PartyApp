@@ -4,29 +4,21 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.PagerSnapHelper
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
+import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.databinding.FragmentAddItemBinding
 import com.merseyside.partyapp.presentation.base.BaseCalcFragment
 import com.merseyside.partyapp.presentation.di.component.DaggerAddItemComponent
 import com.merseyside.partyapp.presentation.di.module.AddItemModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
-import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.PaidAdapter
+import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberAdapter
 import com.merseyside.partyapp.presentation.view.fragment.addItem.model.AddItemViewModel
-import com.merseyside.partyapp.utils.LinePagerDecorator
-import com.merseyside.partyapp.utils.SnapOnScrollListener
-import com.merseyside.partyapp.utils.attachSnapHelperWithListener
+import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
 
 class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewModel>() {
 
     private lateinit var sharedViewModel: SharedViewModel
-
-    private val adapter = PaidAdapter()
-
-    override fun isActionBarVisible(): Boolean {
-        return true
-    }
 
     override fun hasTitleBackButton(): Boolean {
         return true
@@ -74,14 +66,6 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
     }
 
     private fun doLayout() {
-
-        binding.membersList.adapter = adapter
-
-        binding.membersList.addItemDecoration(
-            LinePagerDecorator(
-                baseActivityView
-            )
-        )
 
         if (arguments != null && arguments!!.containsKey(MODE_KEY)) {
             if (arguments!!.getInt(MODE_KEY) == EDIT_VALUE) {

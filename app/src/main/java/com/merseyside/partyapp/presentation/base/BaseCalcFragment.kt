@@ -1,14 +1,30 @@
 package com.merseyside.partyapp.presentation.base
 
+import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import androidx.annotation.CallSuper
+import androidx.appcompat.widget.Toolbar
 import androidx.databinding.ViewDataBinding
 import com.merseyside.partyapp.CalcApplication
 import com.upstream.basemvvmimpl.presentation.fragment.BaseMvvmFragment
+import com.upstream.basemvvmimpl.presentation.view.IFocusManager
 
-abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : BaseMvvmFragment<B, M>() {
+abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : BaseMvvmFragment<B, M>(), IFocusManager {
 
     val appComponent = CalcApplication.getInstance().appComponent
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        keepOneFocusedView()
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        viewModel.writeTo(outState)
+    }
 
     protected fun goBack() {
         viewModel.goBack()
@@ -22,11 +38,6 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
         super.onStart()
 
         setTitleBackButtonEnabled()
-        if (isActionBarVisible()) {
-            getActionBar()?.show()
-        } else {
-            getActionBar()?.hide()
-        }
     }
 
     private fun setTitleBackButtonEnabled() {
@@ -50,7 +61,14 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
         return super.onOptionsItemSelected(item)
     }
 
+    override fun getToolbar(): Toolbar? {
+        return null
+    }
+
+    override fun getRootView(): View {
+        return view!!
+    }
+
     abstract fun hasTitleBackButton(): Boolean
 
-    abstract fun isActionBarVisible(): Boolean
 }

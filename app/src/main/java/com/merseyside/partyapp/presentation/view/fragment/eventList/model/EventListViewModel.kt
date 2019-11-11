@@ -1,6 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.eventList.model
 
-import android.util.Log
+import android.os.Bundle
 import androidx.databinding.ObservableField
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -21,6 +21,10 @@ class EventListViewModel(
 
     val eventsContainer = ObservableField<List<Event>>()
 
+    override fun readFrom(bundle: Bundle) {}
+
+    override fun writeTo(bundle: Bundle) {}
+
     override fun dispose() {
         getEventsUseCase.cancel()
     }
@@ -29,8 +33,6 @@ class EventListViewModel(
         getEventsUseCase.execute(
             onComplete = {
                 eventsVisibility.set(it.isNotEmpty())
-
-                Log.d(TAG, it.toString())
 
                 eventsContainer.set(it)
             },

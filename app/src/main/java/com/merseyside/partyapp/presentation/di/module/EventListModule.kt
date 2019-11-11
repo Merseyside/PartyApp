@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.di.module
 
+import android.os.Bundle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
@@ -7,12 +8,16 @@ import com.merseyside.partyapp.domain.interactor.DeleteEventInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventsInteractor
 import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventListViewModel
 import com.upstream.basemvvmimpl.presentation.fragment.BaseFragment
+import com.upstream.basemvvmimpl.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router
 
 @Module
-class EventListModule(private val fragment: BaseFragment) {
+class EventListModule(
+    private val fragment: BaseFragment,
+    private val bundle: Bundle?
+) {
 
     @Provides
     internal fun eventListViewModelProvider(
@@ -20,7 +25,7 @@ class EventListModule(private val fragment: BaseFragment) {
         getEventsUseCase: GetEventsInteractor,
         deleteEventUseCase: DeleteEventInteractor
     ): ViewModelProvider.Factory {
-        return EventListViewModelProviderFactory(router, getEventsUseCase, deleteEventUseCase)
+        return EventListViewModelProviderFactory(bundle, router, getEventsUseCase, deleteEventUseCase)
     }
 
     @Provides
@@ -39,16 +44,13 @@ class EventListModule(private val fragment: BaseFragment) {
     }
 
     class EventListViewModelProviderFactory(
+        bundle: Bundle?,
         private val router: Router,
         private val getEventsUseCase: GetEventsInteractor,
         private val deleteEventUseCase: DeleteEventInteractor
-    ) : ViewModelProvider.Factory {
-
-        override fun <T : ViewModel> create(modelClass: Class<T>): T {
-            if (modelClass == EventListViewModel::class.java) {
-                return EventListViewModel(router, getEventsUseCase, deleteEventUseCase) as T
-            }
-            throw IllegalArgumentException("Unknown class title")
+    ) : BundleAwareViewModelFactory<EventListViewModel>(bundle) {
+        override fun getViewModel(): EventListViewModel {
+            return EventListViewModel(router, getEventsUseCase, deleteEventUseCase)
         }
     }
 }

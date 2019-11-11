@@ -1,10 +1,11 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMember.model
 
-import androidx.annotation.DrawableRes
+import androidx.annotation.AttrRes
 import androidx.databinding.Bindable
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.Order
+import com.merseyside.partyapp.utils.doubleToStringPrice
 import com.upstream.basemvvmimpl.presentation.model.BaseAdapterViewModel
 
 
@@ -36,19 +37,40 @@ class OrderItemViewModel(override var obj: Order) : BaseAdapterViewModel<Order>(
 
     @Bindable
     fun getPrice(): String {
-        return  CalcApplication.getInstance().getActualString(R.string.price, obj.price.toString())
+        return CalcApplication.getInstance().getActualString(R.string.price, doubleToStringPrice(obj.price))
     }
 
     @Bindable
-    @DrawableRes
-    fun getBackgroundDrawable(): Int {
+    @AttrRes
+    fun getBackgroundColor(): Int {
         return when (obj) {
             is Order.OrderOwner -> {
-                R.drawable.order_owner_background
+                if (obj.ownerId == obj.member.id) {
+                    R.attr.colorOnBackground
+                } else {
+                    R.attr.colorPrimary
+                }
+            }
+            else -> {
+                R.attr.colorError
+            }
+        }
+    }
+
+    @Bindable
+    @AttrRes
+    fun getTextColor(): Int {
+        return when (obj) {
+            is Order.OrderOwner -> {
+                if (obj.ownerId == obj.member.id) {
+                    R.attr.calcTextColor
+                } else {
+                    R.attr.colorOnPrimary
+                }
             }
 
-            else -> {
-                R.drawable.order_receiver_background
+            is Order.OrderReceiver -> {
+                R.attr.colorOnError
             }
         }
     }

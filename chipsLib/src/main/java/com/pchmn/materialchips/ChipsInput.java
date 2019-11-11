@@ -140,7 +140,7 @@ public class ChipsInput extends ScrollViewMaxHeight {
                 mIsSelectable = a.getBoolean(R.styleable.ChipsInput_chip_selectable, false);
 
                 mSelectedColor = a.getColorStateList(R.styleable.ChipsInput_chip_selectedColor);
-                mSelectedTextColor = a.getColorStateList(R.styleable.ChipsInput_chip_selectedTextColor);
+                mSelectedTextColor = a.getColorStateList(R.styleable.ChipsInput_chip_selectedLabelColor);
             }
 
             finally {

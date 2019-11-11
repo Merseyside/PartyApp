@@ -2,6 +2,7 @@ package com.merseyside.partyapp.presentation.view.fragment.itemList.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -26,10 +27,6 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
 
     private val adapter = ItemAdapter()
 
-    override fun isActionBarVisible(): Boolean {
-        return true
-    }
-
     override fun hasTitleBackButton(): Boolean {
         return true
     }
@@ -46,7 +43,7 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
     }
 
     private fun getItemListModule(bundle: Bundle?): ItemListModule {
-        return ItemListModule(this)
+        return ItemListModule(this, bundle)
     }
 
     override fun setLayoutId(): Int {
@@ -78,9 +75,8 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
 
-        when (id) {
+        when (item.itemId) {
             R.id.action_edit -> {
                 viewModel.navigateToEditScreen(sharedViewModel.eventContainer?.id ?: throw IllegalStateException())
                 return true
@@ -96,28 +92,41 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
 
 
     private fun init() {
-        adapter.setOnItemClickListener(object: BaseAdapter.AdapterClickListener<Item> {
-            override fun onItemClicked(obj: Item) {
-                sharedViewModel.itemContainer = obj
-                viewModel.navigateToEditItemScreen()
-            }
-        })
-    }
 
-    private fun doLayout() {
-        binding.itemList.adapter = adapter
-        
+
         adapter.setOnItemOptionsClickListener(object: ItemAdapter.OnItemOptionsClickListener {
             override fun onDeleteClick(item: Item) {
                 viewModel.deleteItem(item)
             }
 
         })
+    }
+
+    private fun doLayout() {
+        binding.itemList.adapter = adapter
+
+        adapter.setOnItemClickListener(onItemClickListener)
 
         viewModel.init(sharedViewModel.eventContainer!!.id)
     }
 
+    private val onItemClickListener = object: BaseAdapter.OnItemClickListener<Item> {
+        override fun onItemClicked(obj: Item) {
+            sharedViewModel.itemContainer = obj
+            viewModel.navigateToEditItemScreen()
+        }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+
+
+        adapter.removeOnItemClickListener(onItemClickListener)
+    }
+
     companion object {
+        private const val TAG = "ItemListFragment"
+
         fun newInstance(): ItemListFragment {
             return ItemListFragment()
         }

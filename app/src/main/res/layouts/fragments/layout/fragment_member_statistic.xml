@@ -8,32 +8,169 @@
             type="com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.StatisticMemberViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/order_list"
-            android:orientation="horizontal"
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/all_orders"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/order_list"
+                android:orientation="horizontal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintTop_toTopOf="parent"
+                app:orders="@{viewModel.ordersContainer}"
+                android:overScrollMode="never"
+                android:layout_marginTop="@dimen/small_spacing"
+                android:visibility="@{viewModel.ordersVisibility ? View.VISIBLE : View.GONE}">
+            </androidx.recyclerview.widget.RecyclerView>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toTopOf="parent"
-            app:orders="@{viewModel.ordersContainer}"
-            android:visibility="@{viewModel.ordersVisibility ? View.VISIBLE : View.GONE}">
-        </androidx.recyclerview.widget.RecyclerView>
+            android:layout_marginTop="@dimen/normal_spacing">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/result_list"
-            android:orientation="horizontal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_constraintTop_toTopOf="parent"
-            android:visibility="@{viewModel.resultsVisibility ? View.VISIBLE : View.GONE}">
-        </androidx.recyclerview.widget.RecyclerView>
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                app:cardBackgroundColor="?attr/colorPrimary"
+                app:contentPadding="@dimen/normal_spacing"
+                app:cardCornerRadius="@dimen/small_spacing"
+                style="@style/MyCardView">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <RelativeLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/total_spend"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                            android:layout_toStartOf="@+id/total_spend"/>
+
+                        <TextView
+                            android:id="@+id/total_spend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                            android:textSize="@dimen/medium_text_size"
+                            android:fontFamily="sans-serif-medium"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:text="@{viewModel.totalSpend}"
+                            android:layout_alignParentEnd="true"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/total_debt"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                            android:layout_toStartOf="@+id/total_debt"/>
+
+                        <TextView
+                            android:id="@+id/total_debt"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                            android:text="@{viewModel.totalDebt}"
+                            android:textColor="?attr/colorError"
+                            android:textSize="@dimen/medium_text_size"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_alignParentEnd="true"/>
+
+                    </RelativeLayout>
+
+                    <RelativeLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="bottom">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@string/total_lend"
+                            android:textColor="?attr/colorOnPrimary"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                            android:layout_toStartOf="@+id/total_lend"/>
+
+                        <TextView
+                            android:id="@+id/total_lend"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+                            android:text="@{viewModel.totalLend}"
+                            android:textSize="@dimen/medium_text_size"
+                            android:fontFamily="sans-serif-medium"
+                            android:layout_alignParentEnd="true"
+                            android:textColor="@color/cyan_secondary"/>
+
+                    </RelativeLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:clickable="true"
+                android:layout_marginTop="@dimen/normal_spacing"
+                app:cardCornerRadius="@dimen/small_spacing"
+                style="@style/MyCardView">
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/result_list"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:results="@{viewModel.resultsContainer}"
+                        android:overScrollMode="never"
+                        android:visibility="@{viewModel.resultsVisibility ? View.VISIBLE : View.GONE}">
+                    </androidx.recyclerview.widget.RecyclerView>
+
+            </androidx.cardview.widget.CardView>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 </layout>

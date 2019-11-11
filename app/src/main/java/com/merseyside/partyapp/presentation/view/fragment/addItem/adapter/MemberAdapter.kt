@@ -4,9 +4,13 @@ import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.presentation.view.fragment.addItem.model.MemberItemViewModel
-import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
+import com.upstream.basemvvmimpl.presentation.adapter.BaseSelectableAdapter
 
-class PaidAdapter : BaseAdapter<Member, MemberItemViewModel>() {
+class MemberAdapter : BaseSelectableAdapter<Member, MemberItemViewModel>() {
+
+    override fun isAllowToCancelSelection(): Boolean {
+        return false
+    }
 
     override fun getLayoutIdForPosition(position: Int): Int {
         return R.layout.view_member

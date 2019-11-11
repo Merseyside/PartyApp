@@ -24,23 +24,21 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
 
     private var text: String = ""
 
-    private val paint: Paint
-    private val textPaint: Paint
+    private lateinit var paint: Paint
+    private lateinit var textPaint: Paint
 
     private val textSizeKoef = 0.33F
 
     private var rect: Rect
 
+    private var textSize = 0f
+
     init {
 
         loadAttrs(attributeSet)
 
-        paint = Paint(Paint.ANTI_ALIAS_FLAG)
-        paint.color = color
-
-        textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
-        textPaint.textAlign = Paint.Align.CENTER
-        textPaint.color = textColor
+        initCirclePaint(color)
+        initTextPaint(textColor)
 
         rect = Rect()
     }
@@ -54,6 +52,18 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
         textColor = array.getColor(R.styleable.CircleView_textColor, textColor)
     }
 
+    private fun initCirclePaint(@ColorInt color: Int) {
+        paint = Paint(Paint.ANTI_ALIAS_FLAG)
+        paint.color = color
+    }
+
+    private fun initTextPaint(@ColorInt color: Int) {
+        textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
+        textPaint.textAlign = Paint.Align.CENTER
+        textPaint.color = color
+        textPaint.textSize = textSize
+    }
+
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
 
         val height = getDefaultSize(suggestedMinimumHeight, heightMeasureSpec)
@@ -61,7 +71,8 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
         size = min(width, height)
         setMeasuredDimension(size, size)
 
-        textPaint.textSize = convertPixelsToDp(size + (size * textSizeKoef).toInt())
+        textSize = convertPixelsToDp(size + (size * textSizeKoef).toInt())
+        textPaint.textSize = textSize
 
         rect.set(0, 0, size, size)
     }
@@ -96,11 +107,20 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
     fun setText(text: String) {
         this.text = text
 
+
         invalidate()
     }
 
     fun setColor(@ColorInt color: Int) {
         this.color = color
+        initCirclePaint(color)
+
+        invalidate()
+    }
+
+    fun setTextColor(@ColorInt color: Int) {
+        this.textColor = color
+        initTextPaint(color)
 
         invalidate()
     }

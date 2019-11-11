@@ -36,10 +36,8 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         style="@style/TextInputLayout"
-                        app:errorEnabled="@{!viewModel.nameErrorText.isEmpty()}"
+                        app:errorEnabled="@{!viewModel.nameErrorText.empty}"
                         app:errorText="@{viewModel.nameErrorText}"
-                        app:counterEnabled="true"
-                        app:counterMaxLength="24"
                         android:hint="@string/item_title">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -73,7 +71,7 @@
                         android:layout_height="wrap_content"
                         style="@style/TextInputLayout"
                         android:layout_marginTop="@dimen/small_spacing"
-                        app:errorEnabled="@{!viewModel.priceErrorText.isEmpty()}"
+                        app:errorEnabled="@{!viewModel.priceErrorText.empty}"
                         app:errorText="@{viewModel.priceErrorText}"
                         android:hint="@string/item_total_price">
 
@@ -103,56 +101,70 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/members_list"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/member_list_height"
-
-                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    android:orientation="horizontal"
-                    app:payMembers="@{viewModel.membersContainer}"
-                    app:payMember="@={viewModel.payMember}">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="@dimen/small_spacing"
-                    android:layout_marginTop="@dimen/normal_spacing">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="@string/choose_members"
-                        android:layout_marginTop="@dimen/small_spacing"
-                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
-
-                    <com.pchmn.materialchips.ChipsInput
-                        android:id="@+id/chips"
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:showChipDetailed="false"
-                        app:chip_backgroundColor="?attr/colorPrimaryVariant"
-                        app:chip_hasAvatarIcon="true"
-                        app:chip_labelColor="?attr/colorOnSurface"
-                        app:chip_selectable="true"
-                        app:chip_selectedColor="?attr/colorPrimary"
-                        app:chip_selectedTextColor="?attr/colorOnPrimary"
-                        app:chip_editable="false"
-                        app:selectableMembers="@={viewModel.selectableMembers}"/>
+                        android:layout_marginTop="@dimen/small_spacing">
 
-                    <TextView
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/choose_pays_member"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/members_list"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                            android:orientation="horizontal"
+                            android:layout_gravity="center"
+                            android:overScrollMode="never"
+                            android:layout_marginTop="@dimen/small_spacing"
+                            app:payMembers="@{viewModel.membersContainer}"
+                            app:payMember="@={viewModel.payMember}">
+
+                        </androidx.recyclerview.widget.RecyclerView>
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:textColor="?attr/colorError"
-                        android:text="@{viewModel.selectableMembersErrorText}"
-                        android:visibility="@{viewModel.selectableMembersErrorText.isEmpty() ? View.GONE : View.VISIBLE}"/>
+                        android:layout_marginTop="@dimen/small_spacing">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/choose_members"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                        <com.pchmn.materialchips.ChipsInput
+                            android:id="@+id/chips"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:showChipDetailed="false"
+                            app:chip_backgroundColor="?attr/colorSecondaryVariant"
+                            app:chip_hasAvatarIcon="true"
+                            app:chip_labelColor="?attr/colorOnSurface"
+                            app:chip_selectable="true"
+                            app:chip_selectedColor="?attr/colorPrimary"
+                            app:chip_selectedLabelColor="?attr/colorOnBackground"
+                            app:chip_editable="false"
+                            app:selectableMembers="@={viewModel.selectableMembers}"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorError"
+                            android:text="@{viewModel.selectableMembersErrorText}"
+                            android:visibility="@{viewModel.selectableMembersErrorText.empty ? View.GONE : View.VISIBLE}"/>
+
+                    </LinearLayout>
 
                 </LinearLayout>
-
-            </LinearLayout>
 
             </androidx.cardview.widget.CardView>
 

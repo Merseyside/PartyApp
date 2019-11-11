@@ -1,7 +1,11 @@
 package com.merseyside.partyapp.presentation.view.fragment.addEvent.view
 
 import android.content.Context
+import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract
+import android.util.Log
 import android.view.View
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
@@ -14,6 +18,7 @@ import com.merseyside.partyapp.presentation.di.component.DaggerAddEventComponent
 import com.merseyside.partyapp.presentation.di.module.AddEventModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
+import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.ContactChip
 import com.upstream.basemvvmimpl.utils.ValueAnimatorHelper
 
 
@@ -26,10 +31,6 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     }
 
     private lateinit var sharedViewModel: SharedViewModel
-
-    override fun isActionBarVisible(): Boolean {
-        return true
-    }
 
     override fun hasTitleBackButton(): Boolean {
         return true
@@ -47,7 +48,7 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     }
 
     private fun getAddEventModule(bundle: Bundle?): AddEventModule {
-        return AddEventModule(this)
+        return AddEventModule(this, bundle)
     }
 
     override fun setLayoutId(): Int {
@@ -123,10 +124,77 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
             )
         }
 
+//        val permission = arrayOf(Manifest.permission.READ_CONTACTS)
+//        if (PermissionsManager.isPermissionsGranted(baseActivityView, permission)) {
+//            getContactList()
+//        } else {
+//            PermissionsManager.verifyStoragePermissions(this, permission, PERMISSION_CODE)
+//        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        when (requestCode) {
+            PERMISSION_CODE -> {
+                if (grantResults.isNotEmpty()
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    getContactList()
+                }
+            }
+        }
+    }
+
+    private fun getContactList() {
+
+        val contactList = ArrayList<ContactChip>()
+        val phones = baseActivityView.contentResolver
+            .query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
+
+        if (phones != null) {
+            while (phones.moveToNext()) {
+
+                var phoneNumber: String? = null
+                val id = phones.getString(phones.getColumnIndex(ContactsContract.Contacts._ID))
+                val name =
+                    phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                val avatarUriString =
+                    phones.getString(phones.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI))
+                var avatarUri: Uri? = null
+                if (avatarUriString != null)
+                    avatarUri = Uri.parse(avatarUriString)
+
+                if (Integer.parseInt(phones.getString(phones.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
+                    val pCur = baseActivityView.contentResolver.query(
+                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                        null,
+                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
+                        arrayOf<String>(id),
+                        null
+                    )
+
+                    while (pCur != null && pCur.moveToNext()) {
+                        phoneNumber =
+                            pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                    }
+
+                    pCur!!.close()
+
+                }
+
+                val contactChip = ContactChip(id, avatarUri, name, phoneNumber)
+                contactList.add(contactChip)
+            }
+            phones.close()
+        }
+
+        binding.chips.filterableList = contactList
     }
 
     companion object {
         private const val TAG = "AddEventFragment"
+
+        private const val PERMISSION_CODE = 23674
 
         const val KEY_EDIT_ID = "action"
 

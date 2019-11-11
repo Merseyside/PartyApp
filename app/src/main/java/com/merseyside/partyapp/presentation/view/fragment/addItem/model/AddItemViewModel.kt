@@ -1,5 +1,7 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 
+import android.os.Bundle
+import android.util.Log
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import com.merseyside.partyapp.R
@@ -10,6 +12,7 @@ import com.merseyside.partyapp.data.db.item.MemberItemInfo
 import com.merseyside.partyapp.domain.interactor.AddItemInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.convertPriceToDouble
+import com.merseyside.partyapp.utils.isNameValid
 import com.merseyside.partyapp.utils.isPriceValid
 import kotlinx.coroutines.cancel
 import ru.terrakok.cicerone.Router
@@ -23,16 +26,16 @@ class AddItemViewModel(
     private var item: Item? = null
 
     val name = ObservableField<String>()
-    val nameErrorText = ObservableField<String>()
+    val nameErrorText = ObservableField("")
 
     val price = ObservableField<String>()
-    val priceErrorText = ObservableField<String>()
+    val priceErrorText = ObservableField("")
 
     val description = ObservableField<String>()
 
     val membersContainer = ObservableField<List<Member>>()
     val selectableMembers = ObservableField<List<Pair<Member, Boolean>>>()
-    val selectableMembersErrorText = ObservableField<String>()
+    val selectableMembersErrorText = ObservableField("")
 
     val payMember = ObservableField<Member>()
 
@@ -71,6 +74,34 @@ class AddItemViewModel(
         })
     }
 
+    override fun readFrom(bundle: Bundle) {
+        bundle.apply {
+            event = serializer.deserialize(getString(EVENT_KEY)!!)
+            if (containsKey(ITEM_KEY)) item = serializer.deserialize(getString(ITEM_KEY)!!)
+
+            name.set(getString(NAME_KEY)!!)
+            description.set(getString(DESCRIPTION_KEY)!!)
+            price.set(getString(PRICE_KEY)!!)
+            selectableMembers.set(serializer.deserialize(getString(SELECTED_MEMBERS_KEY)!!))
+            payMember.set(serializer.deserialize(getString(PAY_MEMBER_KEY)!!))
+        }
+    }
+
+    override fun writeTo(bundle: Bundle) {
+        bundle.apply {
+            putString(NAME_KEY, serializer.serialize<Event>(event))
+            if (item != null) putString(ITEM_KEY, serializer.serialize<Item>(item!!))
+
+            putString(NAME_KEY, name.get() ?: "")
+            putString(DESCRIPTION_KEY, description.get() ?: "")
+            putString(PRICE_KEY, price.get() ?: "0")
+            putString(NAME_KEY, name.get() ?: "")
+
+            putString(PAY_MEMBER_KEY, serializer.serialize<Member>(payMember.get()!!))
+            if (selectableMembers.get() != null) putString(SELECTED_MEMBERS_KEY, serializer.serialize<List<Pair<Member, Boolean>>>(selectableMembers.get()!!))
+        }
+    }
+
     fun init(event: Event, item: Item? = null) {
         this.event = event
         this.item = item
@@ -106,7 +137,7 @@ class AddItemViewModel(
     }
 
     private fun saveItem() {
-        if (name.get().isNullOrEmpty()) {
+        if (!isNameValid(name.get())) {
             nameErrorText.set(getString(R.string.name_error_msg))
             return
         }
@@ -154,5 +185,15 @@ class AddItemViewModel(
 
     companion object {
         private const val TAG = "AddItemViewModel"
+
+        private const val ITEM_KEY = "item"
+        private const val EVENT_KEY = "event"
+
+        private const val NAME_KEY = "name"
+        private const val PRICE_KEY = "price"
+        private const val DESCRIPTION_KEY = "description"
+        private const val PAY_MEMBER_KEY = "pay_member"
+        private const val SELECTED_MEMBERS_KEY = "selected_members"
+
     }
 }

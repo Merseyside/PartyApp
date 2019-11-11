@@ -8,11 +8,12 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.merseyside.partyapp.CalcApplication
 import java.lang.NumberFormatException
-import java.math.BigDecimal
-import java.math.RoundingMode
 import java.text.SimpleDateFormat
 import java.util.*
 import android.util.Log
+import java.math.BigDecimal
+import java.math.BigInteger
+import java.math.RoundingMode
 
 
 @SuppressLint("SimpleDateFormat")
@@ -57,7 +58,6 @@ fun isNameValid(name: String?): Boolean {
         isNameValid(name.drop(1))
     }
 
-    Log.d("Utils", "${name.length}")
     return name.length in 3..24
 }
 
@@ -65,6 +65,12 @@ fun isNameValid(name: String?): Boolean {
 fun convertPriceToDouble(price: String): Double {
 
     return price.toDouble()
+}
+
+fun doubleToStringPrice(double: Double): String {
+    val bigInteger = BigDecimal(double)
+
+    return bigInteger.setScale(2, RoundingMode.HALF_UP).toString()
 }
 
 fun RecyclerView.attachSnapHelperWithListener(

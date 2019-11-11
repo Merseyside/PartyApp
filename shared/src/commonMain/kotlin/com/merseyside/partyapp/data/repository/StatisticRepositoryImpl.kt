@@ -20,26 +20,43 @@ class StatisticRepositoryImpl(
         val membersStatistic = event.members
             .mapNotNull { member ->
                 val orders = items
-                    .filter { item -> item.payMember.id == member.id || item.membersInfo.firstOrNull { membersInfo -> membersInfo.id == member.id } != null }
+                    .filter { item -> item.payMember.id == member.id || item.membersInfo.any { membersInfo ->
+                        membersInfo.id == member.id
+                        }
+                    }
                     .flatMap { item -> // проходим по всем закупкам, в которых учавствует member
 
                         val payedMemberId = item.payMember.id
                         val isItemOwner = payedMemberId == member.id
 
-                        item.membersInfo.map { memberInfo ->
-                            if (isItemOwner) {
-                                Order.OrderOwner(memberInfo, item.name,item.price / item.membersInfo.size)
+                        item.membersInfo.mapNotNull { memberInfo ->
+                            if (isItemOwner || memberInfo.id == member.id) {
+                                if (isItemOwner) {
+                                    Order.OrderOwner(
+                                        member.id,
+                                        memberInfo,
+                                        item.name,
+                                        item.price / item.membersInfo.size
+                                    )
+                                } else {
+                                    Order.OrderReceiver(
+                                        member.id,
+                                        item.payMember,
+                                        item.name,
+                                        item.price / item.membersInfo.size
+                                    )
+                                }
                             } else {
-                                Order.OrderReceiver(memberInfo, item.name, item.price / item.membersInfo.size)
+                                null
                             }
                         }
                     }
 
-                val priceResult = event.members.mapNotNull { member1 ->
-
+                val priceResult = event.members.mapNotNull priceResult@{ member1 ->
                     var price = 0.0
 
                     orders.forEach { order ->
+                        if (order.ownerId == order.member.id) return@forEach
                         if (member1.id == order.member.id) {
                             if (order is Order.OrderOwner) {
                                 price += order.price
@@ -56,27 +73,28 @@ class StatisticRepositoryImpl(
                     }
                 }
 
-                var totalSpend = 0.0
+                var totalSpend  = 0.0
+                var totalOwed   = 0.0
+                var totalLend = 0.0
 
                 orders.forEach { order ->
                     if (order is Order.OrderOwner) {
                         totalSpend += order.price
+
+                        if (order.ownerId != order.member.id) {
+                            totalLend += order.price
+                        }
+                    } else {
+                        totalOwed += order.price
                     }
                 }
 
-                var totalDebt = 0.0
-
-                priceResult.forEach { result ->
-                    if (result is Result.ResultDebtor) {
-                        totalDebt += result.price
-                    }
-                }
-
-                if (totalSpend != 0.0 || totalDebt != 0.0) {
+                if (totalSpend != 0.0 || totalOwed != 0.0) {
                     MemberStatistic(
                         member = member,
                         totalSpend = totalSpend,
-                        totalDebt = totalDebt,
+                        totalDebt = totalOwed,
+                        totalLend = totalLend,
                         orders = orders,
                         priceResult = priceResult
                     )
@@ -97,5 +115,9 @@ class StatisticRepositoryImpl(
             memberCount = event.members.size,
             membersStatistic = membersStatistic
         )
+    }
+
+    companion object  {
+        private const val TAG = "StatisticRepository"
     }
 }

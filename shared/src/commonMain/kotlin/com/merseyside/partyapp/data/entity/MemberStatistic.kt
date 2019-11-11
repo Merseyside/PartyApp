@@ -6,6 +6,7 @@ data class MemberStatistic(
     val member: Member,
     val totalSpend: Double,
     val totalDebt: Double,
+    val totalLend: Double,
     val orders: List<Order>,
     val priceResult: List<Result>
 ) {

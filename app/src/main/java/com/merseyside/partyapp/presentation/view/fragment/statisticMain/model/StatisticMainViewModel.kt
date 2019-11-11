@@ -1,12 +1,15 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMain.model
 
+import android.os.Bundle
 import android.util.Log
 import androidx.databinding.Bindable
 import androidx.databinding.ObservableField
+import androidx.lifecycle.MutableLiveData
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
+import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.data.entity.Statistic
 import com.merseyside.partyapp.domain.interactor.GetStatisticInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
@@ -20,11 +23,18 @@ class StatisticMainViewModel(
 
     val membersVisibility = ObservableField<Boolean>()
     val memberContainer = ObservableField<List<Member>>()
+    val memberStatisticLiveData = MutableLiveData<List<MemberStatistic>>()
 
     var totalSpend = ObservableField<String>()
 
     override fun dispose() {
         getStatisticUseCase.cancel()
+    }
+
+    override fun readFrom(bundle: Bundle) {
+    }
+
+    override fun writeTo(bundle: Bundle) {
     }
 
     fun getStatistic(event: Event?) {
@@ -36,8 +46,6 @@ class StatisticMainViewModel(
                     membersVisibility.set(it.membersStatistic.isNotEmpty())
 
                     showStats(it)
-
-                    Log.d(TAG, it.toString())
                 },
                 onError = {
                     showErrorMsg(errorMsgCreator.createErrorMsg(it))
@@ -50,6 +58,8 @@ class StatisticMainViewModel(
         memberContainer.set(stats.membersStatistic.map { memberStatistic -> memberStatistic.member })
 
         setTotalSpend(stats.totalSpend)
+
+        memberStatisticLiveData.value = stats.membersStatistic
     }
 
     private fun setTotalSpend(totalSpend: Double) {

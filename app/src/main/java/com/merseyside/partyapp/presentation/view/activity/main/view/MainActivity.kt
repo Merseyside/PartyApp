@@ -1,9 +1,10 @@
 package com.merseyside.partyapp.presentation.view.activity.main.view
 
 import android.os.Bundle
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
-import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.databinding.ActivityMainBinding
@@ -23,21 +24,10 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
 
-    private var navigator : Navigator = object : SupportAppNavigator(this, R.id.container) {
+    @Inject
+    lateinit var sharedViewModel: SharedViewModel
 
-        override fun applyCommand(command: Command?) {
-            super.applyCommand(command)
-            supportFragmentManager.executePendingTransactions()
-        }
-
-        override fun setupFragmentTransaction(command: Command?,
-                                              currentFragment: Fragment?,
-                                              nextFragment: Fragment?,
-                                              fragmentTransaction: FragmentTransaction?) {
-            super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction)
-            fragmentTransaction!!.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        }
-    }
+    private lateinit var navigator : Navigator
 
     override fun setBindingVariable(): Int {
         return BR.viewModel
@@ -55,18 +45,52 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun getMainModule(bundle: Bundle?): MainModule {
-        return MainModule(this)
+        return MainModule(this, bundle)
     }
 
-    override fun onCreate(savedInstance: Bundle?) {
-        super.onCreate(savedInstance)
-        setSupportActionBar(binding.toolbar)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        ViewModelProviders.of(this).get(SharedViewModel::class.java)
+        initNavigation()
+        setUpToolbar()
 
-        if (savedInstance == null) {
+        if (savedInstanceState == null) {
             init()
         }
+    }
+
+    private fun initNavigation() {
+        navigator = object : SupportAppNavigator(this, binding.container.id) {
+
+            override fun applyCommand(command: Command?) {
+                super.applyCommand(command)
+                supportFragmentManager.executePendingTransactions()
+            }
+
+            override fun setupFragmentTransaction(command: Command?,
+                                                  currentFragment: Fragment?,
+                                                  nextFragment: Fragment?,
+                                                  fragmentTransaction: FragmentTransaction?
+            ) {
+                super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction)
+                fragmentTransaction!!.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        sharedViewModel.writeTo(outState)
+    }
+
+    override fun getToolbar(): Toolbar? {
+        return binding.toolbar
+    }
+
+    private fun setUpToolbar() {
+        val upArrow = ContextCompat.getDrawable(this, R.drawable.ic_arrow)
+        supportActionBar?.setHomeAsUpIndicator(upArrow)
     }
 
     private fun init() {

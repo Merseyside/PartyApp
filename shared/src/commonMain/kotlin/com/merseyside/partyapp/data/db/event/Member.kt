@@ -28,4 +28,8 @@ open class Member(
         result = 31 * result + name.hashCode()
         return result
     }
+
+    override fun toString(): String {
+        return "Member(ownerId='$id', name='$name')"
+    }
 }

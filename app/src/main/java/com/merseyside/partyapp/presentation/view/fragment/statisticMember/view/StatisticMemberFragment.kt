@@ -2,6 +2,7 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMember.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.appcompat.app.ActionBar
 import com.merseyside.partyapp.BR
@@ -12,6 +13,7 @@ import com.merseyside.partyapp.presentation.base.BaseCalcFragment
 import com.merseyside.partyapp.presentation.di.component.DaggerStatisticMemberComponent
 import com.merseyside.partyapp.presentation.di.module.StatisticMemberModule
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter.OrderAdapter
+import com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter.ResultAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.StatisticMemberViewModel
 
 class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding, StatisticMemberViewModel>() {
@@ -19,14 +21,9 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
     private lateinit var statistic: MemberStatistic
 
     private val orderAdapter = OrderAdapter()
+    private val resultAdapter = ResultAdapter()
 
     override fun hasTitleBackButton(): Boolean {
-        return false
-    }
-
-    override fun getActionBar(): ActionBar? = null
-
-    override fun isActionBarVisible(): Boolean {
         return false
     }
 
@@ -71,6 +68,9 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
 
     private fun doLayout() {
         binding.orderList.adapter = orderAdapter
+        binding.resultList.adapter = resultAdapter
+
+        viewModel.initWithMemberStatistic(statistic)
     }
 
     companion object {

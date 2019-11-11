@@ -39,7 +39,3 @@ fun loadVectorDrawable(iv: ImageView, @DrawableRes resId: Int) {
     iv.setImageResource(resId)
 }
 
-@BindingAdapter("bind:attrTextColor")
-fun setCustomTextColor(view: TextView, attrId: Int) {
-    view.setTextColor(view.context.getColorFromAttr(attrId))
-}

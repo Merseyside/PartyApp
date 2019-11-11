@@ -2,6 +2,11 @@
 <resources>
     <attr name="calcBackgroundColor" format="reference"/>
     <attr name="calcTextColor" format="reference"/>
+    <attr name="calcSecondaryTextColor" format="reference"/>
+    <attr name="calcHeadlineTextColor" format="reference"/>
+    <attr name="calcHighlightTextColor" format="reference"/>
+
+    <attr name="calcIconColor" format="reference"/>
 
     <declare-styleable name="CircleView">
         <attr name="color" format="color"/>

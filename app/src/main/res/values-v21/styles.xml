@@ -2,7 +2,8 @@
 <resources>
     <!--Public styles-->
     <style name="Theme.CalcApp.Purple" parent="Theme.CalcApp.Purple.Base">
-        <item name="android:navigationBarColor">@color/purple_primary_variant</item>
+        <item name="android:navigationBarColor">@color/grey</item>
+        <item name="android:statusBarColor">@color/grey</item>
     </style>
 
     <style name="Theme.VpnApp.Purple.OppositeStatusBar" parent="Theme.CalcApp.Purple">
