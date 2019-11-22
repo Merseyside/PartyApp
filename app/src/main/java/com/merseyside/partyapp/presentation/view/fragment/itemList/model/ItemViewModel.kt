@@ -12,7 +12,7 @@ class ItemViewModel(
 
     private var isLastItem: Boolean = false
 
-    override fun areContentTheSame(obj: Item): Boolean {
+    override fun areContentsTheSame(obj: Item): Boolean {
         return this.obj == obj
     }
 

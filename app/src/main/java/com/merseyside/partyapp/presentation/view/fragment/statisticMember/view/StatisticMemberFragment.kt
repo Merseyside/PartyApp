@@ -18,10 +18,7 @@ import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.
 
 class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding, StatisticMemberViewModel>() {
 
-    private lateinit var statistic: MemberStatistic
-
-    private val orderAdapter = OrderAdapter()
-    private val resultAdapter = ResultAdapter()
+    private var statistic: MemberStatistic? = null
 
     override fun hasTitleBackButton(): Boolean {
         return false
@@ -39,7 +36,7 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
     }
 
     private fun getStatisticMemberModule(bundle: Bundle?): StatisticMemberModule {
-        return StatisticMemberModule(this)
+        return StatisticMemberModule(this, bundle)
     }
 
     override fun setLayoutId(): Int {
@@ -67,10 +64,9 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
     }
 
     private fun doLayout() {
-        binding.orderList.adapter = orderAdapter
-        binding.resultList.adapter = resultAdapter
-
-        viewModel.initWithMemberStatistic(statistic)
+        if (statistic != null) {
+            viewModel.initWithMemberStatistic(statistic!!)
+        }
     }
 
     companion object {

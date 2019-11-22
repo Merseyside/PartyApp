@@ -1,7 +1,8 @@
 package com.merseyside.partyapp.domain.repository
 
+import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.db.item.Item
-import com.merseyside.partyapp.data.db.item.MemberItemInfo
+import com.merseyside.partyapp.data.db.item.MemberInfo
 
 interface ItemRepository {
 
@@ -11,8 +12,8 @@ interface ItemRepository {
         name: String,
         description: String,
         price: Double,
-        payMember: MemberItemInfo,
-        membersInfo: List<MemberItemInfo>
+        payMember: Member,
+        membersInfo: List<MemberInfo>
     ): Boolean
 
     suspend fun getItemsByEventId(eventId: Long): List<Item>

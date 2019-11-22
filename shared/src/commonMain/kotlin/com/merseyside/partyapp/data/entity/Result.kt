@@ -1,15 +1,25 @@
 package com.merseyside.partyapp.data.entity
 
 import com.merseyside.partyapp.data.db.event.Member
+import kotlinx.serialization.Serializable
 
-sealed class Result(
-    val member: Member,
-    val price: Double
-) {
+@Serializable
+sealed class Result {
 
-    class ResultDebtor(member: Member, price: Double) : Result(member, price)
+    abstract val member: Member
+    abstract val price: Double
 
-    class ResultLender(member: Member, price: Double) : Result(member, price)
+    @Serializable
+    class ResultDebtor(
+        override val member: Member,
+        override val price: Double
+    ) : Result()
+
+    @Serializable
+    class ResultLender(
+        override val member: Member,
+        override val price: Double
+    ) : Result()
 
     override fun toString(): String {
         return "Result(member=$member, price=$price)"

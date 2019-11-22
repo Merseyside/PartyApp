@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MembersModel(
-    val members: List<MemberItemInfo>
+    val members: List<MemberInfo>
 )

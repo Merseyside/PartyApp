@@ -19,10 +19,12 @@
     <dimen name="corner_radius">30dp</dimen>
     <dimen name="member_list_height">48dp</dimen>
     <dimen name="circle_size">48dp</dimen>
-    <dimen name="app_bar_height">150dp</dimen>
+    <dimen name="app_bar_height">200dp</dimen>
     <dimen name="list_item_width">150dp</dimen>
     <dimen name="list_item_height">120dp</dimen>
     <dimen name="member_item_height">100dp</dimen>
     <dimen name="member_container_corner_radius">45dp</dimen>
+    <dimen name="spinner_size">56dp</dimen>
+    <dimen name="percent_field_width">70dp</dimen>
 
 </resources>

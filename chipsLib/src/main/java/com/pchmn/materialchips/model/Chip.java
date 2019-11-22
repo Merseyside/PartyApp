@@ -14,6 +14,7 @@ public class Chip implements ChipInterface {
     private String label;
     private String info;
     private boolean isSelected;
+    private Object obj;
 
     public Chip(@NonNull Object id, @Nullable Uri avatarUri, @NonNull String label, @Nullable String info) {
         this.id = id;
@@ -52,9 +53,10 @@ public class Chip implements ChipInterface {
         this.info = info;
     }
 
-    public Chip(@NonNull Object id, @NonNull String label) {
+    public Chip(@NonNull Object id, @NonNull String label, Object obj) {
         this.id = id;
         this.label = label;
+        this.obj = obj;
     }
 
     @Override
@@ -80,6 +82,11 @@ public class Chip implements ChipInterface {
     @Override
     public String getInfo() {
         return info;
+    }
+
+    @Override
+    public Object getObject() {
+        return obj;
     }
 
     @Override

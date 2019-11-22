@@ -1,7 +1,7 @@
 package com.merseyside.partyapp.data.entity.mapper
 
 import com.merseyside.partyapp.data.db.item.Item
-import com.merseyside.partyapp.data.db.item.MemberItemInfo
+import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.data.db.item.MembersModel
 import com.merseyside.partyapp.db.model.ItemModel
 import kotlinx.serialization.ImplicitReflectionSerializer
@@ -22,14 +22,15 @@ class ItemDataMapper {
     }
 
     @UseExperimental(ImplicitReflectionSerializer::class)
-    fun memberItemInfoToStr(itemInfo: MemberItemInfo): String {
+    fun MemberInfoToStr(itemInfo: MemberInfo): String {
         return Json.nonstrict.stringify(itemInfo)
     }
 
     @UseExperimental(ImplicitReflectionSerializer::class)
-    fun strToMemberItemInfo(str: String): MemberItemInfo {
+    fun strToMemberInfo(str: String): MemberInfo {
         return Json.nonstrict.parse(str)
     }
+
 
     fun transform(itemsModel: List<ItemModel>): List<Item> {
         return itemsModel.map {

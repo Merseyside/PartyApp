@@ -20,12 +20,6 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
         keepOneFocusedView()
     }
 
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        viewModel.writeTo(outState)
-    }
-
     protected fun goBack() {
         viewModel.goBack()
     }

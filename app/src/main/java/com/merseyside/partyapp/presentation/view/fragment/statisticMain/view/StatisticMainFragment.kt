@@ -2,10 +2,12 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMain.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.widget.Toolbar
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.BR
@@ -20,6 +22,7 @@ import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewM
 import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.adapter.MemberStatisticPagerAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.model.StatisticMainViewModel
+import com.merseyside.partyapp.presentation.view.fragment.statisticMember.view.StatisticMemberFragment
 import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
 
 class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, StatisticMainViewModel>() {
@@ -101,7 +104,6 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
 
             binding.pageContainer.currentItem = position
         }
-
     }
 
     override fun onDestroyView() {

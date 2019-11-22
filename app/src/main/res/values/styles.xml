@@ -59,7 +59,7 @@
         <item name="android:textColorSecondary">@color/white</item>
     </style>
 
-    <style name="TextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+    <style name="OutlinedTextInputLayout" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
         <item name="android:textColorHint">@color/main_text_color_purple</item>
         <item name="hintTextColor">?attr/colorPrimary</item>
@@ -70,17 +70,16 @@
 
     </style>
 
+    <style name="TextInputEditText">
+        <item name="android:textColor">?attr/calcTextColor</item>
+    </style>
+
     <style name="InputLayoutHintStyle" parent="TextAppearance.AppCompat">
         <item name="android:textColor">?attr/colorPrimary</item>
     </style>
 
     <style name="CustomCounterTextAppearance" parent="TextAppearance.MaterialComponents.Caption">
         <item name="android:textColor">?attr/colorPrimary</item>
-    </style>
-
-    <style name="TextInputEditText">
-        <item name="android:textColor">?attr/calcTextColor</item>
-
     </style>
 
     <style name="MyTextViewStyle" parent="android:Widget.TextView">

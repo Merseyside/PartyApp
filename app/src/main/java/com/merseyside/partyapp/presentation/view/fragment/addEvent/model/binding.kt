@@ -29,7 +29,10 @@ fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
            override fun onTextChanged(text: CharSequence?) {
                if (text!!.contains(",")) {
                    if (text.length != 1) {
-                       view.addChip(text.toString().replace(",", ""), "")
+                       val label = text.toString().replace(",", "")
+                       if (view.allChips.find { it.label == label} == null) {
+                           view.addChip(label, "")
+                       }
                    } else {
                        view.editText.setText("")
                    }

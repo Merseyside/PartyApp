@@ -1,6 +1,7 @@
 package com.merseyside.partyapp.presentation.view.fragment.itemList.model
 
 import android.os.Bundle
+import android.util.Log
 import androidx.databinding.ObservableField
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.Item

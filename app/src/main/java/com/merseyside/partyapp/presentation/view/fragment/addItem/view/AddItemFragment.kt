@@ -2,7 +2,10 @@ package com.merseyside.partyapp.presentation.view.fragment.addItem.view
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.ScrollView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
@@ -36,7 +39,7 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
     }
 
     private fun getAddItemModule(bundle: Bundle?): AddItemModule {
-        return AddItemModule(this)
+        return AddItemModule(this, bundle)
     }
 
     override fun setLayoutId(): Int {
@@ -67,6 +70,17 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
 
     private fun doLayout() {
 
+        binding.additionalContainer.setOnClickListener {
+            if (binding.expandedGroup.visibility == View.VISIBLE) {
+                binding.expandedGroup.visibility = View.GONE
+                binding.expandableIcon.setImageDrawable(ContextCompat.getDrawable(baseActivityView, R.drawable.ic_arrow_down))
+            } else {
+                binding.expandedGroup.visibility = View.VISIBLE
+                binding.expandableIcon.setImageDrawable(ContextCompat.getDrawable(baseActivityView, R.drawable.ic_arrow_up))
+                binding.scrollView.post { binding.scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
+            }
+        }
+
         if (arguments != null && arguments!!.containsKey(MODE_KEY)) {
             if (arguments!!.getInt(MODE_KEY) == EDIT_VALUE) {
                 viewModel.init(sharedViewModel.eventContainer!!, sharedViewModel.itemContainer)
@@ -77,6 +91,8 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
     }
 
     companion object {
+
+        private const val TAG = "AddItemFragment"
 
         const val MODE_KEY = "mode"
         const val EDIT_VALUE = 1

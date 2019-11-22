@@ -1,6 +1,7 @@
 package com.merseyside.partyapp.data.entity.mapper
 
 import com.merseyside.partyapp.data.db.event.Event
+import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.db.event.MembersModel
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.db.model.EventModel
@@ -39,4 +40,16 @@ class EventDataMapper {
     fun strToMembers(str: String): MembersModel {
         return Json.nonstrict.parse(str)
     }
+
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    fun memberToStr(membersModel: Member): String {
+        return Json.nonstrict.stringify(membersModel)
+    }
+
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    fun strToMember(str: String): Member {
+        return Json.nonstrict.parse(str)
+    }
+
+
 }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PartyApp</string>
+    <string name="app_name" translatable="false">PartyApp</string>
     <string name="action_settings">Settings</string>
 
     <string name="unknown_error">Unknown error</string>
@@ -16,6 +16,9 @@
     <string name="close_event">Close event</string>
     <string name="close_event_title">Close event?</string>
     <string name="close_event_message">Are you sure want to close that event? This action is irreversible!</string>
+    <string name="additional_settings">Additional settings</string>
+    <string name="percent_setting">Set member share</string>
+    <string name="not_chosen">Not chosen</string>
 
     <string name="event_title">Event name</string>
     <string name="choose_members">For whom?</string>
@@ -61,7 +64,7 @@
     <string name="total_debt">Owed</string>
     <string name="total_lend">Lend</string>
 
-    <string name="use_comma">Note: use comma to separate participants</string>
+    <string name="use_comma">Note: use comma to separate participants. Names must be unique.</string>
 
     <string name="for_member">For %1$s</string>
     <string name="from_member">From %1$s</string>

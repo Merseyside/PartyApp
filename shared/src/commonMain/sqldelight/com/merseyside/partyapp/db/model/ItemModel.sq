@@ -1,5 +1,6 @@
 import com.merseyside.partyapp.data.db.item.MembersModel;
-import com.merseyside.partyapp.data.db.item.MemberItemInfo;
+import com.merseyside.partyapp.data.db.item.MemberInfo;
+import com.merseyside.partyapp.data.db.event.Member;
 
 CREATE TABLE ItemModel(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -7,7 +8,7 @@ CREATE TABLE ItemModel(
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     price REAL NOT NULL,
-    payMember TEXT AS MemberItemInfo NOT NULL,
+    payMember TEXT AS Member NOT NULL,
     memberModel TEXT AS MembersModel NOT NULL,
     timestamp INTEGER NOT NULL,
             FOREIGN KEY (eventId) REFERENCES EventModel(id)

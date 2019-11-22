@@ -1,8 +1,9 @@
 package com.merseyside.partyapp.data.repository
 
+import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.data.db.item.ItemDao
-import com.merseyside.partyapp.data.db.item.MemberItemInfo
+import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.domain.repository.ItemRepository
 
 class ItemRepositoryImpl(
@@ -21,8 +22,8 @@ class ItemRepositoryImpl(
         name: String,
         description: String,
         price: Double,
-        payMember: MemberItemInfo,
-        membersInfo: List<MemberItemInfo>
+        payMember: Member,
+        membersInfo: List<MemberInfo>
     ): Boolean {
         if (id == null) {
             itemDao.insertItem(eventId, name, description, price, payMember, membersInfo)

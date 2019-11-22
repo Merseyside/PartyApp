@@ -9,7 +9,7 @@
     <attr name="calcIconColor" format="reference"/>
 
     <declare-styleable name="CircleView">
-        <attr name="color" format="color"/>
+        <attr name="сolor" format="color"/>
         <attr name="text" format="string"/>
         <attr name="textColor" format="color"/>
     </declare-styleable>

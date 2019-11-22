@@ -85,6 +85,7 @@ dependencies {
     implementation "com.squareup.sqldelight:android-driver:$sqlDriver"
 
     implementation "androidx.lifecycle:lifecycle-extensions:$lifecycleExtensions"
+    implementation "org.jetbrains.kotlinx:kotlinx-serialization-runtime:$serialization"
 
     implementation "androidx.appcompat:appcompat:$appcompat"
     implementation "androidx.core:core-ktx:$ktxCore"

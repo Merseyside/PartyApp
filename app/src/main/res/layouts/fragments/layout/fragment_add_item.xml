@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    tools:context="">
+    tools:context="com.merseyside.partyapp.presentation.view.fragment.addItem.view.AddItemFragment">
     <data>
         <import type="android.view.View"/>
         <variable
@@ -12,170 +12,290 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:padding="@dimen/normal_spacing">
 
-        <LinearLayout
-            android:orientation="vertical"
+        <ScrollView
+            android:id="@+id/scroll_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/normal_spacing">
+            android:layout_height="match_parent"
+            android:layout_above="@+id/save"
+            android:layout_marginBottom="@dimen/small_spacing"
+            android:layout_alignParentTop="true"
+            android:overScrollMode="never">
 
-            <androidx.cardview.widget.CardView
+            <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:contentPadding="@dimen/normal_spacing"
-                app:cardCornerRadius="@dimen/small_spacing"
-                style="@style/MyCardView">
+                android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:orientation="vertical"
+                <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent">
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/TextInputLayout"
-                        app:errorEnabled="@{!viewModel.nameErrorText.empty}"
-                        app:errorText="@{viewModel.nameErrorText}"
-                        android:hint="@string/item_title">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@={viewModel.name}"
-                            style="@style/TextInputEditText" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/TextInputLayout"
-                        android:gravity="top|start"
-                        android:layout_marginTop="@dimen/small_spacing"
-                        android:hint="@string/item_description">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@={viewModel.description}"
-                            style="@style/TextInputEditText"
-                            android:maxLines="2"
-                            android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        style="@style/TextInputLayout"
-                        android:layout_marginTop="@dimen/small_spacing"
-                        app:errorEnabled="@{!viewModel.priceErrorText.empty}"
-                        app:errorText="@{viewModel.priceErrorText}"
-                        android:hint="@string/item_total_price">
-
-                        <com.google.android.material.textfield.TextInputEditText
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@={viewModel.price}"
-                            android:inputType="numberDecimal"
-                            style="@style/TextInputEditText" />
-
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:contentPadding="@dimen/normal_spacing"
-            app:cardCornerRadius="@dimen/small_spacing"
-            android:layout_marginTop="@dimen/small_spacing"
-            style="@style/MyCardView">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:contentPadding="@dimen/normal_spacing"
+                    app:cardCornerRadius="@dimen/small_spacing"
+                    style="@style/MyCardView">
 
                     <LinearLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/small_spacing">
+                        android:layout_height="wrap_content">
 
-                        <TextView
-                            android:layout_width="wrap_content"
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/choose_pays_member"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+                            style="@style/OutlinedTextInputLayout"
+                            app:errorEnabled="@{!viewModel.nameErrorText.empty}"
+                            app:errorText="@{viewModel.nameErrorText}"
+                            android:hint="@string/item_title">
 
-                        <androidx.recyclerview.widget.RecyclerView
-                            android:id="@+id/members_list"
-                            android:layout_width="wrap_content"
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={viewModel.name}"
+                                style="@style/TextInputEditText" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                            android:orientation="horizontal"
-                            android:layout_gravity="center"
-                            android:overScrollMode="never"
+                            style="@style/OutlinedTextInputLayout"
+                            android:gravity="top|start"
                             android:layout_marginTop="@dimen/small_spacing"
-                            app:payMembers="@{viewModel.membersContainer}"
-                            app:payMember="@={viewModel.payMember}">
+                            android:hint="@string/item_description">
 
-                        </androidx.recyclerview.widget.RecyclerView>
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={viewModel.description}"
+                                style="@style/TextInputEditText"
+                                android:maxLines="2"
+                                android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
+
+                        </com.google.android.material.textfield.TextInputLayout>
+
+                        <com.google.android.material.textfield.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/OutlinedTextInputLayout"
+                            android:layout_marginTop="@dimen/small_spacing"
+                            app:errorEnabled="@{!viewModel.priceErrorText.empty}"
+                            app:errorText="@{viewModel.priceErrorText}"
+                            android:hint="@string/item_total_price">
+
+                            <com.google.android.material.textfield.TextInputEditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@={viewModel.price}"
+                                android:inputType="numberDecimal"
+                                style="@style/TextInputEditText" />
+
+                        </com.google.android.material.textfield.TextInputLayout>
 
                     </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:contentPadding="@dimen/normal_spacing"
+                    app:cardCornerRadius="@dimen/small_spacing"
+                    android:layout_marginTop="@dimen/small_spacing"
+                    style="@style/MyCardView">
 
                     <LinearLayout
-                        android:orientation="vertical"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/small_spacing">
+                        android:orientation="vertical">
 
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/choose_members"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
-
-                        <com.pchmn.materialchips.ChipsInput
-                            android:id="@+id/chips"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:showChipDetailed="false"
-                            app:chip_backgroundColor="?attr/colorSecondaryVariant"
-                            app:chip_hasAvatarIcon="true"
-                            app:chip_labelColor="?attr/colorOnSurface"
-                            app:chip_selectable="true"
-                            app:chip_selectedColor="?attr/colorPrimary"
-                            app:chip_selectedLabelColor="?attr/colorOnBackground"
-                            app:chip_editable="false"
-                            app:selectableMembers="@={viewModel.selectableMembers}"/>
+                            android:orientation="vertical">
 
-                        <TextView
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/choose_pays_member"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/members_list"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:orientation="horizontal"
+                                android:overScrollMode="never"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                app:payMember="@={viewModel.payMember}"
+                                app:payMembers="@{viewModel.membersContainer}">
+
+                            </androidx.recyclerview.widget.RecyclerView>
+
+                        </LinearLayout>
+
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="?attr/colorError"
-                            android:text="@{viewModel.selectableMembersErrorText}"
-                            android:visibility="@{viewModel.selectableMembersErrorText.empty ? View.GONE : View.VISIBLE}"/>
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/choose_members"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+                            <com.pchmn.materialchips.ChipsInput
+                                android:id="@+id/chips"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:chip_backgroundColor="?attr/colorSecondaryVariant"
+                                app:chip_editable="false"
+                                app:chip_hasAvatarIcon="true"
+                                app:chip_labelColor="?attr/colorOnSurface"
+                                app:chip_selectable="true"
+                                app:chip_selectedColor="?attr/colorPrimary"
+                                app:chip_selectedLabelColor="?attr/colorOnBackground"
+                                app:selectableMembers="@={viewModel.selectableMembers}"
+                                app:showChipDetailed="false" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.selectableMembersErrorText}"
+                                android:textColor="?attr/colorError"
+                                android:visibility="@{viewModel.selectableMembersErrorText.empty ? View.GONE : View.VISIBLE}" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
-                </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-            </androidx.cardview.widget.CardView>
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:contentPadding="@dimen/normal_spacing"
+                    app:cardCornerRadius="@dimen/small_spacing"
+                    android:layout_marginTop="@dimen/small_spacing"
+                    style="@style/MyCardView">
 
-        </LinearLayout>
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+
+                        <RelativeLayout
+                            android:id="@+id/additional_container"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:gravity="center">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/additional_settings"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                            <ImageView
+                                android:id="@+id/expandable_icon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                tools:ignore="ContentDescription"
+                                app:srcCompat="@drawable/ic_arrow_down"/>
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:id="@+id/percent_container"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@+id/additional_container"
+                            android:padding="@dimen/small_spacing">
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                                android:text="@string/percent_setting"/>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
+
+                                <androidx.appcompat.widget.AppCompatSpinner
+                                    android:id="@+id/member_spinner"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="@dimen/spinner_size"
+                                    android:layout_alignParentStart="true"
+                                    android:layout_toStartOf="@+id/percent_field"
+                                    android:overlapAnchor="false"
+                                    android:scrollbars="none"
+                                    android:minWidth="@dimen/spinner_size"
+                                    android:backgroundTint="@color/grey_dark"
+                                    app:spinnerSelectableMembers="@{viewModel.spinnerSelectedMembers}"
+                                    app:spinnerSelectedMember="@={viewModel.spinnerSelectedMember}"/>
+
+                                <LinearLayout
+                                    android:id="@+id/percent_field"
+                                    android:orientation="horizontal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentEnd="true">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        android:layout_width="@dimen/percent_field_width"
+                                        android:layout_height="wrap_content"
+                                        android:text="@={viewModel.percent}"
+                                        style="@style/TextInputEditText"
+                                        android:singleLine="true"
+                                        android:hint="@{viewModel.percentHint}"
+                                        android:backgroundTint="?attr/colorPrimary"
+                                        android:inputType="numberDecimal"
+                                        android:textAlignment="viewEnd"/>
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="%"
+                                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                                </LinearLayout>
+
+                            </RelativeLayout>
+
+                        </LinearLayout>
+
+                        <androidx.constraintlayout.widget.Group
+                            android:id="@+id/expanded_group"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            app:constraint_referenced_ids="percent_container"
+                            android:visibility="gone"
+                            tools:visibility="visible"/>
+
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                </androidx.cardview.widget.CardView>
+
+            </LinearLayout>
+
+        </ScrollView>
 
         <Button
+            android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/save"
             android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/normal_spacing"
             android:onClick="@{view -> viewModel.onSaveClick()}"/>
 
     </RelativeLayout>

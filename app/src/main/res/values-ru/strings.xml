@@ -1,0 +1,73 @@
+<resources>
+    <string name="action_settings">Настройки</string>
+
+    <string name="unknown_error">Неизвестная ошибка</string>
+
+    <string name="event_list_title">События</string>
+    <string name="add_items_title">Новая покупка</string>
+
+    <string name="no_events">Добавьте Ваше первое событие\nнажатием на +</string>
+    <string name="no_items">Тут пока ничего нет. Добавьте\nновую покупку</string>
+    <string name="no_activity">Пока что не было никакой активности.\nДобавьте покупки и выберите участников</string>
+    <string name="new_event_title">Новое событие</string>
+    <string name="edit_event_title">Изменить событие</string>
+    <string name="save">Сохранить</string>
+    <string name="close_event">Закрыть событие</string>
+    <string name="close_event_title">Закрыть событие?</string>
+    <string name="close_event_message">Вы действительно хотите закрыть это событие? Это действие отменить нельзя!</string>
+    <string name="additional_settings">Дополнительные параметры</string>
+    <string name="percent_setting">Выберите доли учатсников</string>
+    <string name="not_chosen">Не выбран</string>
+
+    <string name="event_title">Название события</string>
+    <string name="choose_members">Для кого?</string>
+    <string name="choose_pays_member">Кто платит?</string>
+    <string name="all_orders">Все заказы участника</string>
+    <string name="result">Результат</string>
+    <string name="add_members">Добавить участников</string>
+    <string name="notes_hint">Описание</string>
+
+    <string name="item_title">Название покупки</string>
+    <string name="item_description">Описание покупки</string>
+    <string name="item_total_price">Полная стоимость</string>
+
+    <string name="empty_title_error">Пожалуйста, заполните название события правильно</string>
+    <string name="members_error">Добавьте как минимум двух участников</string>
+    <string name="name_error_msg">Имя не может быть пустым</string>
+    <string name="price_error_msg">Пожалуйста, заполните стоимость правильно</string>
+    <string name="members_error_msg">Пожалуйста, выберите как минимум одного учатсника</string>
+
+    <string name="statistic">Статистика</string>
+
+    <string name="in_progress">В процессе</string>
+    <string name="completed">Завершено</string>
+
+    <string name="member_count">Количество участников: </string>
+    <string name="date">Дата: </string>
+    <string name="items">Покупки</string>
+
+    <string name="action_edit">Изменить</string>
+    <string name="action_delete">Удалить</string>
+    <string name="action_share">Поделиться</string>
+
+    <string name="delete_event_title">Удалить %1$s?</string>
+    <string name="delete_event_message">Вы действительно хотите удалить это событие?</string>
+    <string name="complete">Успешно</string>
+    <string name="event_name_error_msg">Название события должно быть от 3 до 24 символов</string>
+    <string name="notes_error_msg">Описание должно быт ьне больше 512 символов</string>
+
+    <string name="delete_item_title">Удалить %1$s?</string>
+    <string name="delete_item_message">Вы действительно хотите удалить эту покупку?</string>
+
+    <string name="total_spend">Потрачено</string>
+    <string name="total_debt">Занято</string>
+    <string name="total_lend">Одолжено</string>
+
+    <string name="use_comma">Примечание: используйте запятую для разделения участников. Имена должны быть уникальны.</string>
+
+    <string name="for_member">Для %1$s</string>
+    <string name="from_member">От %1$s</string>
+    <string name="price">Цена: %1$s</string>
+    <string name="debt">Долг: %1$s</string>
+    <string name="debit">Дебит: %1$s</string>
+</resources>

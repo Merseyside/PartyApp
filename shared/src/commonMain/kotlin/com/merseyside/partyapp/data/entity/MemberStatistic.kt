@@ -1,7 +1,9 @@
 package com.merseyside.partyapp.data.entity
 
 import com.merseyside.partyapp.data.db.event.Member
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class MemberStatistic(
     val member: Member,
     val totalSpend: Double,
@@ -13,4 +15,6 @@ data class MemberStatistic(
     override fun toString(): String {
         return "MemberStatistic(member=$member, totalSpend=$totalSpend, totalDebt=$totalDebt, orders=$orders, priceResult=$priceResult)"
     }
+
+
 }

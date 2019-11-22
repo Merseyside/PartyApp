@@ -17,7 +17,7 @@ class MemberItemViewModel(override var obj: Member) : BaseComparableAdapterViewM
         notifyUpdate()
     }
 
-    override fun areContentTheSame(obj: Member): Boolean {
+    override fun areContentsTheSame(obj: Member): Boolean {
         return this.obj == obj
     }
 

@@ -10,6 +10,11 @@ data class ContactChip(
     private val name: String,
     private val phoneNumber: String?
 ): ChipInterface {
+
+    override fun getObject(): Any {
+        throw NotImplementedError()
+    }
+
     override fun setSelected(isSelected: Boolean) {}
 
     override fun isSelected(): Boolean {

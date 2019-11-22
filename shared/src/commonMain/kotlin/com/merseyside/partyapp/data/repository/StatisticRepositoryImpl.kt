@@ -29,21 +29,41 @@ class StatisticRepositoryImpl(
                         val payedMemberId = item.payMember.id
                         val isItemOwner = payedMemberId == member.id
 
+                        var equalsCount = 0
+                        var hundred = 1f
+
+                        item.membersInfo.forEach {
+                            if (it.percent != 0f) {
+                                hundred -= it.percent
+                            } else {
+                                equalsCount++
+                            }
+                        }
+
+                        val equalPercent = hundred / equalsCount
+
                         item.membersInfo.mapNotNull { memberInfo ->
+
                             if (isItemOwner || memberInfo.id == member.id) {
+                                val price = if (memberInfo.percent == 0f) {
+                                    item.price * equalPercent
+                                } else {
+                                    item.price * memberInfo.percent
+                                }
+
                                 if (isItemOwner) {
                                     Order.OrderOwner(
                                         member.id,
                                         memberInfo,
                                         item.name,
-                                        item.price / item.membersInfo.size
+                                        price
                                     )
                                 } else {
                                     Order.OrderReceiver(
                                         member.id,
                                         item.payMember,
                                         item.name,
-                                        item.price / item.membersInfo.size
+                                        price
                                     )
                                 }
                             } else {

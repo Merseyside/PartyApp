@@ -21,7 +21,7 @@ class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewMod
         notifyPropertyChanged(BR.statusIcon)
     }
 
-    override fun areContentTheSame(obj: Event): Boolean {
+    override fun areContentsTheSame(obj: Event): Boolean {
         return this.obj == obj
     }
 

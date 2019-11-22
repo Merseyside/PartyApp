@@ -15,7 +15,7 @@
         android:paddingBottom="@dimen/small_spacing"
         android:paddingStart="@dimen/small_spacing"
         android:paddingEnd="@dimen/small_spacing"
-        app:attrBackgroundColor="@{obj.backgroundColor}"
+        android:background="?attr/colorOnBackground"
         android:clickable="true"
         android:focusable="true"
         android:foreground="@drawable/card_view_ripple">

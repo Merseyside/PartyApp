@@ -17,10 +17,13 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
     private var size: Int = 0
 
     @ColorInt
-    private var color: Int = Color.BLACK
+    private var circleColor: Int = Color.BLACK
 
     @ColorInt
-    private var textColor: Int = Color.WHITE
+    private var circleTextColor: Int = Color.WHITE
+
+    @ColorInt
+    private var textColor: Int = Color.BLACK
 
     private var text: String = ""
 
@@ -37,8 +40,8 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
 
         loadAttrs(attributeSet)
 
-        initCirclePaint(color)
-        initTextPaint(textColor)
+        initCirclePaint(circleColor)
+        initTextPaint(circleTextColor)
 
         rect = Rect()
     }
@@ -47,8 +50,9 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
 
         val array = context.theme.obtainStyledAttributes(attributeSet, R.styleable.CircleView, 0, 0)
 
-        color = array.getColor(R.styleable.CircleView_color, color)
+        circleColor = array.getColor(R.styleable.CircleView_сolor, circleColor)
         text = array.getString(R.styleable.CircleView_text) ?: text
+        circleTextColor = array.getColor(R.styleable.CircleView_textColor, circleTextColor)
         textColor = array.getColor(R.styleable.CircleView_textColor, textColor)
     }
 
@@ -106,20 +110,18 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
 
     fun setText(text: String) {
         this.text = text
-
-
         invalidate()
     }
 
     fun setColor(@ColorInt color: Int) {
-        this.color = color
+        this.circleColor = color
         initCirclePaint(color)
 
         invalidate()
     }
 
     fun setTextColor(@ColorInt color: Int) {
-        this.textColor = color
+        this.circleTextColor = color
         initTextPaint(color)
 
         invalidate()

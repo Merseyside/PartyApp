@@ -17,7 +17,7 @@ import kotlinx.coroutines.cancel
 import ru.terrakok.cicerone.Router
 
 class StatisticMainViewModel(
-    private val router: Router,
+    router: Router,
     private val getStatisticUseCase: GetStatisticInteractor
 ) : BaseCalcViewModel(router) {
 
@@ -35,6 +35,7 @@ class StatisticMainViewModel(
     }
 
     override fun writeTo(bundle: Bundle) {
+
     }
 
     fun getStatistic(event: Event?) {

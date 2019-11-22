@@ -6,13 +6,18 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
+import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.domain.interactor.AddEventInteractor
 import com.merseyside.partyapp.domain.interactor.CloseEventInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventByIdInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.isNameValid
+import com.upstream.basemvvmimpl.data.deserialize
+import com.upstream.basemvvmimpl.data.serialize
 import kotlinx.coroutines.cancel
+import kotlinx.serialization.internal.StringSerializer
+import kotlinx.serialization.list
 import ru.terrakok.cicerone.Router
 
 class AddEventViewModel(
@@ -69,11 +74,12 @@ class AddEventViewModel(
     override fun readFrom(bundle: Bundle) {
         bundle.apply {
             if (containsKey(EVENT_KEY)) {
-                initWithEvent(serializer.deserialize(bundle.getString(EVENT_KEY)!!))
+                initWithEvent(getString(EVENT_KEY)!!.deserialize())
+            } else {
 
                 eventName.set(bundle.getString(NAME_KEY))
                 notes.set(bundle.getString(NOTES_KEY))
-                members.set(serializer.deserialize(bundle.getString(MEMBERS_KEY)!!))
+                members.set(getString(MEMBERS_KEY)!!.deserialize(StringSerializer.list))
             }
         }
     }
@@ -84,11 +90,11 @@ class AddEventViewModel(
             putString(NOTES_KEY, notes.get() ?: "")
             putString(
                 MEMBERS_KEY,
-                serializer.serialize<List<String>>(members.get() ?: arrayOf(""))
+                members.get()?.serialize(StringSerializer.list) ?: ""
             )
 
             if (modeField == MODE_EDIT) {
-                bundle.putString(EVENT_KEY, serializer.serialize<Event>(event!!))
+                bundle.putString(EVENT_KEY, event!!.serialize())
             }
         }
 

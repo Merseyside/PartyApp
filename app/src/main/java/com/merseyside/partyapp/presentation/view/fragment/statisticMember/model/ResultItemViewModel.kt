@@ -54,10 +54,10 @@ class ResultItemViewModel(override var obj: Result) : BaseAdapterViewModel<Resul
     fun getTextColor(): Int {
         return when (obj) {
             is Result.ResultLender -> {
-                R.attr.colorOnPrimary
+                R.attr.colorPrimary
             }
             else -> {
-                R.attr.colorOnError
+                R.attr.colorError
             }
         }
     }

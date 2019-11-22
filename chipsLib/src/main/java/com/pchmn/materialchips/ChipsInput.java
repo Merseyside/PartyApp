@@ -220,11 +220,6 @@ public class ChipsInput extends ScrollViewMaxHeight {
         mChipsAdapter.addChip(chip);
     }
 
-    public void addChip(Object id, String label) {
-        Chip chip = new Chip(id, label);
-        mChipsAdapter.addChip(chip);
-    }
-
     public void removeChip(ChipInterface chip) {
         mChipsAdapter.removeChip(chip);
     }

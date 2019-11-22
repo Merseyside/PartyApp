@@ -4,15 +4,14 @@ package com.merseyside.partyapp.utils
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Build
+import android.util.Log
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
 import com.merseyside.partyapp.CalcApplication
 import java.lang.NumberFormatException
 import java.text.SimpleDateFormat
 import java.util.*
-import android.util.Log
 import java.math.BigDecimal
-import java.math.BigInteger
 import java.math.RoundingMode
 
 
@@ -49,6 +48,38 @@ fun isPriceValid(price: String?): Boolean {
     }
 
     return false
+}
+
+fun isPercentValid(percentStr: String): Boolean {
+    return try {
+        val percent = convertPercentToInt(percentStr)
+        return (!percentStr.contains(".") && percentStr.length < 3 && percent in 0 .. 100)
+    } catch (e: NumberFormatException) {
+        false
+    }
+}
+
+@Throws(NumberFormatException::class)
+fun convertPercentToFloat(percentStr: String): Float {
+    return percentStr.toFloat()
+}
+
+@Throws(NumberFormatException::class)
+fun convertPercentToInt(percentStr: String): Int {
+    return percentStr.toInt()
+}
+
+@Throws(NumberFormatException::class)
+fun convertPercentToString(percentFloat: Float): String {
+    return percentFloat.toString().split(".")[0]
+}
+
+fun getHumanReadablePercents(percentFloat: Float): String {
+    return (percentFloat * 100).toInt().toString()
+}
+
+fun getInternalPercents(percentStr: String): Float {
+    return convertPercentToFloat(percentStr) / 100
 }
 
 fun isNameValid(name: String?): Boolean {

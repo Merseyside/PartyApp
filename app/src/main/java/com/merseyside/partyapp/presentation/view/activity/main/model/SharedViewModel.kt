@@ -4,31 +4,38 @@ import android.content.Context
 import android.os.Bundle
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.item.Item
-import com.upstream.basemvvmimpl.data.cache.serializer.Serializer
+import com.upstream.basemvvmimpl.data.deserialize
+import com.upstream.basemvvmimpl.data.serialize
 import com.upstream.basemvvmimpl.presentation.model.ParcelableViewModel
+import kotlinx.serialization.list
 
 class SharedViewModel : ParcelableViewModel() {
     override fun readFrom(bundle: Bundle) {
-        val serializer = Serializer()
 
-        if (bundle.containsKey(EVENT_KEY)) {
-            eventContainer = serializer.deserialize(bundle.getString(EVENT_KEY)!!, Event::class.java)
-        }
+        bundle.apply {
+            if (bundle.containsKey(EVENT_KEY)) {
+                eventContainer = getString(EVENT_KEY)!!.deserialize()
+            }
 
-        if (bundle.containsKey(ITEM_KEY)) {
-            itemContainer = serializer.deserialize(bundle.getString(ITEM_KEY)!!, Item::class.java)
+            if (bundle.containsKey(ITEM_KEY)) {
+                itemContainer = getString(ITEM_KEY)!!.deserialize()
+            }
         }
     }
 
     override fun writeTo(bundle: Bundle) {
-        val serializer = Serializer()
+        bundle.apply {
 
-        if (eventContainer != null) {
-            bundle.putString(EVENT_KEY, serializer.serialize(eventContainer!!, Event::class.java))
-        }
+            if (eventContainer != null) {
+                bundle.putString(
+                    EVENT_KEY,
+                    eventContainer!!.serialize()
+                )
+            }
 
-        if (itemContainer != null) {
-            bundle.putString(ITEM_KEY, serializer.serialize(itemContainer!!, Item::class.java))
+            if (itemContainer != null) {
+                itemContainer!!.serialize()
+            }
         }
     }
 

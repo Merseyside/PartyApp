@@ -1,15 +1,19 @@
 package com.merseyside.partyapp.data.db.item
 
+import com.merseyside.partyapp.data.db.event.Member
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Item(
     val id: Long,
     val eventId: Long,
     val name: String,
     val description: String,
     val price: Double,
-    val payMember: MemberItemInfo,
-    val membersInfo: List<MemberItemInfo>,
+    val payMember: Member,
+    val membersInfo: List<MemberInfo>,
     val timestamp: Long
-) {
+): Any() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false

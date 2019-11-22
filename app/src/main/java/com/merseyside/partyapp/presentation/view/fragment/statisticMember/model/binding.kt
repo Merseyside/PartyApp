@@ -24,11 +24,11 @@ fun setViewGroupBackgroundColor(viewGroup: ViewGroup, @AttrRes res: Int) {
 @BindingAdapter("app:orders")
 fun setOrderList(recyclerView: RecyclerView, orders: List<Order>?) {
     if (!orders.isNullOrEmpty()) {
-        if (recyclerView.adapter is OrderAdapter) {
-            val adapter = recyclerView.adapter as OrderAdapter
+        val adapter = recyclerView.adapter ?: OrderAdapter().also { recyclerView.adapter = it }
 
-            adapter.removeAll()
-            adapter.add(orders)
+        (adapter as OrderAdapter).apply {
+            removeAll()
+            add(orders)
         }
     }
 }
@@ -36,12 +36,11 @@ fun setOrderList(recyclerView: RecyclerView, orders: List<Order>?) {
 @BindingAdapter("app:results")
 fun setResults(recyclerView: RecyclerView, results: List<Result>?) {
     if (!results.isNullOrEmpty()) {
+        val adapter = recyclerView.adapter ?: ResultAdapter().also { recyclerView.adapter = it }
 
-        if (recyclerView.adapter is ResultAdapter) {
-            val adapter = recyclerView.adapter as ResultAdapter
-
-            adapter.removeAll()
-            adapter.add(results)
+        (adapter as ResultAdapter).apply {
+            removeAll()
+            add(results)
         }
     }
 }

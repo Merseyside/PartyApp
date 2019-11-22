@@ -1,17 +1,34 @@
 package com.merseyside.partyapp.data.entity
 
 import com.merseyside.partyapp.data.db.event.Member
+import com.merseyside.partyapp.data.deserialize
+import com.merseyside.partyapp.data.serialize
+import kotlinx.serialization.*
+import kotlinx.serialization.internal.StringDescriptor
 
+@Serializable
+sealed class Order {
 
-sealed class Order(
-    val ownerId: String,
-    val member: Member,
-    val title: String,
-    val price: Double
-) {
-    class OrderOwner(id: String, member: Member, title: String, price: Double) : Order(id, member, title, price)
+    abstract val ownerId: String
+    abstract val member: Member
+    abstract val title: String
+    abstract val price: Double
 
-    class OrderReceiver(id: String, member: Member, title: String, price: Double) : Order(id, member, title, price)
+    @Serializable
+    class OrderOwner(
+        override val ownerId: String,
+        override val member: Member,
+        override val title: String,
+        override val price: Double
+    ) : Order()
+
+    @Serializable
+    class OrderReceiver(
+        override val ownerId: String,
+        override val member: Member,
+        override val title: String,
+        override val price: Double
+    ) : Order()
 
     override fun toString(): String {
         return "Order(member=$member, title=$title, price=$price)"

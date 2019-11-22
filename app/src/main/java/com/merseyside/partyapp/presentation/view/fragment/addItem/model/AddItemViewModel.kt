@@ -1,6 +1,8 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
@@ -8,13 +10,14 @@ import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.db.item.Item
-import com.merseyside.partyapp.data.db.item.MemberItemInfo
+import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.domain.interactor.AddItemInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
-import com.merseyside.partyapp.utils.convertPriceToDouble
-import com.merseyside.partyapp.utils.isNameValid
-import com.merseyside.partyapp.utils.isPriceValid
+import com.merseyside.partyapp.utils.*
+import com.upstream.basemvvmimpl.data.deserialize
+import com.upstream.basemvvmimpl.data.serialize
 import kotlinx.coroutines.cancel
+import kotlinx.serialization.ImplicitReflectionSerializer
 import ru.terrakok.cicerone.Router
 
 class AddItemViewModel(
@@ -33,9 +36,15 @@ class AddItemViewModel(
 
     val description = ObservableField<String>()
 
+    val percent = ObservableField<String>()
+    val percentHint = ObservableField<String>()
+
     val membersContainer = ObservableField<List<Member>>()
-    val selectableMembers = ObservableField<List<Pair<Member, Boolean>>>()
+    val selectableMembers = ObservableField<List<Pair<MemberInfo, Boolean>>>()
     val selectableMembersErrorText = ObservableField("")
+
+    val spinnerSelectedMembers = ObservableField<List<MemberInfo>>()
+    val spinnerSelectedMember = ObservableField<MemberInfo>()
 
     val payMember = ObservableField<Member>()
 
@@ -70,35 +79,113 @@ class AddItemViewModel(
                 if (!selectableMembersErrorText.get().isNullOrEmpty()) {
                     selectableMembersErrorText.set("")
                 }
+
+                if (selectableMembers.get()?.isNotEmpty() == true) {
+                    spinnerSelectedMembers.set(selectableMembers.get()!!.mapNotNull {
+                        if (it.second) {
+                            it.first
+                        } else {
+                            null
+                        }
+                    })
+
+                    percentHint.set(getHumanReadablePercents(calculatePercentHint()))
+                } else {
+                    spinnerSelectedMembers.set(null)
+                }
+            }
+        })
+
+        spinnerSelectedMember.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                spinnerSelectedMember.get()?.let {
+                    percent.set(getHumanReadablePercents(it.percent))
+                }
+            }
+        })
+
+        percent.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                if (spinnerSelectedMember.get() != null) {
+                    var percentStr = percent.get()
+
+                    if (percentStr != null) {
+
+                        if (percentStr.isEmpty()) {
+                            percentStr = "0"
+                        }
+
+                        if (!isPercentValid(percentStr)) {
+                            if (getHumanReadablePercents(spinnerSelectedMember.get()!!.percent) != percentStr) {
+                                percent.set(getHumanReadablePercents(spinnerSelectedMember.get()!!.percent))
+                            }
+                        } else {
+                            if (convertPercentToInt(percentStr) == 0) {
+                                percent.set("")
+                            }
+                            spinnerSelectedMember.get()!!.percent =
+                                getInternalPercents(percentStr)
+                        }
+
+                        percentHint.set(getHumanReadablePercents(calculatePercentHint()))
+                    }
+                }
             }
         })
     }
 
-    override fun readFrom(bundle: Bundle) {
-        bundle.apply {
-            event = serializer.deserialize(getString(EVENT_KEY)!!)
-            if (containsKey(ITEM_KEY)) item = serializer.deserialize(getString(ITEM_KEY)!!)
+    private fun calculatePercentHint(): Float {
+        if (spinnerSelectedMembers.get()?.isNotEmpty() == true) {
+            var hundred = 1f
+            var equalCount = 0
 
-            name.set(getString(NAME_KEY)!!)
-            description.set(getString(DESCRIPTION_KEY)!!)
-            price.set(getString(PRICE_KEY)!!)
-            selectableMembers.set(serializer.deserialize(getString(SELECTED_MEMBERS_KEY)!!))
-            payMember.set(serializer.deserialize(getString(PAY_MEMBER_KEY)!!))
+            spinnerSelectedMembers.get()?.forEach {
+                if (it.percent != 0f) {
+                    hundred -= it.percent
+                } else {
+                    equalCount++
+                }
+            }
+
+            return hundred / equalCount
+        } else {
+            return 0f
         }
     }
 
+    @UseExperimental(ImplicitReflectionSerializer::class)
+    override fun readFrom(bundle: Bundle) {
+        bundle.apply {
+            event = getString(EVENT_KEY)!!.deserialize()
+            if (containsKey(ITEM_KEY)) item = getString(ITEM_KEY)!!.deserialize()
+
+            membersContainer.set(event.members)
+            name.set(getString(NAME_KEY)!!)
+            description.set(getString(DESCRIPTION_KEY)!!)
+            price.set(getString(PRICE_KEY)!!)
+
+            selectableMembers.set(getString(SELECTED_MEMBERS_KEY)!!.deserialize(kSerializer))
+            payMember.set(getString(PAY_MEMBER_KEY)!!.deserialize())
+        }
+    }
+
+    @UseExperimental(ImplicitReflectionSerializer::class)
     override fun writeTo(bundle: Bundle) {
         bundle.apply {
-            putString(NAME_KEY, serializer.serialize<Event>(event))
-            if (item != null) putString(ITEM_KEY, serializer.serialize<Item>(item!!))
+            putString(EVENT_KEY, event.serialize())
+            if (item != null) putString(ITEM_KEY, item!!.serialize())
+
 
             putString(NAME_KEY, name.get() ?: "")
             putString(DESCRIPTION_KEY, description.get() ?: "")
             putString(PRICE_KEY, price.get() ?: "0")
             putString(NAME_KEY, name.get() ?: "")
 
-            putString(PAY_MEMBER_KEY, serializer.serialize<Member>(payMember.get()!!))
-            if (selectableMembers.get() != null) putString(SELECTED_MEMBERS_KEY, serializer.serialize<List<Pair<Member, Boolean>>>(selectableMembers.get()!!))
+            putString(PAY_MEMBER_KEY, (payMember.get() ?: event.members.first()).serialize())
+
+            if (selectableMembers.get() != null) {
+                putString(SELECTED_MEMBERS_KEY, selectableMembers.get()!!.serialize(kSerializer))
+            }
         }
     }
 
@@ -117,18 +204,21 @@ class AddItemViewModel(
             selectableMembers.set(event.members.map { member ->
                 item.membersInfo.forEach { info ->
                     if (info.id == member.id) {
-                        return@map Pair(member, true)
+                        return@map Pair(info, true)
                     }
                 }
 
-                return@map Pair(member, false)
+                return@map Pair(MemberInfo(member.id, member.name, 0f), false)
             })
 
-            setPayMember(item.payMember)
-        } else {
-            setPayMember(event.members.first())
+            Handler(Looper.getMainLooper()).postDelayed({
+                setPayMember(item.payMember)
+            }, 100)
 
-            selectableMembers.set(event.members.map { Pair(it, false) })
+        } else {
+            setPayMember()
+
+            selectableMembers.set(event.members.map { Pair(MemberInfo(it.id, it.name, 0f), false) })
         }
     }
 
@@ -159,14 +249,8 @@ class AddItemViewModel(
                 name = name.get()!!,
                 description = description.get() ?: "",
                 price = convertPriceToDouble(price.get()!!),
-                payMember = MemberItemInfo(payMember.get()!!.id, payMember.get()!!.name, 1f),
-                membersInfo = selectableMembers.get()!!.mapNotNull {
-                    if (it.second) {
-                        MemberItemInfo(it.first.id, it.first.name, 1f)
-                    } else {
-                        null
-                    }
-                }
+                payMember = Member(payMember.get()!!.id, payMember.get()!!.name),
+                membersInfo = spinnerSelectedMembers.get()!!
             ),
             onComplete = {
                 goBack()
@@ -175,7 +259,7 @@ class AddItemViewModel(
         )
     }
 
-    private fun setPayMember(member: Member) {
+    private fun setPayMember(member: Member? = null) {
         payMember.set(member)
     }
 
