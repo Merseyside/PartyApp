@@ -1,8 +1,12 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMain.view
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
@@ -11,6 +15,7 @@ import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.BR
+import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.MemberStatistic
@@ -23,6 +28,9 @@ import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.Member
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.adapter.MemberStatisticPagerAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.model.StatisticMainViewModel
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.view.StatisticMemberFragment
+import com.merseyside.partyapp.utils.getMemberStatistic
+import com.merseyside.partyapp.utils.getShareableStatistic
+import com.merseyside.partyapp.utils.shareStatistic
 import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
 
 class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, StatisticMainViewModel>() {
@@ -43,10 +51,6 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
 
     override fun hasTitleBackButton(): Boolean {
         return true
-    }
-
-    override fun getToolbar(): Toolbar? {
-        return binding.toolbar
     }
 
     override fun setBindingVariable(): Int {
@@ -110,6 +114,26 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         super.onDestroyView()
 
         adapter.removeOnItemClickListener(onMemberClickListener)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        baseActivityView.menuInflater.inflate(R.menu.menu_statistic, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        viewModel.statistic?.let { statistic ->
+            when (item.itemId) {
+                R.id.action_share -> {
+                    shareStatistic(baseActivityView, getShareableStatistic(
+                        CalcApplication.getInstance().getContext(),
+                        statistic
+                    ))
+                }
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {

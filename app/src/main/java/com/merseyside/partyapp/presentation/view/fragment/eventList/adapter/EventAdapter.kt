@@ -41,7 +41,7 @@ class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
 
         holder.itemView.rootView.setOnLongClickListener {
             val popup = PopupMenu(holder.itemView.context, holder.itemView.findViewById(R.id.status_container))
-            popup.inflate(R.menu.menu_event_actions)
+            popup.inflate(R.menu.menu_event)
 
             popup.setOnMenuItemClickListener {
                 when (it.itemId) {

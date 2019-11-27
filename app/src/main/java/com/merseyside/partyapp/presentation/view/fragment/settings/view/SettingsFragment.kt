@@ -38,7 +38,6 @@ class SettingsFragment : BaseCalcFragment<FragmentSettingsBinding, SettingsViewM
     }
 
     override fun getTitle(context: Context): String? {
-        Log.d(TAG, "getTitle")
         return context.getString(R.string.settings_title)
     }
 

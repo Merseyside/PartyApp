@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="com.merseyside.partyapp.presentation.view.fragment.statisticMember.view.StatisticMemberFragment">
     <data>
-        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.StatisticMemberViewModel" />
@@ -35,7 +36,7 @@
                 app:orders="@{viewModel.ordersContainer}"
                 android:overScrollMode="never"
                 android:layout_marginTop="@dimen/small_spacing"
-                android:visibility="@{viewModel.ordersVisibility ? View.VISIBLE : View.GONE}">
+                app:isVisibleOrGone="@{viewModel.ordersVisibility}">
             </androidx.recyclerview.widget.RecyclerView>
 
         </LinearLayout>
@@ -164,10 +165,18 @@
                         app:layout_constraintTop_toTopOf="parent"
                         app:results="@{viewModel.resultsContainer}"
                         android:overScrollMode="never"
-                        android:visibility="@{viewModel.resultsVisibility ? View.VISIBLE : View.GONE}">
+                        app:isVisibleOrGone="@{viewModel.resultsVisibility}">
                     </androidx.recyclerview.widget.RecyclerView>
 
             </androidx.cardview.widget.CardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/share_member"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{viewModel.shareMemberTitle}"
+                android:layout_marginTop="@dimen/normal_spacing"
+                app:cornerRadius="@dimen/normal_spacing"/>
 
         </LinearLayout>
 

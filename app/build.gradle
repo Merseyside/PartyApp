@@ -9,8 +9,8 @@ android {
         applicationId "com.merseyside.partyapp"
         minSdkVersion 19
         targetSdkVersion 29
-        versionCode 1
-        versionName "0.01"
+        versionCode 10
+        versionName "0.10"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -88,19 +88,17 @@ ext {
 
     cicerone = '5.0.0'
 
-    horizontalSelectorView = '1.12'
+    horizontalSelectorView = '1.13'
 
-    mvvmCleanArchLibrary = '1.29'
+    mvvmCleanArchLibrary = '1.32'
 }
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-    implementation project(":library")
     implementation project(":shared")
     implementation project(":chipsLib")
-    implementation project(":horizontal-selector-view")
 
     implementation "com.squareup.sqldelight:android-driver:$sqlDriver"
 
@@ -117,7 +115,7 @@ dependencies {
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutines"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:$coroutines"
 
-    //implementation "com.github.Merseyside.horizontal-selector-view:HorizontalSelectorView:$horizontalSelectorView"
+    implementation "com.github.Merseyside.horizontal-selector-view:HorizontalSelectorView:$horizontalSelectorView"
 
     implementation "com.google.dagger:dagger:$dagger2"
     kapt "com.google.dagger:dagger-compiler:$dagger2Compiler"
@@ -125,7 +123,7 @@ dependencies {
 
     implementation "ru.terrakok.cicerone:cicerone:$cicerone"
 
-    //implementation "com.github.Merseyside.mvvm-clean-arch-library:library:$mvvmCleanArchLibrary"
+    implementation "com.github.Merseyside.mvvm-clean-arch-library:library:$mvvmCleanArchLibrary"
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.1.1'

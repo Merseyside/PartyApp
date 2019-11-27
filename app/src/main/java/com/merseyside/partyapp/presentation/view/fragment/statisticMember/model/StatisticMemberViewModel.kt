@@ -14,7 +14,7 @@ import com.upstream.basemvvmimpl.data.serialize
 
 class StatisticMemberViewModel : BaseCalcViewModel() {
 
-    private lateinit var statistic: MemberStatistic
+    lateinit var statistic: MemberStatistic
 
     val ordersVisibility = ObservableField(false)
     val ordersContainer = ObservableField<List<Order>>()
@@ -32,13 +32,16 @@ class StatisticMemberViewModel : BaseCalcViewModel() {
     val totalLend = ObservableField<String>()
     val lendTitle = ObservableField<String>()
 
+    val shareMemberTitle = ObservableField<String>()
+
     override fun updateLanguage(context: Context) {
         super.updateLanguage(context)
 
         ordersTitle.set(context.getString(R.string.all_orders))
-        spendTitle.set(context.getString(R.string.total_spend))
-        debtTitle.set(context.getString(R.string.total_debt))
-        lendTitle.set(context.getString(R.string.total_lend))
+        spendTitle.set(context.getString(R.string.spend))
+        debtTitle.set(context.getString(R.string.owed))
+        lendTitle.set(context.getString(R.string.lend))
+        shareMemberTitle.set(context.getString(R.string.share_member))
     }
 
     override fun dispose() {}

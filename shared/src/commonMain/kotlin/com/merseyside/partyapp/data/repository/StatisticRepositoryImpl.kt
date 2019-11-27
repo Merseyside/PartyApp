@@ -129,14 +129,17 @@ class StatisticRepositoryImpl(
             }
 
         var totalSpend = 0.0
+        var totalDebt = 0.0
 
         membersStatistic.forEach { memberStatistic ->
             totalSpend += memberStatistic.totalSpend
+            totalDebt += memberStatistic.totalDebt
         }
 
         return Statistic(
             eventId = eventId,
             totalSpend = totalSpend,
+            totalDebt = totalDebt,
             memberCount = event.members.size,
             currency = currency,
             membersStatistic = membersStatistic

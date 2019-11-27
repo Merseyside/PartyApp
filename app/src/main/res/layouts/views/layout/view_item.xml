@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="android.view.View"/>
         <variable
             name="obj"
             type="com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemViewModel" />
@@ -27,15 +26,15 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
             android:text="@{obj.title}"
             android:textSize="@dimen/large_text_size"
-            android:ellipsize="marquee"/>
+            android:ellipsize="marquee"
+            android:layout_marginBottom="@dimen/small_spacing"/>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/transparent_grey"
             android:layout_below="@id/title"
-            android:layout_marginTop="@dimen/small_spacing"
-            android:visibility="@{obj.last ? View.INVISIBLE : View.VISIBLE}"/>
+            app:isVisibleOrGone="@{!obj.last}"/>
 
     </RelativeLayout>
 

@@ -4,7 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.merseyside.partyapp.presentation.view.fragment.addItem.view.AddItemFragment">
     <data>
-        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.merseyside.partyapp.presentation.view.fragment.addItem.model.AddItemViewModel" />
@@ -166,7 +165,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@{viewModel.selectableMembersErrorText}"
                                 android:textColor="?attr/colorError"
-                                android:visibility="@{viewModel.selectableMembersErrorText.empty ? View.GONE : View.VISIBLE}" />
+                                app:isVisibleOrGone="@{viewModel.selectableMembersErrorText.empty}" />
 
                         </LinearLayout>
 

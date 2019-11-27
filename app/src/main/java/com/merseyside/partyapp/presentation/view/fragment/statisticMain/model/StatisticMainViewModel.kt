@@ -2,11 +2,8 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMain.model
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.databinding.Bindable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
-import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
@@ -22,7 +19,9 @@ class StatisticMainViewModel(
     private val getStatisticUseCase: GetStatisticInteractor
 ) : BaseCalcViewModel(router) {
 
-    val membersVisibility = ObservableField<Boolean>()
+    var statistic: Statistic? = null
+
+    val membersVisibility = ObservableField<Boolean>(true)
     val memberContainer = ObservableField<List<Member>>()
     val memberStatisticLiveData = MutableLiveData<List<MemberStatistic>>()
 
@@ -56,13 +55,17 @@ class StatisticMainViewModel(
             getStatisticUseCase.execute(
                 params = GetStatisticInteractor.Params(eventId = event.id),
                 onComplete = {
+                    statistic = it
+
                     membersVisibility.set(it.membersStatistic.isNotEmpty())
 
                     showStats(it)
                 },
                 onError = {
                     showErrorMsg(errorMsgCreator.createErrorMsg(it))
-                }
+                },
+                showProgress = { showProgress() },
+                hideProgress = { hideProgress() }
             )
         }
     }
@@ -76,7 +79,7 @@ class StatisticMainViewModel(
     }
 
     private fun setTotalSpend(totalSpend: Double) {
-        this.totalSpend.set(getString(R.string.total_spend, totalSpend.toString()))
+        this.totalSpend.set(getString(R.string.spend, totalSpend.toString()))
     }
 
     companion object {

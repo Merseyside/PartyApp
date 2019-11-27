@@ -2,7 +2,6 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemListViewModel" />
@@ -24,7 +23,7 @@
                 android:layout_height="match_parent"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:items="@{viewModel.itemsContainer}"
-                android:visibility="@{viewModel.itemsVisibility ? View.VISIBLE : View.GONE}">
+                app:isVisibleOrGone="@{viewModel.itemsVisibility}">
             </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
@@ -38,7 +37,7 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:minLines="2"
                 android:text="@string/no_items"
-                android:visibility="@{viewModel.itemsVisibility ? View.GONE : View.VISIBLE}"/>
+                app:isVisibleOrGone="@{!viewModel.itemsVisibility}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

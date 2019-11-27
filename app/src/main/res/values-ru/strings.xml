@@ -60,18 +60,24 @@
     <string name="delete_item_title">Удалить %1$s?</string>
     <string name="delete_item_message">Вы действительно хотите удалить эту покупку?</string>
 
-    <string name="total_spend">Потрачено</string>
-    <string name="total_debt">Занято</string>
-    <string name="total_lend">Одолжено</string>
+    <string name="spend">Потрачено</string>
+    <string name="owed">Занято</string>
+    <string name="lend">Одолжено</string>
 
     <string name="use_comma">Примечание: используйте запятую для разделения участников. Имена должны быть уникальны.</string>
     <string name="enter_currency">Введите свою валюту</string>
 
-    <string name="for_member">Для %1$s</string>
-    <string name="from_member">От %1$s</string>
+    <string name="for_member">для %1$s</string>
+    <string name="from_member">от %1$s</string>
+    <string name="for_yourself">для себя</string>
     <string name="price">Цена: %1$s %2$s</string>
     <string name="debt">Долг: %1$s %2$s</string>
     <string name="debit">Дебит: %1$s %2$s</string>
 
+    <string name="total_spend">Всего потрачено</string>
+    <string name="total_debt">Всего занято</string>
+
     <string name="language">Язык</string>
+
+    <string name="share_member">Поделиться статистикой участника</string>
 </resources>

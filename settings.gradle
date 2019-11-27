@@ -12,9 +12,3 @@ include ':app', ':shared', ':chipsLib'
 rootProject.name='PartyApp'
 
 enableFeaturePreview("GRADLE_METADATA")
-
-include ':library'
-project(':library').projectDir = new File(settingsDir, '../Workspace/mvvm-clean-arch-library/library')
-
-include ':horizontal-selector-view'
-project(':horizontal-selector-view').projectDir = new File(settingsDir, '../Workspace/horizontal-selector-view/HorizontalSelectorView')

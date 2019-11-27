@@ -20,7 +20,6 @@ class ResultItemViewModel(
     set(value) {
         field = value
 
-        Log.d(TAG, "here $value")
         notifyPropertyChanged(BR.dividerVisible)
     }
 

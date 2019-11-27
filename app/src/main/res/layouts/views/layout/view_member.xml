@@ -4,7 +4,6 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.merseyside.partyapp.presentation.view.fragment.statisticMain.view.StatisticMainFragment">
     <data>
-        <import type="android.view.View"/>
         <variable
             name="obj"
             type="com.merseyside.partyapp.presentation.view.fragment.addItem.model.MemberItemViewModel" />

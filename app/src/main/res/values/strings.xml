@@ -61,20 +61,26 @@
     <string name="delete_item_title">Delete %1$s?</string>
     <string name="delete_item_message">Do you want to delete this item?</string>
 
-    <string name="total_spend">Spend</string>
-    <string name="total_debt">Owed</string>
-    <string name="total_lend">Lend</string>
+    <string name="spend">Spend</string>
+    <string name="owed">Owed</string>
+    <string name="lend">Lend</string>
 
     <string name="use_comma">Note: use comma to separate participants. Names must be unique.</string>
     <string name="enter_currency">Enter currency</string>
 
-    <string name="for_member">For %1$s</string>
-    <string name="from_member">From %1$s</string>
+    <string name="for_member">for %1$s</string>
+    <string name="from_member">from %1$s</string>
+    <string name="for_yourself">for yourself</string>
     <string name="price">Price: %1$s %2$s</string>
     <string name="debt">Debt: %1$s %2$s</string>
     <string name="debit">Debit: %1$s %2$s</string>
 
+    <string name="total_spend">Total spend</string>
+    <string name="total_debt">Total debt</string>
+
     <string name="language">Language</string>
+
+    <string name="share_member">Share member statistic</string>
 
     <string-array name="language_entries">
         <item>ic_english</item>
