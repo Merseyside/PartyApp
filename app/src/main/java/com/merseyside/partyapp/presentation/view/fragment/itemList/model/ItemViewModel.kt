@@ -4,7 +4,7 @@ import androidx.databinding.Bindable
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.utils.getHoursDateTime
-import com.upstream.basemvvmimpl.presentation.model.BaseComparableAdapterViewModel
+import com.merseyside.mvvmcleanarch.presentation.model.BaseComparableAdapterViewModel
 
 class ItemViewModel(
     override var obj: Item

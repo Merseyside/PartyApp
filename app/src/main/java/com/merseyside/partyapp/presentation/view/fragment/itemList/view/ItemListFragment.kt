@@ -18,7 +18,7 @@ import com.merseyside.partyapp.presentation.di.module.ItemListModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.itemList.adapter.ItemAdapter
 import com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemListViewModel
-import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
+import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
 import java.lang.IllegalStateException
 
 class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewModel>() {
@@ -31,7 +31,7 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
         return true
     }
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
@@ -46,11 +46,12 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
         return ItemListModule(this, bundle)
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.fragment_item_list
     }
 
     override fun getTitle(context: Context): String? {
+        Log.d(TAG, "here")
         return sharedViewModel.eventContainer?.name ?: throw IllegalStateException()
     }
 

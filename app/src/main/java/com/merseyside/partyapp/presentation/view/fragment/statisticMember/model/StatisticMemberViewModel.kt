@@ -9,8 +9,8 @@ import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.doubleToStringPrice
-import com.upstream.basemvvmimpl.data.deserialize
-import com.upstream.basemvvmimpl.data.serialize
+import com.merseyside.mvvmcleanarch.data.deserialize
+import com.merseyside.mvvmcleanarch.data.serialize
 
 class StatisticMemberViewModel : BaseCalcViewModel() {
 

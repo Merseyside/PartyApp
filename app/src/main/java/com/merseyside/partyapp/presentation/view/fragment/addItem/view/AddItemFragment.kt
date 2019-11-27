@@ -17,7 +17,7 @@ import com.merseyside.partyapp.presentation.di.module.AddItemModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberAdapter
 import com.merseyside.partyapp.presentation.view.fragment.addItem.model.AddItemViewModel
-import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
+import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
 
 class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewModel>() {
 
@@ -27,7 +27,7 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
         return true
     }
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
@@ -42,7 +42,7 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
         return AddItemModule(this, bundle)
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.fragment_add_item
     }
 

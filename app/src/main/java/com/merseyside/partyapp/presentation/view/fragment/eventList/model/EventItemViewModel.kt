@@ -8,7 +8,7 @@ import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.utils.getDateTime
-import com.upstream.basemvvmimpl.presentation.model.BaseComparableAdapterViewModel
+import com.merseyside.mvvmcleanarch.presentation.model.BaseComparableAdapterViewModel
 
 class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewModel<Event>(obj) {
 

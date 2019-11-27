@@ -5,8 +5,8 @@ import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemViewModel
-import com.upstream.basemvvmimpl.presentation.adapter.BaseSortedAdapter
-import com.upstream.basemvvmimpl.presentation.view.BaseViewHolder
+import com.merseyside.mvvmcleanarch.presentation.adapter.BaseSortedAdapter
+import com.merseyside.mvvmcleanarch.presentation.view.BaseViewHolder
 
 class ItemAdapter : BaseSortedAdapter<Item, ItemViewModel>() {
 

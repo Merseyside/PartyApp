@@ -3,8 +3,8 @@ package com.merseyside.partyapp.presentation.di.module
 import android.app.Application
 import android.content.Context
 import com.merseyside.partyapp.utils.PrefsHelper
-import com.upstream.basemvvmimpl.presentation.di.qualifiers.ApplicationContext
-import com.upstream.basemvvmimpl.utils.PreferenceManager
+import com.merseyside.mvvmcleanarch.presentation.di.qualifiers.ApplicationContext
+import com.merseyside.mvvmcleanarch.utils.PreferenceManager
 import dagger.Module
 import dagger.Provides
 

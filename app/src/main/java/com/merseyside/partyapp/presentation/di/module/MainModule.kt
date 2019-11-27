@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.presentation.view.activity.main.model.MainViewModel
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
-import com.upstream.basemvvmimpl.presentation.activity.BaseActivity
-import com.upstream.basemvvmimpl.presentation.model.BundleAwareViewModelFactory
+import com.merseyside.mvvmcleanarch.presentation.activity.BaseActivity
+import com.merseyside.mvvmcleanarch.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router

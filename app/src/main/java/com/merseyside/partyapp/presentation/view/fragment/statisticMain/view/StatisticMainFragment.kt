@@ -31,7 +31,7 @@ import com.merseyside.partyapp.presentation.view.fragment.statisticMember.view.S
 import com.merseyside.partyapp.utils.getMemberStatistic
 import com.merseyside.partyapp.utils.getShareableStatistic
 import com.merseyside.partyapp.utils.shareStatistic
-import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
+import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
 
 class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, StatisticMainViewModel>() {
 
@@ -53,7 +53,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         return true
     }
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
@@ -68,7 +68,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         return StatisticMainModule(this, bundle)
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.fragment_statistic_main
     }
 

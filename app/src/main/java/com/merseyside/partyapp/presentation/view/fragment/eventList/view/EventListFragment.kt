@@ -17,7 +17,7 @@ import com.merseyside.partyapp.presentation.di.module.EventListModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.eventList.adapter.EventAdapter
 import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventListViewModel
-import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
+import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
 import java.lang.IllegalStateException
 
 class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListViewModel>() {
@@ -30,7 +30,7 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
 
     private val adapter = EventAdapter()
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
@@ -45,7 +45,7 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
         return EventListModule(this, bundle)
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.fragment_event_list
     }
 

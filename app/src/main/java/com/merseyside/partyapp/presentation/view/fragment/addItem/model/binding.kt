@@ -13,7 +13,7 @@ import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.Member
 import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberSpinnerAdapter
 import com.pchmn.materialchips.ChipsInput
 import com.pchmn.materialchips.model.Chip
-import com.upstream.basemvvmimpl.presentation.adapter.BaseSelectableAdapter
+import com.merseyside.mvvmcleanarch.presentation.adapter.BaseSelectableAdapter
 import android.view.View
 import android.widget.Spinner
 import com.merseyside.partyapp.data.db.item.MemberInfo

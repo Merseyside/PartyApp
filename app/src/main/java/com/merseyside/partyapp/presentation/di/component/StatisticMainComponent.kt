@@ -2,7 +2,7 @@ package com.merseyside.partyapp.presentation.di.component
 
 import com.merseyside.partyapp.presentation.di.module.StatisticMainModule
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.view.StatisticMainFragment
-import com.upstream.basemvvmimpl.presentation.di.qualifiers.FragmentScope
+import com.merseyside.mvvmcleanarch.presentation.di.qualifiers.FragmentScope
 import dagger.Component
 
 @FragmentScope

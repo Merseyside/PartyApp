@@ -4,9 +4,9 @@ import android.content.Context
 import android.os.Bundle
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.item.Item
-import com.upstream.basemvvmimpl.data.deserialize
-import com.upstream.basemvvmimpl.data.serialize
-import com.upstream.basemvvmimpl.presentation.model.ParcelableViewModel
+import com.merseyside.mvvmcleanarch.data.deserialize
+import com.merseyside.mvvmcleanarch.data.serialize
+import com.merseyside.mvvmcleanarch.presentation.model.ParcelableViewModel
 import kotlinx.serialization.list
 
 class SharedViewModel : ParcelableViewModel() {

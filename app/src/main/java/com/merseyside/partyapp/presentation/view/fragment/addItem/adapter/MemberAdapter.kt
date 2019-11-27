@@ -4,7 +4,7 @@ import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.presentation.view.fragment.addItem.model.MemberItemViewModel
-import com.upstream.basemvvmimpl.presentation.adapter.BaseSelectableAdapter
+import com.merseyside.mvvmcleanarch.presentation.adapter.BaseSelectableAdapter
 
 class MemberAdapter : BaseSelectableAdapter<Member, MemberItemViewModel>() {
 

@@ -4,9 +4,9 @@ import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.ResultItemViewModel
-import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
+import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
 import com.merseyside.partyapp.data.entity.Result
-import com.upstream.basemvvmimpl.presentation.view.BaseViewHolder
+import com.merseyside.mvvmcleanarch.presentation.view.BaseViewHolder
 
 class ResultAdapter : BaseAdapter<Result, ResultItemViewModel>() {
 

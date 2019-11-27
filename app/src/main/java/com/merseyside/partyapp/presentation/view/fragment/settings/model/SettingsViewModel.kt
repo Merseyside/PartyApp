@@ -8,7 +8,7 @@ import androidx.databinding.ObservableField
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.PrefsHelper
-import com.upstream.basemvvmimpl.utils.PreferenceManager
+import com.merseyside.mvvmcleanarch.utils.PreferenceManager
 import ru.terrakok.cicerone.Router
 
 class SettingsViewModel(

@@ -15,8 +15,8 @@ import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.domain.interactor.AddItemInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.*
-import com.upstream.basemvvmimpl.data.deserialize
-import com.upstream.basemvvmimpl.data.serialize
+import com.merseyside.mvvmcleanarch.data.deserialize
+import com.merseyside.mvvmcleanarch.data.serialize
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.ImplicitReflectionSerializer
 import ru.terrakok.cicerone.Router

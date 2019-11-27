@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.annotation.StringRes
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.presentation.exception.ErrorMessageFactory
-import com.upstream.basemvvmimpl.presentation.model.ParcelableViewModel
+import com.merseyside.mvvmcleanarch.presentation.model.ParcelableViewModel
 import ru.terrakok.cicerone.Router
 
 abstract class BaseCalcViewModel(private val router: Router? = null) : ParcelableViewModel() {

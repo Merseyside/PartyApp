@@ -7,7 +7,7 @@ import com.merseyside.partyapp.presentation.di.component.AppComponent
 import com.merseyside.partyapp.presentation.di.component.DaggerAppComponent
 import com.merseyside.partyapp.presentation.di.module.AppModule
 import com.squareup.sqldelight.android.AndroidSqliteDriver
-import com.upstream.basemvvmimpl.BaseApplication
+import com.merseyside.mvvmcleanarch.BaseApplication
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.di.sqlDriver
 import com.merseyside.partyapp.utils.PrefsHelper

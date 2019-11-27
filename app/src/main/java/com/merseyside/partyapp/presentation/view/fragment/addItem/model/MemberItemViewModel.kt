@@ -4,8 +4,8 @@ import androidx.databinding.Bindable
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member
-import com.upstream.basemvvmimpl.presentation.adapter.SelectableItemInterface
-import com.upstream.basemvvmimpl.presentation.model.BaseComparableAdapterViewModel
+import com.merseyside.mvvmcleanarch.presentation.adapter.SelectableItemInterface
+import com.merseyside.mvvmcleanarch.presentation.model.BaseComparableAdapterViewModel
 
 class MemberItemViewModel(override var obj: Member) : BaseComparableAdapterViewModel<Member>(obj),
     SelectableItemInterface {

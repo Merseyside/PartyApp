@@ -8,8 +8,8 @@ import com.merseyside.partyapp.domain.interactor.AddEventInteractor
 import com.merseyside.partyapp.domain.interactor.CloseEventInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventByIdInteractor
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
-import com.upstream.basemvvmimpl.presentation.fragment.BaseFragment
-import com.upstream.basemvvmimpl.presentation.model.BundleAwareViewModelFactory
+import com.merseyside.mvvmcleanarch.presentation.fragment.BaseFragment
+import com.merseyside.mvvmcleanarch.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router

@@ -2,7 +2,6 @@ package com.merseyside.partyapp.presentation.view.fragment.settings.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
@@ -18,7 +17,7 @@ class SettingsFragment : BaseCalcFragment<FragmentSettingsBinding, SettingsViewM
         return true
     }
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
@@ -33,16 +32,12 @@ class SettingsFragment : BaseCalcFragment<FragmentSettingsBinding, SettingsViewM
         return SettingsModule(this, bundle)
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.fragment_settings
     }
 
     override fun getTitle(context: Context): String? {
         return context.getString(R.string.settings_title)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -51,15 +46,11 @@ class SettingsFragment : BaseCalcFragment<FragmentSettingsBinding, SettingsViewM
         doLayout()
     }
 
-    private fun init() {
-
-    }
-
     private fun doLayout() {
         binding.language.apply {
             currentEntryValue = getLanguage()
             setOnValueChangeListener {
-                updateLanguage(it)
+                setLanguage(it)
             }
         }
     }

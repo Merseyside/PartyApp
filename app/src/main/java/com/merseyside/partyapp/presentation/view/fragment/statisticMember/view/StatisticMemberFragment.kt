@@ -28,7 +28,7 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
         return true
     }
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
@@ -43,7 +43,7 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
         return StatisticMemberModule(this, bundle)
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.fragment_member_statistic
     }
 

@@ -19,7 +19,7 @@ import com.merseyside.partyapp.presentation.di.module.AddEventModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.ContactChip
-import com.upstream.basemvvmimpl.utils.ValueAnimatorHelper
+import com.merseyside.mvvmcleanarch.utils.ValueAnimatorHelper
 
 
 class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewModel>() {
@@ -36,7 +36,7 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
         return true
     }
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
@@ -51,7 +51,7 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
         return AddEventModule(this, bundle)
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.fragment_add_event
     }
 

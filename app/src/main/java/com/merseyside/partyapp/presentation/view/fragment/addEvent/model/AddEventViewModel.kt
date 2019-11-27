@@ -14,8 +14,8 @@ import com.merseyside.partyapp.domain.interactor.CloseEventInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventByIdInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.isNameValid
-import com.upstream.basemvvmimpl.data.deserialize
-import com.upstream.basemvvmimpl.data.serialize
+import com.merseyside.mvvmcleanarch.data.deserialize
+import com.merseyside.mvvmcleanarch.data.serialize
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.internal.StringSerializer
 import kotlinx.serialization.list

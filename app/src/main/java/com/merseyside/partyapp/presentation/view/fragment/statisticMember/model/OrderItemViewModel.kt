@@ -6,7 +6,7 @@ import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.utils.doubleToStringPrice
-import com.upstream.basemvvmimpl.presentation.model.BaseAdapterViewModel
+import com.merseyside.mvvmcleanarch.presentation.model.BaseAdapterViewModel
 
 
 class OrderItemViewModel(

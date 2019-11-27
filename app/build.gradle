@@ -99,6 +99,7 @@ dependencies {
 
     implementation project(":shared")
     implementation project(":chipsLib")
+    //implementation project(":library")
 
     implementation "com.squareup.sqldelight:android-driver:$sqlDriver"
 

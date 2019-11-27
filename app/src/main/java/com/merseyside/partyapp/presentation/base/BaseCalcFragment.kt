@@ -7,8 +7,8 @@ import androidx.annotation.CallSuper
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.ViewDataBinding
 import com.merseyside.partyapp.CalcApplication
-import com.upstream.basemvvmimpl.presentation.fragment.BaseMvvmFragment
-import com.upstream.basemvvmimpl.presentation.view.IFocusManager
+import com.merseyside.mvvmcleanarch.presentation.fragment.BaseMvvmFragment
+import com.merseyside.mvvmcleanarch.presentation.view.IFocusManager
 
 abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : BaseMvvmFragment<B, M>(), IFocusManager {
 
@@ -23,8 +23,6 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
     protected fun goBack() {
         viewModel.goBack()
     }
-
-    override fun clear() {}
 
     override fun loadingObserver(isLoading: Boolean) {}
 

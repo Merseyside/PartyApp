@@ -30,11 +30,11 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
 
     private lateinit var navigator : Navigator
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.activity_main
     }
 

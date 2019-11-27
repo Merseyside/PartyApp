@@ -7,7 +7,7 @@ import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.Order
-import com.upstream.basemvvmimpl.presentation.model.BaseAdapterViewModel
+import com.merseyside.mvvmcleanarch.presentation.model.BaseAdapterViewModel
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.utils.doubleToStringPrice
 
