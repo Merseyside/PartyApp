@@ -13,12 +13,14 @@ import org.kodein.di.erased.singleton
 internal val statisticModule = Kodein.Module("statistic") {
 
     bind<StatisticRepository>() with singleton {
-        StatisticRepositoryImpl(instance(), instance())
+        StatisticRepositoryImpl(instance(), instance(), instance())
     }
 }
 
 @ExperimentalCoroutinesApi
 val statisticComponent = Kodein {
+
+    import(appModule)
 
     extend(itemComponent, allowOverride = true)
     extend(eventComponent, allowOverride = true)

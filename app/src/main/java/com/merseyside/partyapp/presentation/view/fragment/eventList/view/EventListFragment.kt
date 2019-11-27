@@ -2,6 +2,9 @@ package com.merseyside.partyapp.presentation.view.fragment.eventList.view
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.BR
@@ -15,6 +18,7 @@ import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewM
 import com.merseyside.partyapp.presentation.view.fragment.eventList.adapter.EventAdapter
 import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventListViewModel
 import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
+import java.lang.IllegalStateException
 
 class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListViewModel>() {
 
@@ -46,11 +50,14 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
     }
 
     override fun getTitle(context: Context): String? {
+
         return context.getString(R.string.event_list_title)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        setHasOptionsMenu(true)
 
         init()
     }
@@ -94,6 +101,21 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
         super.onDestroyView()
 
         adapter.removeOnItemClickListener(onItemClickListener)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        baseActivityView.menuInflater.inflate(R.menu.menu_main,  menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        when (item.itemId) {
+            R.id.action_settings -> {
+                viewModel.navigateToSettings()
+            }
+        }
+
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {

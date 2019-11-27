@@ -6,6 +6,7 @@ import com.merseyside.partyapp.presentation.view.fragment.addEvent.view.AddEvent
 import com.merseyside.partyapp.presentation.view.fragment.addItem.view.AddItemFragment
 import com.merseyside.partyapp.presentation.view.fragment.eventList.view.EventListFragment
 import com.merseyside.partyapp.presentation.view.fragment.itemList.view.ItemListFragment
+import com.merseyside.partyapp.presentation.view.fragment.settings.view.SettingsFragment
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.view.StatisticMainFragment
 import ru.terrakok.cicerone.android.support.SupportAppScreen
 
@@ -64,6 +65,12 @@ class Screens {
             return AddItemFragment.newInstance().apply {
                 arguments = bundle
             }
+        }
+    }
+
+    class SettingsScreen : SupportAppScreen() {
+        override fun getFragment(): Fragment {
+            return SettingsFragment.newInstance()
         }
     }
 }

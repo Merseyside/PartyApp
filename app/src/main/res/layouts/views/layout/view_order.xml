@@ -59,7 +59,7 @@
                     android:text="@{obj.price}"
                     app:attrTextColor="@{obj.textColor}"
                     android:ellipsize="marquee"
-                    android:singleLine="true"
+                    android:maxLines="2"
                     android:textAlignment="center" />
             </LinearLayout>
 

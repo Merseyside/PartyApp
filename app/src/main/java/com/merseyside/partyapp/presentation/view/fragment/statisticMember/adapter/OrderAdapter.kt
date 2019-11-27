@@ -1,6 +1,7 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter
 
 import com.merseyside.partyapp.BR
+import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.OrderItemViewModel
@@ -17,6 +18,6 @@ class OrderAdapter : BaseAdapter<Order, OrderItemViewModel>() {
     }
 
     override fun createItemViewModel(obj: Order): OrderItemViewModel {
-        return OrderItemViewModel(obj)
+        return OrderItemViewModel(obj, CalcApplication.getInstance().prefsHelper.getCurrency())
     }
 }

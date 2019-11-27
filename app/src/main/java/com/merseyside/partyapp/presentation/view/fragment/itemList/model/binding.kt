@@ -13,14 +13,14 @@ fun setItems(recyclerView: RecyclerView, items: List<Item>?) {
 
         val itemsAdapter = recyclerView.adapter as ItemAdapter
         if (!items.isNullOrEmpty()) {
-            if (itemsAdapter.isEmpty()) {
+            if (itemsAdapter.isNotEmpty()) {
                 val request = UpdateRequest.Builder<Item>()
                     .isAddNew(true)
                     .isDeleteOld(false)
                     .setList(items)
                     .build()
 
-                itemsAdapter.updateAsync(request)
+                itemsAdapter.update(request)
             } else {
                 itemsAdapter.add(items)
             }

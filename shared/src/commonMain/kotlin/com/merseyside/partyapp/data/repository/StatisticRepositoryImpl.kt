@@ -7,15 +7,19 @@ import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.data.entity.Statistic
 import com.merseyside.partyapp.domain.repository.StatisticRepository
+import com.merseyside.partyapp.utils.PreferenceHelper
 
 class StatisticRepositoryImpl(
     private val eventDao: EventDao,
-    private val itemDao: ItemDao
+    private val itemDao: ItemDao,
+    private val prefsHelper: PreferenceHelper
 ) : StatisticRepository {
 
     override suspend fun getStatistic(eventId: Long): Statistic {
         val event = eventDao.getEventById(eventId)
         val items = itemDao.getItemsById(eventId)
+
+        val currency = prefsHelper.getCurrency("")
 
         val membersStatistic = event.members
             .mapNotNull { member ->
@@ -116,7 +120,8 @@ class StatisticRepositoryImpl(
                         totalDebt = totalOwed,
                         totalLend = totalLend,
                         orders = orders,
-                        priceResult = priceResult
+                        priceResult = priceResult,
+                        currency = currency
                     )
                 } else {
                     null
@@ -133,6 +138,7 @@ class StatisticRepositoryImpl(
             eventId = eventId,
             totalSpend = totalSpend,
             memberCount = event.members.size,
+            currency = currency,
             membersStatistic = membersStatistic
         )
     }

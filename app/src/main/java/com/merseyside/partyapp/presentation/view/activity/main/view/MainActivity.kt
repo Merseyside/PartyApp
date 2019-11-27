@@ -1,6 +1,7 @@
 package com.merseyside.partyapp.presentation.view.activity.main.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -52,7 +53,6 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
 
         initNavigation()
-        setUpToolbar()
 
         if (savedInstanceState == null) {
             init()
@@ -60,20 +60,28 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun initNavigation() {
-        navigator = object : SupportAppNavigator(this, binding.container.id) {
+        if (binding.container != null) {
+            navigator = object : SupportAppNavigator(this, binding.container.id) {
 
-            override fun applyCommand(command: Command?) {
-                super.applyCommand(command)
-                supportFragmentManager.executePendingTransactions()
-            }
+                override fun applyCommand(command: Command?) {
+                    super.applyCommand(command)
+                    supportFragmentManager.executePendingTransactions()
+                }
 
-            override fun setupFragmentTransaction(command: Command?,
-                                                  currentFragment: Fragment?,
-                                                  nextFragment: Fragment?,
-                                                  fragmentTransaction: FragmentTransaction?
-            ) {
-                super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction)
-                fragmentTransaction!!.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                override fun setupFragmentTransaction(
+                    command: Command?,
+                    currentFragment: Fragment?,
+                    nextFragment: Fragment?,
+                    fragmentTransaction: FragmentTransaction?
+                ) {
+                    super.setupFragmentTransaction(
+                        command,
+                        currentFragment,
+                        nextFragment,
+                        fragmentTransaction
+                    )
+                    fragmentTransaction!!.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                }
             }
         }
     }
@@ -86,11 +94,6 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
 
     override fun getToolbar(): Toolbar? {
         return binding.toolbar
-    }
-
-    private fun setUpToolbar() {
-        val upArrow = ContextCompat.getDrawable(this, R.drawable.ic_arrow)
-        supportActionBar?.setHomeAsUpIndicator(upArrow)
     }
 
     private fun init() {
@@ -109,5 +112,9 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     override fun onPause() {
         navigatorHolder.removeNavigator()
         super.onPause()
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 }

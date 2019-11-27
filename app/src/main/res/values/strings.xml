@@ -12,6 +12,7 @@
     <string name="no_activity">There has been no activity so far.\nAdd items and choose it\'s members</string>
     <string name="new_event_title">New event</string>
     <string name="edit_event_title">Edit event</string>
+    <string name="settings_title">Settings</string>
     <string name="save">Save</string>
     <string name="close_event">Close event</string>
     <string name="close_event_title">Close event?</string>
@@ -65,12 +66,25 @@
     <string name="total_lend">Lend</string>
 
     <string name="use_comma">Note: use comma to separate participants. Names must be unique.</string>
+    <string name="enter_currency">Enter currency</string>
 
     <string name="for_member">For %1$s</string>
     <string name="from_member">From %1$s</string>
-    <string name="price">Price: %1$s</string>
-    <string name="debt">Debt: %1$s</string>
-    <string name="debit">Debit: %1$s</string>
+    <string name="price">Price: %1$s %2$s</string>
+    <string name="debt">Debt: %1$s %2$s</string>
+    <string name="debit">Debit: %1$s %2$s</string>
+
+    <string name="language">Language</string>
+
+    <string-array name="language_entries">
+        <item>ic_english</item>
+        <item>ic_russian</item>
+    </string-array>
+
+    <string-array name="language_entry_values">
+        <item>en</item>
+        <item>ru</item>
+    </string-array>
 
 
 </resources>

@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.addEvent.model
 
+import android.content.Context
 import android.os.Bundle
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
@@ -29,12 +30,19 @@ class AddEventViewModel(
 
     val eventName = ObservableField<String>()
     val eventNameErrorText = ObservableField("")
+    val eventNameHint = ObservableField<String>()
 
     val notes = ObservableField<String>()
     val notesErrorText = ObservableField("")
+    val notesHint = ObservableField<String>("")
 
     val members = ObservableField<List<String>>()
     val membersErrorText = ObservableField("")
+
+    val addItemsTitle = ObservableField<String>()
+    val useCommaHint = ObservableField<String>()
+    val save = ObservableField<String>()
+    val closeEvent = ObservableField<String>()
 
     val eventLiveData = MutableLiveData<Event>()
 
@@ -44,6 +52,17 @@ class AddEventViewModel(
     val addMembersVisibility = ObservableField(true)
 
     private var event: Event? = null
+
+    override fun updateLanguage(context: Context) {
+        super.updateLanguage(context)
+
+        eventNameHint.set(context.getString(R.string.event_title))
+        notesHint.set(context.getString(R.string.notes_hint))
+        addItemsTitle.set(context.getString(R.string.add_members))
+        useCommaHint.set(context.getString(R.string.use_comma))
+        save.set(context.getString(R.string.save))
+        closeEvent.set(context.getString(R.string.close_event))
+    }
 
     init {
         eventName.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {

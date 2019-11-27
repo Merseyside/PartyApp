@@ -1,14 +1,14 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMember.model
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.databinding.ObservableField
+import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.doubleToStringPrice
-import com.upstream.basemvvmimpl.data.cache.serializer.Serializer
 import com.upstream.basemvvmimpl.data.deserialize
 import com.upstream.basemvvmimpl.data.serialize
 
@@ -18,13 +18,28 @@ class StatisticMemberViewModel : BaseCalcViewModel() {
 
     val ordersVisibility = ObservableField(false)
     val ordersContainer = ObservableField<List<Order>>()
+    val ordersTitle = ObservableField<String>()
 
     val resultsVisibility = ObservableField(false)
     val resultsContainer = ObservableField<List<Result>>()
 
     val totalSpend = ObservableField<String>()
+    val spendTitle = ObservableField<String>()
+
     val totalDebt = ObservableField<String>()
+    val debtTitle = ObservableField<String>()
+
     val totalLend = ObservableField<String>()
+    val lendTitle = ObservableField<String>()
+
+    override fun updateLanguage(context: Context) {
+        super.updateLanguage(context)
+
+        ordersTitle.set(context.getString(R.string.all_orders))
+        spendTitle.set(context.getString(R.string.total_spend))
+        debtTitle.set(context.getString(R.string.total_debt))
+        lendTitle.set(context.getString(R.string.total_lend))
+    }
 
     override fun dispose() {}
 
@@ -53,9 +68,9 @@ class StatisticMemberViewModel : BaseCalcViewModel() {
             resultsVisibility.set(true)
             resultsContainer.set(statistic.priceResult)
 
-            totalSpend.set(doubleToStringPrice(statistic.totalSpend))
-            totalDebt.set(doubleToStringPrice(statistic.totalDebt))
-            totalLend.set(doubleToStringPrice(statistic.totalLend))
+            totalSpend.set("${doubleToStringPrice(statistic.totalSpend)} ${statistic.currency}")
+            totalDebt.set("${doubleToStringPrice(statistic.totalDebt)} ${statistic.currency}")
+            totalLend.set("${doubleToStringPrice(statistic.totalLend)} ${statistic.currency}")
         } else {
             resultsVisibility.set(false)
         }

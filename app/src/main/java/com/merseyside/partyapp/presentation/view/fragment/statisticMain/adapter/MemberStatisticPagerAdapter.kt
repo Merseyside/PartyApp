@@ -1,6 +1,5 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMain.adapter
 
-import android.util.Log
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.merseyside.partyapp.data.entity.MemberStatistic

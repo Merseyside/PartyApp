@@ -5,6 +5,7 @@ import android.content.Context
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.presentation.di.module.AppModule
 import com.merseyside.partyapp.presentation.di.module.NavigationModule
+import com.merseyside.partyapp.utils.PrefsHelper
 import com.upstream.basemvvmimpl.presentation.di.qualifiers.ApplicationContext
 import com.upstream.basemvvmimpl.utils.PreferenceManager
 import dagger.Component
@@ -23,7 +24,7 @@ interface AppComponent {
 
     fun application() : Application
 
-    fun getPreferenceManager(): PreferenceManager
+    fun getPrefsHelper(): PrefsHelper
 
     fun navigation() : NavigatorHolder
 

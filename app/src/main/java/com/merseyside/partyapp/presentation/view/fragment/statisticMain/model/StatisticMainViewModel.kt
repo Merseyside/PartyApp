@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMain.model
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.databinding.Bindable
@@ -25,7 +26,18 @@ class StatisticMainViewModel(
     val memberContainer = ObservableField<List<Member>>()
     val memberStatisticLiveData = MutableLiveData<List<MemberStatistic>>()
 
+    val statisticTitle = ObservableField<String>()
+    val memberVisibilityHint = ObservableField<String>()
+
     var totalSpend = ObservableField<String>()
+
+    override fun updateLanguage(context: Context) {
+        super.updateLanguage(context)
+
+        statisticTitle.set(context.getString(R.string.statistic))
+        memberVisibilityHint.set(context.getString(R.string.no_activity))
+    }
+
 
     override fun dispose() {
         getStatisticUseCase.cancel()

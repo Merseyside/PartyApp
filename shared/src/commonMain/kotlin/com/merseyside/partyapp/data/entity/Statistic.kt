@@ -4,6 +4,7 @@ data class Statistic(
     val eventId: Long,
     val totalSpend: Double,
     val memberCount: Int,
+    val currency: String,
     val membersStatistic: List<MemberStatistic>
 ) {
     override fun toString(): String {

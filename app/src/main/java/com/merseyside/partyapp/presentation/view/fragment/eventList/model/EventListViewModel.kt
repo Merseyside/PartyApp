@@ -70,6 +70,10 @@ class EventListViewModel(
         )
     }
 
+    fun navigateToSettings() {
+        router.navigateTo(Screens.SettingsScreen())
+    }
+
     companion object {
         private const val TAG = "EventListViewModel"
     }

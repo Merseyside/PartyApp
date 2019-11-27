@@ -1,6 +1,7 @@
 package com.merseyside.partyapp.utils
 
 import android.util.Log
+import com.github.florent37.preferences.Preferences
 
 internal actual class Logger {
 

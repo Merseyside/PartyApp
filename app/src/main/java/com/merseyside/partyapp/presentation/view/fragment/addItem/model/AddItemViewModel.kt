@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 
+import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -30,11 +31,14 @@ class AddItemViewModel(
 
     val name = ObservableField<String>()
     val nameErrorText = ObservableField("")
+    val itemNameHint = ObservableField<String>()
 
     val price = ObservableField<String>()
     val priceErrorText = ObservableField("")
+    val priceHint = ObservableField<String>()
 
     val description = ObservableField<String>()
+    val itemDescriptionHint = ObservableField<String>()
 
     val percent = ObservableField<String>()
     val percentHint = ObservableField<String>()
@@ -47,6 +51,26 @@ class AddItemViewModel(
     val spinnerSelectedMember = ObservableField<MemberInfo>()
 
     val payMember = ObservableField<Member>()
+    val whoPaysTitle = ObservableField<String>()
+    val forWhomTitle = ObservableField<String>()
+    val additionalSettingsTitle = ObservableField<String>()
+    val percentSettingsTitle = ObservableField<String>()
+    val save = ObservableField<String>()
+
+    override fun updateLanguage(context: Context) {
+        super.updateLanguage(context)
+
+        itemNameHint.set(context.getString(R.string.item_title))
+        itemDescriptionHint.set(context.getString(R.string.item_description))
+        priceHint.set(context.getString(R.string.item_total_price))
+
+        whoPaysTitle.set(context.getString(R.string.choose_pays_member))
+        forWhomTitle.set(context.getString(R.string.choose_members))
+
+        additionalSettingsTitle.set(context.getString(R.string.additional_settings))
+        percentSettingsTitle.set(context.getString(R.string.percent_setting))
+        save.set(context.getString(R.string.save))
+    }
 
     init {
         name.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {

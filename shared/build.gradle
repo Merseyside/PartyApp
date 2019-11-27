@@ -39,6 +39,8 @@ kotlin {
             implementation "org.kodein.di:kodein-di-erased:$kodein"
 
             implementation "com.soywiz.korlibs.klock:klock:$klock"
+
+            implementation "com.github.florent37:multiplatform-preferences:$preferences"
         }
 
         androidMain.dependencies {
@@ -52,6 +54,8 @@ kotlin {
 
             implementation "com.squareup.sqldelight:runtime-jvm:$sqldelight"
             implementation "com.squareup.sqldelight:android-driver:$sqldelight"
+
+            implementation "com.github.florent37:multiplatform-preferences-android:$preferences"
 
         }
     }

@@ -1,9 +1,7 @@
 package com.merseyside.partyapp.data.db.item
 
 import com.merseyside.partyapp.data.db.event.Member
-import kotlinx.serialization.*
-import kotlinx.serialization.internal.HexConverter
-import kotlinx.serialization.internal.StringDescriptor
+import kotlinx.serialization.Serializable
 
 @Serializable
 data class MemberInfo( // Needs to be fixed!

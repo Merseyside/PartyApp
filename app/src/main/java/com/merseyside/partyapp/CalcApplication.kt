@@ -10,6 +10,7 @@ import com.squareup.sqldelight.android.AndroidSqliteDriver
 import com.upstream.basemvvmimpl.BaseApplication
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.di.sqlDriver
+import com.merseyside.partyapp.utils.PrefsHelper
 import javax.inject.Inject
 
 class CalcApplication : BaseApplication() {
@@ -25,6 +26,9 @@ class CalcApplication : BaseApplication() {
 
     @Inject
     lateinit var databaseName: String
+
+    @Inject
+    lateinit var prefsHelper: PrefsHelper
 
     lateinit var appComponent : AppComponent
         private set

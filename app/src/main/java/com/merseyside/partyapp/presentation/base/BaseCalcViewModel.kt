@@ -13,7 +13,7 @@ abstract class BaseCalcViewModel(private val router: Router? = null) : Parcelabl
     protected val errorMsgCreator = ErrorMessageFactory(context)
 
     protected fun getString(@StringRes id: Int, vararg args: String): String {
-        return context.getString(id, *args)
+        return context.getActualString(id, *args)
     }
 
     fun goBack() {

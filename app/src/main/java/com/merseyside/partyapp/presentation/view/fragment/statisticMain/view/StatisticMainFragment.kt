@@ -34,7 +34,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
 
     private val memberStatisticObserver = Observer<List<MemberStatistic>> {
         if (!it.isNullOrEmpty()) {
-            pagedAdapter = MemberStatisticPagerAdapter(fragmentManager!!, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
+            pagedAdapter = MemberStatisticPagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
             pagedAdapter.setData(it)
 
             binding.pageContainer.adapter = pagedAdapter

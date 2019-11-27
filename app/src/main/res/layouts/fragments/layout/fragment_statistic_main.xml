@@ -25,7 +25,7 @@
                 android:layout_height="match_parent"
                 app:contentScrim="?attr/calcBackgroundColor"
                 app:titleEnabled="true"
-                app:title="@string/statistic"
+                app:title="@{viewModel.statisticTitle}"
                 app:collapsedTitleTextAppearance="@style/collapsingToolbarLayoutTitleColor"
                 app:expandedTitleTextAppearance="@style/expandedToolbarLayoutTitleColor"
                 app:layout_scrollFlags="scroll|exitUntilCollapsed"
@@ -128,7 +128,7 @@
                     android:textAlignment="center"
                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                     android:minLines="2"
-                    android:text="@string/no_activity"
+                    android:text="@{viewModel.memberVisibilityHint}"
                     android:visibility="@{viewModel.membersVisibility ? View.GONE : View.VISIBLE}"/>
 
             </androidx.constraintlayout.widget.ConstraintLayout>

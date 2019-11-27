@@ -11,12 +11,13 @@
     <string name="no_activity">Пока что не было никакой активности.\nДобавьте покупки и выберите участников</string>
     <string name="new_event_title">Новое событие</string>
     <string name="edit_event_title">Изменить событие</string>
+    <string name="settings_title">Настройки</string>
     <string name="save">Сохранить</string>
     <string name="close_event">Закрыть событие</string>
     <string name="close_event_title">Закрыть событие?</string>
     <string name="close_event_message">Вы действительно хотите закрыть это событие? Это действие отменить нельзя!</string>
     <string name="additional_settings">Дополнительные параметры</string>
-    <string name="percent_setting">Выберите доли учатсников</string>
+    <string name="percent_setting">Выберите доли участников</string>
     <string name="not_chosen">Не выбран</string>
 
     <string name="event_title">Название события</string>
@@ -64,10 +65,13 @@
     <string name="total_lend">Одолжено</string>
 
     <string name="use_comma">Примечание: используйте запятую для разделения участников. Имена должны быть уникальны.</string>
+    <string name="enter_currency">Введите свою валюту</string>
 
     <string name="for_member">Для %1$s</string>
     <string name="from_member">От %1$s</string>
-    <string name="price">Цена: %1$s</string>
-    <string name="debt">Долг: %1$s</string>
-    <string name="debit">Дебит: %1$s</string>
+    <string name="price">Цена: %1$s %2$s</string>
+    <string name="debt">Долг: %1$s %2$s</string>
+    <string name="debit">Дебит: %1$s %2$s</string>
+
+    <string name="language">Язык</string>
 </resources>

@@ -47,7 +47,7 @@
                             style="@style/OutlinedTextInputLayout"
                             app:errorEnabled="@{!viewModel.nameErrorText.empty}"
                             app:errorText="@{viewModel.nameErrorText}"
-                            android:hint="@string/item_title">
+                            android:hint="@{viewModel.itemNameHint}">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
@@ -63,7 +63,7 @@
                             style="@style/OutlinedTextInputLayout"
                             android:gravity="top|start"
                             android:layout_marginTop="@dimen/small_spacing"
-                            android:hint="@string/item_description">
+                            android:hint="@{viewModel.itemDescriptionHint}">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
@@ -82,7 +82,7 @@
                             android:layout_marginTop="@dimen/small_spacing"
                             app:errorEnabled="@{!viewModel.priceErrorText.empty}"
                             app:errorText="@{viewModel.priceErrorText}"
-                            android:hint="@string/item_total_price">
+                            android:hint="@{viewModel.priceHint}">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
@@ -118,7 +118,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/choose_pays_member"
+                                android:text="@{viewModel.whoPaysTitle}"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
                             <androidx.recyclerview.widget.RecyclerView
@@ -144,7 +144,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/choose_members"
+                                android:text="@{viewModel.forWhomTitle}"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
                             <com.pchmn.materialchips.ChipsInput
@@ -199,7 +199,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/additional_settings"
+                                android:text="@{viewModel.additionalSettingsTitle}"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
 
                             <ImageView
@@ -224,7 +224,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                                android:text="@string/percent_setting"/>
+                                android:text="@{viewModel.percentSettingsTitle}"/>
 
                             <RelativeLayout
                                 android:layout_width="match_parent"
@@ -294,7 +294,7 @@
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/save"
+            android:text="@{viewModel.save}"
             android:layout_alignParentBottom="true"
             android:onClick="@{view -> viewModel.onSaveClick()}"/>
 

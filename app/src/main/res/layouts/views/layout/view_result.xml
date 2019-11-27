@@ -12,7 +12,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:paddingTop="@dimen/small_spacing"
-        android:paddingBottom="@dimen/small_spacing"
         android:paddingStart="@dimen/small_spacing"
         android:paddingEnd="@dimen/small_spacing"
         android:background="?attr/colorOnBackground"
@@ -36,7 +35,15 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             android:text="@{obj.price}"
             app:attrTextColor="@{obj.textColor}"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="@dimen/small_spacing"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/dividerHorizontal"
+            app:isVisibleOrGone="@{obj.dividerVisible}"
+            android:layout_below="@id/price"/>
 
 
     </RelativeLayout>

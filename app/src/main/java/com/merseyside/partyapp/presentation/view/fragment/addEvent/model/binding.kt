@@ -45,7 +45,7 @@ fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
 @BindingAdapter("app:memberNames")
 fun setMembers(chipView: ChipsInput, members: List<String>?) {
     members?.forEach {
-        chipView.addChip(it, "kek")
+        chipView.addChip(it, "")
     }
 }
 

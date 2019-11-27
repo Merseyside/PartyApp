@@ -40,12 +40,12 @@ class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewMod
 
     @Bindable
     fun getMemberInfo(): String {
-        return "${CalcApplication.getInstance().getString(R.string.member_count)} ${obj.members.size}"
+        return "${CalcApplication.getInstance().getActualString(R.string.member_count)} ${obj.members.size}"
     }
 
     @Bindable
     fun getDate(): String {
-        return "${CalcApplication.getInstance().getString(R.string.date)} ${getDateTime(obj.timestamp)}"
+        return "${CalcApplication.getInstance().getActualString(R.string.date)} ${getDateTime(obj.timestamp)}"
     }
 
     @Bindable
@@ -67,10 +67,10 @@ class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewMod
 
         return when (obj.status) {
             Status.IN_PROCESS -> {
-                CalcApplication.getInstance().getString(R.string.in_progress)
+                CalcApplication.getInstance().getActualString(R.string.in_progress)
             }
 
-            else -> CalcApplication.getInstance().getString(R.string.completed)
+            else -> CalcApplication.getInstance().getActualString(R.string.completed)
         }
     }
 

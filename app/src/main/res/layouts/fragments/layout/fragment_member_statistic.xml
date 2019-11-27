@@ -21,7 +21,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/all_orders"
+                android:text="@{viewModel.ordersTitle}"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -70,7 +70,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/total_spend"
+                            android:text="@{viewModel.spendTitle}"
                             android:textColor="?attr/calcTextColor"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                             android:layout_toStartOf="@+id/total_spend"/>
@@ -97,7 +97,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/total_debt"
+                            android:text="@{viewModel.debtTitle}"
                             android:textColor="?attr/calcTextColor"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                             android:layout_toStartOf="@+id/total_debt"/>
@@ -124,7 +124,7 @@
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="@string/total_lend"
+                            android:text="@{viewModel.lendTitle}"
                             android:textColor="?attr/calcTextColor"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                             android:layout_toStartOf="@+id/total_lend"/>

@@ -22,22 +22,22 @@
 
 -keepattributes *Annotation*, InnerClasses
 -dontnote kotlinx.serialization.SerializationKt
--keep,includedescriptorclasses class com.yourcompany.yourpackage.**$$serializer { *; } # <-- change package name to your app's
--keepclassmembers class com.yourcompany.yourpackage.** { # <-- change package name to your app's
+-keep,includedescriptorclasses class com.merseyside.partyapp.**$$serializer { *; }
+-keepclassmembers class com.merseyside.partyapp.** {
     *** Companion;
 }
--keepclasseswithmembers class com.yourcompany.yourpackage.** { # <-- change package name to your app's
+-keepclasseswithmembers class com.merseyside.partyapp.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
 
 -keepattributes Signature
 
-# For using GSON @Expose annotation
--keepattributes *Annotation*
+                                                            # For using GSON @Expose annotation
+                                                            -keepattributes *Annotation*
 
-# Gson specific classes
--keep class sun.misc.Unsafe { *; }
-#-keep class com.google.gson.stream.** { *; }
+                                                            # Gson specific classes
+                                                            -keep class sun.misc.Unsafe { *; }
+                                                            #-keep class com.google.gson.stream.** { *; }
 
-# Application classes that will be serialized/deserialized over Gson
--keep class com.google.gson.examples.android.model.** { *; }
+                                                            # Application classes that will be serialized/deserialized over Gson
+                                                            -keep class com.google.gson.examples.android.model.** { *; }

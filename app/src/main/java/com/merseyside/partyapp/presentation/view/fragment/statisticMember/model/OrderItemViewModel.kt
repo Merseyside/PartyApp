@@ -9,7 +9,10 @@ import com.merseyside.partyapp.utils.doubleToStringPrice
 import com.upstream.basemvvmimpl.presentation.model.BaseAdapterViewModel
 
 
-class OrderItemViewModel(override var obj: Order) : BaseAdapterViewModel<Order>(obj) {
+class OrderItemViewModel(
+    override var obj: Order,
+    private val currency: String
+) : BaseAdapterViewModel<Order>(obj) {
 
     override fun areItemsTheSame(obj: Order): Boolean {
         return this.obj == obj
@@ -37,7 +40,7 @@ class OrderItemViewModel(override var obj: Order) : BaseAdapterViewModel<Order>(
 
     @Bindable
     fun getPrice(): String {
-        return CalcApplication.getInstance().getActualString(R.string.price, doubleToStringPrice(obj.price))
+        return CalcApplication.getInstance().getActualString(R.string.price, doubleToStringPrice(obj.price), currency)
     }
 
     @Bindable

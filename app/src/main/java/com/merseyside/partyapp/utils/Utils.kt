@@ -18,7 +18,7 @@ import java.math.RoundingMode
 @SuppressLint("SimpleDateFormat")
 fun getDateTime(timestamp: Long): String? {
     return try {
-        val sdf = SimpleDateFormat("dd MMM", getCurrentLocale(CalcApplication.getInstance()))
+        val sdf = SimpleDateFormat("dd MMM", getCurrentLocale(CalcApplication.getInstance().getContext()))
         val netDate = Date(timestamp)
         sdf.format(netDate)
     } catch (e: Exception) {
@@ -28,7 +28,7 @@ fun getDateTime(timestamp: Long): String? {
 
 fun getHoursDateTime(timestamp: Long): String? {
     return try {
-        val sdf = SimpleDateFormat("HH:mm", getCurrentLocale(CalcApplication.getInstance()))
+        val sdf = SimpleDateFormat("HH:mm", getCurrentLocale(CalcApplication.getInstance().getContext()))
         val netDate = Date(timestamp)
         sdf.format(netDate)
     } catch (e: Exception) {

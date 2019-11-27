@@ -41,7 +41,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         style="@style/OutlinedTextInputLayout"
-                        android:hint="@string/event_title"
+                        android:hint="@{viewModel.eventNameHint}"
                         app:counterEnabled="true"
                         app:counterMaxLength="24"
                         app:errorEnabled="@{!viewModel.eventNameErrorText.empty}"
@@ -61,7 +61,7 @@
                         android:layout_height="wrap_content"
                         style="@style/OutlinedTextInputLayout"
                         android:layout_marginTop="@dimen/normal_spacing"
-                        android:hint="@string/notes_hint"
+                        android:hint="@{viewModel.notesHint}"
                         app:errorEnabled="true"
                         app:counterEnabled="true"
                         app:counterMaxLength="512"
@@ -73,7 +73,6 @@
                             android:imeOptions="actionGo"
                             android:text="@={viewModel.notes}"
                             android:minLines="5"
-                            android:gravity="top|start"
                             style="@style/TextInputEditText"
                             android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
 
@@ -113,7 +112,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/add_members"
+                            android:text="@{viewModel.addItemsTitle}"
                             android:layout_marginTop="@dimen/small_spacing"
                             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
 
@@ -142,7 +141,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:textColor="?attr/calcTextColor"
-                            android:text="@string/use_comma" />
+                            android:text="@{viewModel.useCommaHint}" />
 
                     </LinearLayout>
 
@@ -161,7 +160,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:text="@string/close_event"
+                    android:text="@{viewModel.closeEvent}"
                     app:strokeWidth="1dp"
                     app:strokeColor="?attr/colorPrimary"
                     android:visibility="@{viewModel.closeEventVisibility ? View.VISIBLE : View.GONE}"/>
@@ -170,7 +169,7 @@
                     android:id="@+id/save"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/save"
+                    android:text="@{viewModel.save}"
                     android:onClick="@{view -> viewModel.onSaveClick()}"/>
 
             </LinearLayout>

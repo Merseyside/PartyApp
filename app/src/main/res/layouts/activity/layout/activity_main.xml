@@ -25,7 +25,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:theme="@style/ToolbarTheme"
-                app:popupTheme="@style/ToolbarTheme.Popup"/>
+                app:popupTheme="@style/ToolbarTheme.Popup"
+                app:navigationIcon="@drawable/ic_arrow"/>
 
         </com.google.android.material.appbar.AppBarLayout>
 

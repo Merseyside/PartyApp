@@ -17,14 +17,14 @@ fun setEvents(recyclerView: RecyclerView, events: List<Event>?) {
 
         val eventsAdapter = recyclerView.adapter as EventAdapter
         if (!events!!.isNullOrEmpty()) {
-            if (eventsAdapter.isEmpty()) {
+            if (eventsAdapter.isNotEmpty()) {
                 val request = UpdateRequest.Builder<Event>()
                     .isAddNew(true)
                     .isDeleteOld(true)
                     .setList(events)
                     .build()
 
-                eventsAdapter.updateAsync(request)
+                eventsAdapter.update(request)
             } else {
                 eventsAdapter.add(events)
             }
