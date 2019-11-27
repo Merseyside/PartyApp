@@ -1,12 +1,31 @@
 package com.merseyside.partyapp.data.db.event
 
-import com.merseyside.partyapp.utils.generateId
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Member(
-    val name: String
+open class Member(
+    open val id: String,
+    open val name: String
 ) {
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other == null || this::class != other::class) return false
 
-    val id: Long = generateId()
+        other as Member
+
+        if (id != other.id) return false
+        if (name != other.name) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        var result = id.hashCode()
+        result = 31 * result + name.hashCode()
+        return result
+    }
+
+    override fun toString(): String {
+        return "Member(ownerId='$id', name='$name')"
+    }
 }

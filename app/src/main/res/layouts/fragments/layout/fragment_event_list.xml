@@ -5,7 +5,6 @@
     tools:context=".presentation.view.fragment.eventList.view.EventListFragment">
 
     <data>
-        <import type="android.view.View"/>
         <variable
             name="viewModel"
             type="com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventListViewModel" />
@@ -30,7 +29,7 @@
                 android:layout_height="match_parent"
                 app:events="@{viewModel.eventsContainer}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                android:visibility="@{viewModel.eventsVisibility ? View.VISIBLE : View.GONE}">
+                app:isVisibleOrGone="@{viewModel.eventsVisibility}">
             </androidx.recyclerview.widget.RecyclerView>
 
             <TextView
@@ -44,7 +43,7 @@
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:minLines="2"
                 android:text="@string/no_events"
-                android:visibility="@{viewModel.eventsVisibility ? View.GONE : View.VISIBLE}"/>
+                app:isVisibleOrGone="@{!viewModel.eventsVisibility}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

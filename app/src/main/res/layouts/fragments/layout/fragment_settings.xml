@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:bind="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.merseyside.partyapp.presentation.view.fragment.settings.model.SettingsViewModel" />
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/normal_spacing">
+
+        <com.vpnapp.upstream.horizontalselectorview.HorizontalSelectorView
+            android:id="@+id/language"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:horizontalSelectorTitle="@string/language"
+            android:entryValues="@array/language_entry_values"
+            android:entries="@array/language_entries"
+            app:horizontalSelectorType="image"
+            app:horizontalSelectorButtonColor="?attr/calcIconColor"/>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/OutlinedTextInputLayout"
+            android:layout_marginTop="@dimen/small_spacing"
+            android:hint="@{viewModel.currencyTitle}">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@={viewModel.currency}"
+                android:inputType="text"
+                style="@style/TextInputEditText" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+    </LinearLayout>
+
+</layout>

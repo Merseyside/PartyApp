@@ -1,14 +1,22 @@
 package com.merseyside.partyapp.presentation.view.fragment.addEvent.model
 
+import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
+import com.google.android.material.textfield.TextInputLayout
 import com.pchmn.materialchips.ChipsInput
 import com.pchmn.materialchips.model.ChipInterface
 
-@BindingAdapter(value = ["membersAttrChanged"]) // AttrChanged required postfix
+@BindingAdapter(value = ["memberNamesAttrChanged"]) // AttrChanged required postfix
 fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
     if (listener != null) {
+       view.editText.setOnFocusChangeListener { v, hasFocus ->
+           if (!hasFocus) {
+               view.editText.setText(StringBuilder(view.editText.text.toString()).append(",").toString(), TextView.BufferType.EDITABLE)
+           }
+       }
+
        view.addChipsListener(object: ChipsInput.ChipsListener {
            override fun onChipAdded(chip: ChipInterface?, newSize: Int) {
                listener.onChange()
@@ -19,23 +27,37 @@ fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
            }
 
            override fun onTextChanged(text: CharSequence?) {
-               if (text!!.contains(" ")) {
-                   view.addChip(text.toString().replace(" ", ""), "")
+               if (text!!.contains(",")) {
+                   if (text.length != 1) {
+                       val label = text.toString().replace(",", "")
+                       if (view.allChips.find { it.label == label} == null) {
+                           view.addChip(label, "")
+                       }
+                   } else {
+                       view.editText.setText("")
+                   }
                }
            }
        })
     }
 }
 
-@BindingAdapter("app:members")
+@BindingAdapter("app:memberNames")
 fun setMembers(chipView: ChipsInput, members: List<String>?) {
     members?.forEach {
-        chipView.addChip(it, "kek")
+        chipView.addChip(it, "")
     }
 }
 
 
-@InverseBindingAdapter(attribute = "app:members")
-fun getMembers(view: ChipsInput): List<String> {
-    return view.selectedChipList.map { it.label }
+@InverseBindingAdapter(attribute = "app:memberNames")
+fun getMembers(chipsInput: ChipsInput): List<String> {
+    return chipsInput.allChips.map { it.label }
+}
+
+@BindingAdapter("app:errorText")
+fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
+    if (errorMessage != null) {
+        view.error = errorMessage
+    }
 }

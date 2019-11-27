@@ -9,79 +9,172 @@
             type="com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel" />
     </data>
 
-    <RelativeLayout
+    <ScrollView
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
 
         <LinearLayout
+            android:id="@+id/main_container"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:padding="@dimen/normal_spacing">
 
-            <com.google.android.material.textfield.TextInputLayout
+            <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                style="@style/TextInputLayout"
-                android:layout_marginTop="@dimen/normal_spacing"
-                android:hint="@string/event_title">
+                app:contentPadding="@dimen/normal_spacing"
+                app:cardCornerRadius="@dimen/small_spacing"
+                android:layout_marginTop="@dimen/very_small_spacing"
+                android:layout_marginBottom="@dimen/very_small_spacing"
+                style="@style/MyCardView">
 
-                <com.google.android.material.textfield.TextInputEditText
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/OutlinedTextInputLayout"
+                        android:hint="@{viewModel.eventNameHint}"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="24"
+                        app:errorEnabled="@{!viewModel.eventNameErrorText.empty}"
+                        app:errorText="@{viewModel.eventNameErrorText}"
+                        app:boxBackgroundColor="?attr/colorOnBackground">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@={viewModel.eventName}"
+                            style="@style/TextInputEditText" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/OutlinedTextInputLayout"
+                        android:layout_marginTop="@dimen/normal_spacing"
+                        android:hint="@{viewModel.notesHint}"
+                        app:errorEnabled="true"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="512"
+                        app:boxBackgroundColor="?attr/colorOnBackground">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionGo"
+                            android:text="@={viewModel.notes}"
+                            android:minLines="5"
+                            style="@style/TextInputEditText"
+                            android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/chips_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:contentPadding="@dimen/small_spacing"
+                app:cardCornerRadius="@dimen/small_spacing"
+                android:layout_marginTop="@dimen/small_spacing"
+                android:layout_marginBottom="@dimen/very_small_spacing"
+                style="@style/MyCardView"
+                app:isVisibleOrGone="@{viewModel.addMembersVisibility}">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/transparent">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:background="@color/transparent"
+                        android:paddingStart="@dimen/small_spacing"
+                        android:paddingEnd="@dimen/small_spacing"
+                        android:paddingTop="@dimen/small_spacing">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.addItemsTitle}"
+                            android:layout_marginTop="@dimen/small_spacing"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                        <com.pchmn.materialchips.ChipsInput
+                            android:id="@+id/chips"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:showChipDetailed="false"
+                            app:chip_backgroundColor="?attr/colorPrimary"
+                            app:chip_hasAvatarIcon="true"
+                            app:chip_deletable="true"
+                            app:chip_labelColor="@color/white"
+                            app:chip_deleteIconColor="?attr/colorOnError"
+                            app:textColor="?attr/calcTextColor"
+                            android:layout_marginTop="@dimen/very_small_spacing"
+                            app:memberNames="@={viewModel.members}" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorError"
+                            android:text="@{viewModel.membersErrorText}"
+                            app:isVisibleOrGone="@{viewModel.membersErrorText.empty}"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/calcTextColor"
+                            android:text="@{viewModel.useCommaHint}" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/small_spacing">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/close_event"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@={viewModel.eventNameObservable}"
-                    style="@style/TextInputEditText"/>
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:text="@{viewModel.closeEvent}"
+                    app:strokeWidth="1dp"
+                    app:strokeColor="?attr/colorPrimary"
+                    app:isVisibleOrGone="@{viewModel.closeEventVisibility}"/>
 
-            </com.google.android.material.textfield.TextInputLayout>
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/members"
-                android:layout_marginTop="@dimen/normal_spacing"/>
-
-            <com.pchmn.materialchips.ChipsInput
-                android:id="@+id/chips"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                app:textColor="?attr/colorOnBackground"
-                app:chip_backgroundColor="?attr/colorPrimary"
-                app:chip_hasAvatarIcon="true"
-                app:chip_deletable="true"
-                app:chip_labelColor="@color/white"
-                app:chip_deleteIconColor="?attr/colorOnError"
-                app:members="@={viewModel.membersObservable}" />
-
-
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/TextInputLayout"
-                android:layout_marginTop="@dimen/normal_spacing"
-                android:hint="@string/notes_hint">
-
-                <com.google.android.material.textfield.TextInputEditText
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/save"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionGo"
-                    android:text="@={viewModel.notesObservable}"
-                    android:minLines="5"
-                    android:gravity="top|start"
-                    style="@style/TextInputEditText"
-                    android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
+                    android:text="@{viewModel.save}"
+                    android:onClick="@{view -> viewModel.onSaveClick()}"/>
 
-            </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
         </LinearLayout>
 
-        <Button
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/save"
-            android:layout_alignParentBottom="true"
-            android:layout_margin="@dimen/normal_spacing"
-            android:onClick="@{view -> viewModel.onSaveClicked()}"/>
-
-
-    </RelativeLayout>
+    </ScrollView>
 
 </layout>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="obj"
+            type="com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.ResultItemViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:paddingTop="@dimen/small_spacing"
+        android:paddingStart="@dimen/small_spacing"
+        android:paddingEnd="@dimen/small_spacing"
+        android:background="?attr/colorOnBackground"
+        android:clickable="true"
+        android:focusable="true"
+        android:foreground="@drawable/card_view_ripple">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:text="@{obj.name}"
+            android:layout_alignParentStart="true"
+            android:layout_toStartOf="@+id/price"
+            app:attrTextColor="@{obj.textColor}"/>
+
+        <TextView
+            android:id="@+id/price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:text="@{obj.price}"
+            app:attrTextColor="@{obj.textColor}"
+            android:layout_alignParentEnd="true"
+            android:layout_marginBottom="@dimen/small_spacing"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="?android:attr/dividerHorizontal"
+            app:isVisibleOrGone="@{obj.dividerVisible}"
+            android:layout_below="@id/price"/>
+
+
+    </RelativeLayout>
+</layout>

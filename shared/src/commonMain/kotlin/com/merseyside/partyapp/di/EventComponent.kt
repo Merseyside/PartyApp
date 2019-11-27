@@ -11,16 +11,16 @@ import org.kodein.di.erased.singleton
 
 @ExperimentalCoroutinesApi
 internal val eventModule = Kodein.Module("event") {
+
     bind<EventDao>() with singleton { EventDao( instance() ) }
 
     bind<EventRepository>() with singleton {
-        EventRepositoryImpl()
+        EventRepositoryImpl(instance())
     }
 }
 
 @ExperimentalCoroutinesApi
 internal val eventComponent = Kodein {
     extend(appComponent)
-
     import(eventModule)
 }

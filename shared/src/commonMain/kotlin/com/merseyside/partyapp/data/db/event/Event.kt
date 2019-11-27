@@ -12,6 +12,7 @@ data class Event(
     var status: Status,
     val timestamp: Long
 ) {
+
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false
@@ -21,6 +22,8 @@ data class Event(
         if (id != other.id) return false
         if (name != other.name) return false
         if (members != other.members) return false
+        if (notes != other.notes) return false
+        if (status != other.status) return false
         if (timestamp != other.timestamp) return false
 
         return true
@@ -30,8 +33,9 @@ data class Event(
         var result = id.hashCode()
         result = 31 * result + name.hashCode()
         result = 31 * result + members.hashCode()
+        result = 31 * result + notes.hashCode()
+        result = 31 * result + status.hashCode()
         result = 31 * result + timestamp.hashCode()
         return result
     }
-
 }

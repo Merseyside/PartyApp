@@ -19,3 +19,25 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+-keepattributes *Annotation*, InnerClasses
+-dontnote kotlinx.serialization.SerializationKt
+-keep,includedescriptorclasses class com.merseyside.partyapp.**$$serializer { *; }
+-keepclassmembers class com.merseyside.partyapp.** {
+    *** Companion;
+}
+-keepclasseswithmembers class com.merseyside.partyapp.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
+-keepattributes Signature
+
+                                                            # For using GSON @Expose annotation
+                                                            -keepattributes *Annotation*
+
+                                                            # Gson specific classes
+                                                            -keep class sun.misc.Unsafe { *; }
+                                                            #-keep class com.google.gson.stream.** { *; }
+
+                                                            # Application classes that will be serialized/deserialized over Gson
+                                                            -keep class com.google.gson.examples.android.model.** { *; }

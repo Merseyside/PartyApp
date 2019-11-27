@@ -3,6 +3,7 @@ package com.merseyside.partyapp.data.db.event
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.data.entity.mapper.EventDataMapper
+import com.merseyside.partyapp.utils.generateId
 import com.merseyside.partyapp.utils.getTimestamp
 
 class EventDao(database: CalcDatabase) {
@@ -11,15 +12,17 @@ class EventDao(database: CalcDatabase) {
 
     private val eventDataMapper = EventDataMapper()
 
-    internal fun insert(name: String, memberNames: List<String>, notes: String) {
+    internal fun insert(name: String, memberNames: List<String>, notes: String): Event {
 
         val members = memberNames.map {
-            Member(it)
+            Member(generateId(), it)
         }
 
         val membersModel = MembersModel(members)
 
         db.insertItem(name, membersModel, notes, Status.IN_PROCESS.toString(), getTimestamp())
+
+        return getEventById(db.lastInsertRowId().executeAsOne())
     }
 
     internal fun change(
@@ -28,18 +31,20 @@ class EventDao(database: CalcDatabase) {
         memberNames: List<String>? = null,
         notes: String? = null,
         status: Status? = null
-    ) {
+    ): Event {
 
         val event = getEventById(id)
 
         name?.let {event.name = name}
-        memberNames?.let { memberNames.map { event.members.add( Member(it) )}}
+        memberNames?.let { memberNames.map { event.members.add( Member(generateId(), it) )}}
         notes?.let {event.notes = notes}
         status?.let { event.status = status }
 
         event.let {
             db.changeItem(it.id, it.name, MembersModel(it.members), it.notes, it.status.toString(), it.timestamp)
         }
+
+        return event
     }
 
     internal fun getAll(): List<Event> {
@@ -54,5 +59,9 @@ class EventDao(database: CalcDatabase) {
 
     internal fun getEventById(id: Long): Event {
         return db.selectById(id).executeAsOne().let { eventDataMapper.transform(it) }
+    }
+
+    internal fun deleteEvent(id: Long) {
+        return db.deleteItem(id)
     }
 }

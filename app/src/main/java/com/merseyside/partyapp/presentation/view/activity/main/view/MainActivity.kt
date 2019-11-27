@@ -1,6 +1,9 @@
 package com.merseyside.partyapp.presentation.view.activity.main.view
 
 import android.os.Bundle
+import android.util.Log
+import androidx.appcompat.widget.Toolbar
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.merseyside.partyapp.BR
@@ -10,6 +13,7 @@ import com.merseyside.partyapp.presentation.base.BaseCalcActivity
 import com.merseyside.partyapp.presentation.di.component.DaggerMainComponent
 import com.merseyside.partyapp.presentation.di.module.MainModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.MainViewModel
+import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import ru.terrakok.cicerone.Navigator
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.android.support.SupportAppNavigator
@@ -21,21 +25,10 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
 
-    private var navigator : Navigator = object : SupportAppNavigator(this, R.id.container) {
+    @Inject
+    lateinit var sharedViewModel: SharedViewModel
 
-        override fun applyCommand(command: Command?) {
-            super.applyCommand(command)
-            supportFragmentManager.executePendingTransactions()
-        }
-
-        override fun setupFragmentTransaction(command: Command?,
-                                              currentFragment: Fragment?,
-                                              nextFragment: Fragment?,
-                                              fragmentTransaction: FragmentTransaction?) {
-            super.setupFragmentTransaction(command, currentFragment, nextFragment, fragmentTransaction)
-            fragmentTransaction!!.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-        }
-    }
+    private lateinit var navigator : Navigator
 
     override fun setBindingVariable(): Int {
         return BR.viewModel
@@ -53,16 +46,54 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     private fun getMainModule(bundle: Bundle?): MainModule {
-        return MainModule(this)
+        return MainModule(this, bundle)
     }
 
-    override fun onCreate(savedInstance: Bundle?) {
-        super.onCreate(savedInstance)
-        setSupportActionBar(binding.toolbar)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-        if (savedInstance == null) {
+        initNavigation()
+
+        if (savedInstanceState == null) {
             init()
         }
+    }
+
+    private fun initNavigation() {
+        if (binding.container != null) {
+            navigator = object : SupportAppNavigator(this, binding.container.id) {
+
+                override fun applyCommand(command: Command?) {
+                    super.applyCommand(command)
+                    supportFragmentManager.executePendingTransactions()
+                }
+
+                override fun setupFragmentTransaction(
+                    command: Command?,
+                    currentFragment: Fragment?,
+                    nextFragment: Fragment?,
+                    fragmentTransaction: FragmentTransaction?
+                ) {
+                    super.setupFragmentTransaction(
+                        command,
+                        currentFragment,
+                        nextFragment,
+                        fragmentTransaction
+                    )
+                    fragmentTransaction!!.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
+                }
+            }
+        }
+    }
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        sharedViewModel.writeTo(outState)
+    }
+
+    override fun getToolbar(): Toolbar? {
+        return binding.toolbar
     }
 
     private fun init() {
@@ -81,5 +112,9 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     override fun onPause() {
         navigatorHolder.removeNavigator()
         super.onPause()
+    }
+
+    companion object {
+        private const val TAG = "MainActivity"
     }
 }

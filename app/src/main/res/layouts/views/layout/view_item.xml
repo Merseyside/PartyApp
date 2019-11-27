@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <data>
+        <variable
+            name="obj"
+            type="com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clickable="true"
+        android:focusable="true"
+        android:onClick="@{view -> obj.onClick()}"
+        android:paddingTop="@dimen/small_spacing"
+        android:paddingStart="@dimen/normal_spacing"
+        android:paddingEnd="@dimen/normal_spacing"
+        android:foreground="@drawable/card_view_ripple">
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+            android:text="@{obj.title}"
+            android:textSize="@dimen/large_text_size"
+            android:ellipsize="marquee"
+            android:layout_marginBottom="@dimen/small_spacing"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:background="@color/transparent_grey"
+            android:layout_below="@id/title"
+            app:isVisibleOrGone="@{!obj.last}"/>
+
+    </RelativeLayout>
+
+</layout>

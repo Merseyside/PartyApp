@@ -2,6 +2,7 @@ package com.merseyside.partyapp.presentation.view.fragment.eventList.model
 
 import androidx.annotation.DrawableRes
 import androidx.databinding.Bindable
+import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -9,52 +10,49 @@ import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.utils.getDateTime
 import com.upstream.basemvvmimpl.presentation.model.BaseComparableAdapterViewModel
 
-class EventItemViewModel(private var event: Event) : BaseComparableAdapterViewModel<Event>() {
+class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewModel<Event>(obj) {
 
-    override fun areContentTheSame(obj: Event): Boolean {
-        return obj == event
+    override fun notifyUpdate() {
+
+        notifyPropertyChanged(BR.name)
+        notifyPropertyChanged(BR.memberInfo)
+        notifyPropertyChanged(BR.status)
+        notifyPropertyChanged(BR.statusColor)
+        notifyPropertyChanged(BR.statusIcon)
+    }
+
+    override fun areContentsTheSame(obj: Event): Boolean {
+        return this.obj == obj
     }
 
     override fun compareTo(obj: Event): Int {
         return 0
     }
 
-    override fun getItem(): Event {
-        return event
-    }
-
-    override fun setItem(item: Event) {
-        event = item
-    }
-
     override fun areItemsTheSame(obj: Event): Boolean {
-        return event.id == obj.id
+        return this.obj.id == obj.id
     }
 
     @Bindable
     fun getName(): String {
-        return event.name
+        return obj.name
     }
 
     @Bindable
     fun getMemberInfo(): String {
-        return "${CalcApplication.getInstance().getString(R.string.member_count)} ${event.members.size}"
+        return "${CalcApplication.getInstance().getActualString(R.string.member_count)} ${obj.members.size}"
     }
 
     @Bindable
     fun getDate(): String {
-        return "${CalcApplication.getInstance().getString(R.string.date)} ${getDateTime(event.timestamp)}"
-    }
-
-    fun onClick() {
-        getClickListener()?.onItemClicked(event)
+        return "${CalcApplication.getInstance().getActualString(R.string.date)} ${getDateTime(obj.timestamp)}"
     }
 
     @Bindable
     @DrawableRes
     fun getStatusIcon(): Int? {
 
-        return when(event.status) {
+        return when(obj.status) {
             Status.IN_PROCESS -> {
                 R.drawable.ic_process
             }
@@ -67,26 +65,30 @@ class EventItemViewModel(private var event: Event) : BaseComparableAdapterViewMo
     @Bindable
     fun getStatus(): String {
 
-        return when (event.status) {
+        return when (obj.status) {
             Status.IN_PROCESS -> {
-                CalcApplication.getInstance().getString(R.string.in_progress)
+                CalcApplication.getInstance().getActualString(R.string.in_progress)
             }
 
-            else -> CalcApplication.getInstance().getString(R.string.completed)
+            else -> CalcApplication.getInstance().getActualString(R.string.completed)
         }
     }
 
     @Bindable
     fun getStatusColor(): Int {
 
-        return when(event.status) {
+        return when(obj.status) {
             Status.IN_PROCESS -> {
-                R.attr.colorSecondary
-            }
-            else -> {
                 R.attr.colorPrimary
             }
+            else -> {
+                R.attr.colorSecondaryVariant
+            }
         }
+    }
+
+    companion object {
+        private const val TAG = "EventItemViewModel"
     }
 
 }

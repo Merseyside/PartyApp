@@ -4,16 +4,16 @@ import android.content.Context
 import androidx.annotation.StringRes
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.presentation.exception.ErrorMessageFactory
-import com.upstream.basemvvmimpl.presentation.model.BaseViewModel
+import com.upstream.basemvvmimpl.presentation.model.ParcelableViewModel
 import ru.terrakok.cicerone.Router
 
-abstract class BaseCalcViewModel(private val router: Router? = null) : BaseViewModel() {
+abstract class BaseCalcViewModel(private val router: Router? = null) : ParcelableViewModel() {
 
     protected val context = CalcApplication.getInstance()
     protected val errorMsgCreator = ErrorMessageFactory(context)
 
-    protected fun getString(@StringRes id: Int): String {
-        return context.getString(id)
+    protected fun getString(@StringRes id: Int, vararg args: String): String {
+        return context.getActualString(id, *args)
     }
 
     fun goBack() {
