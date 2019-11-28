@@ -16,6 +16,8 @@ class SettingsViewModel(
     private val prefsHelper: PrefsHelper
 ) : BaseCalcViewModel(router) {
 
+    val interfaceTitle = ObservableField<String>()
+
     val currency = ObservableField<String>(prefsHelper.getCurrency())
     val currencyTitle = ObservableField<String>()
 
@@ -33,12 +35,12 @@ class SettingsViewModel(
 
     override fun writeTo(bundle: Bundle) {}
 
-    override fun dispose() {
-    }
+    override fun dispose() {}
 
     override fun updateLanguage(context: Context) {
         super.updateLanguage(context)
 
+        interfaceTitle.set(getString(R.string.settings_interface))
         currencyTitle.set(context.getString(R.string.enter_currency))
     }
 

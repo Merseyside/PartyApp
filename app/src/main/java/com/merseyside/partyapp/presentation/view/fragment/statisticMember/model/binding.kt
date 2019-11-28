@@ -12,7 +12,7 @@ import com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapte
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter.ResultAdapter
 
 @BindingAdapter("app:attrCardBackgroundColor")
-fun setCardViewbackgroundColor(cardView: CardView, @AttrRes res: Int) {
+fun setCardViewBackgroundColor(cardView: CardView, @AttrRes res: Int) {
     cardView.setCardBackgroundColor(cardView.context.getColorFromAttr(res))
 }
 

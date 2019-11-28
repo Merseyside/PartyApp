@@ -147,36 +147,49 @@
 
             </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
+            <RelativeLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:focusable="true"
-                android:clickable="true"
-                android:layout_marginTop="@dimen/normal_spacing"
-                app:cardCornerRadius="@dimen/small_spacing"
-                style="@style/MyCardView">
+                android:layout_height="wrap_content">
 
-                    <androidx.recyclerview.widget.RecyclerView
-                        android:id="@+id/result_list"
-                        android:orientation="vertical"
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/share_member">
+
+                    <androidx.cardview.widget.CardView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:results="@{viewModel.resultsContainer}"
-                        android:overScrollMode="never"
-                        app:isVisibleOrGone="@{viewModel.resultsVisibility}">
-                    </androidx.recyclerview.widget.RecyclerView>
+                        android:layout_marginTop="@dimen/normal_spacing"
+                        app:cardCornerRadius="@dimen/small_spacing"
+                        style="@style/MyCardView">
 
-            </androidx.cardview.widget.CardView>
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/result_list"
+                                android:orientation="vertical"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:results="@{viewModel.resultsContainer}"
+                                android:overScrollMode="never"
+                                app:isVisibleOrGone="@{viewModel.resultsVisibility}">
+                            </androidx.recyclerview.widget.RecyclerView>
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/share_member"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@{viewModel.shareMemberTitle}"
-                android:layout_marginTop="@dimen/normal_spacing"
-                app:cornerRadius="@dimen/normal_spacing"/>
+                    </androidx.cardview.widget.CardView>
+
+                </LinearLayout>
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/share_member"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{viewModel.shareMemberTitle}"
+                    android:layout_marginTop="@dimen/normal_spacing"
+                    app:cornerRadius="@dimen/normal_spacing"
+                    android:layout_alignParentBottom="true"/>
+
+            </RelativeLayout>
 
         </LinearLayout>
 

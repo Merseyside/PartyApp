@@ -13,5 +13,3 @@ rootProject.name='PartyApp'
 
 enableFeaturePreview("GRADLE_METADATA")
 
-include ':library'
-project(':library').projectDir = new File(settingsDir, '../mvvm-clean-arch-library/library')

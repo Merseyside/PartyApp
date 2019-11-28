@@ -99,7 +99,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
 
         adapter.setOnItemClickListener(onMemberClickListener)
 
-        viewModel.getStatistic(sharedViewModel.eventContainer)
+        viewModel.initWithEvent(sharedViewModel.eventContainer)
     }
 
     private val onMemberClickListener = object: BaseAdapter.OnItemClickListener<Member> {
@@ -129,6 +129,8 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
                         CalcApplication.getInstance().getContext(),
                         statistic
                     ))
+
+                    logEvent("share_all", Bundle())
                 }
             }
         }

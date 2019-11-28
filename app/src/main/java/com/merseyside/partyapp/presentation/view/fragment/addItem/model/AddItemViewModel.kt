@@ -277,6 +277,10 @@ class AddItemViewModel(
                 membersInfo = spinnerSelectedMembers.get()!!
             ),
             onComplete = {
+                logItemEvent(item?.id)
+
+                showInterstitial(0.33f)
+
                 goBack()
             },
             onError = {showErrorMsg(errorMsgCreator.createErrorMsg(it))}
@@ -285,6 +289,18 @@ class AddItemViewModel(
 
     private fun setPayMember(member: Member? = null) {
         payMember.set(member)
+    }
+
+    private fun logItemEvent(id: Long?) {
+        val eventName = if (id != null) {
+            "edit_item"
+        } else {
+            "add_item"
+        }
+
+        logEvent(eventName, Bundle().apply {
+            putString("event_name", event.name)
+        })
     }
 
     fun onSaveClick() {

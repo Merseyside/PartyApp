@@ -10,13 +10,13 @@
             type="com.merseyside.partyapp.presentation.view.activity.main.model.MainViewModel" />
     </data>
 
-   <LinearLayout
-       android:orientation="vertical"
+   <RelativeLayout
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:background="?attr/calcBackgroundColor">
 
         <com.google.android.material.appbar.AppBarLayout
+            android:id="@+id/appBar"
             android:layout_height="wrap_content"
             android:layout_width="match_parent">
 
@@ -34,8 +34,20 @@
             android:id="@+id/container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/transparent" />
+            android:background="@color/transparent"
+            android:layout_below="@id/appBar"
+            android:layout_above="@+id/adView"/>
 
-   </LinearLayout>
+       <com.google.android.gms.ads.AdView
+           xmlns:ads="http://schemas.android.com/apk/res-auto"
+           android:id="@+id/adView"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           ads:adSize="BANNER"
+           ads:adUnitId="@string/bannerId"
+           android:layout_alignParentBottom="true">
+       </com.google.android.gms.ads.AdView>
+
+   </RelativeLayout>
 
 </layout>

@@ -2,12 +2,12 @@ package com.merseyside.partyapp.presentation.view.fragment.addEvent.model
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
-import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.domain.interactor.AddEventInteractor
 import com.merseyside.partyapp.domain.interactor.CloseEventInteractor
@@ -179,8 +179,10 @@ class AddEventViewModel(
                 notes.get() ?: ""
             ),
             onComplete = {
-                eventLiveData.value = it
+                logEventChanges(it)
+                showInterstitial()
 
+                eventLiveData.value = it
                 goBack()
             },
 
@@ -189,6 +191,20 @@ class AddEventViewModel(
             }
         )
 
+    }
+
+    private fun logEventChanges(event: Event) {
+        val eventName = if (modeField == MODE_ADD) {
+            "add_event"
+        } else {
+            "edit_event"
+        }
+
+        logEvent(eventName, Bundle().apply {
+            putString("event_name", event.name)
+            putInt("member_count", event.members.size)
+            putString("event_notes", event.notes)
+        })
     }
 
     fun closeEvent() {

@@ -66,7 +66,7 @@
     <string name="lend">Lend</string>
 
     <string name="use_comma">Note: use comma to separate participants. Names must be unique.</string>
-    <string name="enter_currency">Enter currency</string>
+    <string name="enter_currency">Enter your currency</string>
 
     <string name="for_member">for %1$s</string>
     <string name="from_member">from %1$s</string>
@@ -78,9 +78,14 @@
     <string name="total_spend">Total spend</string>
     <string name="total_debt">Total debt</string>
 
+    <string name="settings_interface">Interface</string>
     <string name="language">Language</string>
 
     <string name="share_member">Share member statistic</string>
+
+    <string name="appId" translatable="false">ca-app-pub-2074462823823829~3546325123</string>
+    <string name="bannerId" translatable="false">ca-app-pub-2074462823823829/5945612978</string>
+    <string name="interstitialId" translatable="false">ca-app-pub-2074462823823829/2361591181</string>
 
     <string-array name="language_entries">
         <item>ic_english</item>

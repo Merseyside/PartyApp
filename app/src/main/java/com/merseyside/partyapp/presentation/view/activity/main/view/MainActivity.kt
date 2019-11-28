@@ -6,6 +6,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.ads.*
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.databinding.ActivityMainBinding
@@ -20,7 +21,7 @@ import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.commands.Command
 import javax.inject.Inject
 
-class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
+class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>(), HasAd {
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
@@ -29,6 +30,8 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     lateinit var sharedViewModel: SharedViewModel
 
     private lateinit var navigator : Navigator
+
+    private val interstitialAd: InterstitialAd by lazy { InterstitialAd(this) }
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
@@ -53,6 +56,7 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
 
         initNavigation()
+        initAdMob()
 
         if (savedInstanceState == null) {
             init()
@@ -112,6 +116,40 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     override fun onPause() {
         navigatorHolder.removeNavigator()
         super.onPause()
+    }
+
+    private fun initAdMob() {
+        MobileAds.initialize(this)
+
+        binding.adView.apply {
+            loadAd(AdRequest.Builder().build())
+        }
+
+        interstitialAd.apply {
+            adUnitId = getString(R.string.interstitialId)
+            loadAd(AdRequest.Builder().build())
+        }
+
+        interstitialAd.adListener = object : AdListener() {
+            override fun onAdClosed() {
+                interstitialAd.loadAd(AdRequest.Builder().build())
+            }
+        }
+    }
+
+    override fun showRewardedAd() {
+        throw NotImplementedError()
+    }
+
+    override fun showInterstitialAd() {
+        Log.d(TAG, "showInterstitial")
+        if (interstitialAd.isLoaded) {
+            interstitialAd.show()
+        }
+    }
+
+    override fun onRewardClosed() {
+        throw NotImplementedError()
     }
 
     companion object {

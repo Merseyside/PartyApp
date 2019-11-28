@@ -18,11 +18,6 @@ class AppModule(private val application: Application) {
     }
 
     @Provides
-    fun provideApplication() : Application {
-        return application
-    }
-
-    @Provides
     internal fun provideDbName(): String {
         return "partyDb.db"
     }

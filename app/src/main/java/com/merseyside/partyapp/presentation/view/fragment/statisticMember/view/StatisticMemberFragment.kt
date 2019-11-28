@@ -77,6 +77,8 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
                 CalcApplication.getInstance().getContext(),
                 viewModel.statistic
             ))
+
+            logEvent("share_member", Bundle())
         }
     }
 
