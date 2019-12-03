@@ -1,19 +1,15 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMain.view
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
@@ -27,11 +23,7 @@ import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewM
 import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.adapter.MemberStatisticPagerAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.model.StatisticMainViewModel
-import com.merseyside.partyapp.presentation.view.fragment.statisticMember.view.StatisticMemberFragment
-import com.merseyside.partyapp.utils.getMemberStatistic
 import com.merseyside.partyapp.utils.getShareableStatistic
-import com.merseyside.partyapp.utils.shareStatistic
-import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
 
 class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, StatisticMainViewModel>() {
 
@@ -81,7 +73,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
 
         sharedViewModel = ViewModelProviders.of(baseActivityView).get(SharedViewModel::class.java)
 
-        init()
+        retainInstance = true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,11 +82,8 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         doLayout()
     }
 
-    private fun init() {
-        viewModel.memberStatisticLiveData.observe(this, memberStatisticObserver)
-    }
-
     private fun doLayout() {
+        viewModel.memberStatisticLiveData.observe(this, memberStatisticObserver)
         binding.memberList.adapter = adapter
 
         adapter.setOnItemClickListener(onMemberClickListener)
@@ -112,6 +101,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.memberStatisticLiveData.removeObserver(memberStatisticObserver)
 
         adapter.removeOnItemClickListener(onMemberClickListener)
     }
@@ -125,10 +115,12 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         viewModel.statistic?.let { statistic ->
             when (item.itemId) {
                 R.id.action_share -> {
-                    shareStatistic(baseActivityView, getShareableStatistic(
+                    shareStatistic(getShareableStatistic(
                         CalcApplication.getInstance().getContext(),
                         statistic
                     ))
+
+                    if (!prefsHelper.isRated()) showRateUsDialog()
 
                     logEvent("share_all", Bundle())
                 }

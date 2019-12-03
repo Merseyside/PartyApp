@@ -1,16 +1,14 @@
 package com.merseyside.partyapp.presentation.view.view.circleView
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Color
-import android.graphics.Paint
-import android.graphics.Rect
+import android.graphics.*
 import android.util.AttributeSet
-import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import androidx.annotation.ColorInt
 import com.merseyside.partyapp.R
 import kotlin.math.min
+
 
 class CircleView(context: Context, attributeSet: AttributeSet) : View(context, attributeSet) {
 
@@ -34,7 +32,8 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
 
     private var rect: Rect
 
-    private var textSize = 0f
+    private var textSize = 0
+    private var font: Typeface? = null
 
     init {
 
@@ -54,6 +53,13 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
         text = array.getString(R.styleable.CircleView_text) ?: text
         circleTextColor = array.getColor(R.styleable.CircleView_textColor, circleTextColor)
         textColor = array.getColor(R.styleable.CircleView_textColor, textColor)
+        textSize = array.getDimensionPixelSize(R.styleable.CircleView_textSize, 0)
+        array.getString(R.styleable.CircleView_font)?.let {
+            if (it.isNotEmpty()) {
+                font = Typeface.createFromAsset(context.assets, "fonts/$it")
+            }
+        }
+
     }
 
     private fun initCirclePaint(@ColorInt color: Int) {
@@ -65,7 +71,11 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
         textPaint = Paint(Paint.ANTI_ALIAS_FLAG)
         textPaint.textAlign = Paint.Align.CENTER
         textPaint.color = color
-        textPaint.textSize = textSize
+        textPaint.textSize = textSize.toFloat()
+
+        if (font != null) {
+            textPaint.typeface = font
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -75,8 +85,9 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
         size = min(width, height)
         setMeasuredDimension(size, size)
 
-        textSize = convertPixelsToDp(size + (size * textSizeKoef).toInt())
-        textPaint.textSize = textSize
+        if (textSize == 0) {
+            textPaint.textSize = (size / 2).toFloat()
+        }
 
         rect.set(0, 0, size, size)
     }
@@ -105,7 +116,9 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
     }
 
     private fun convertPixelsToDp(px: Int): Float {
-        return px / (context.resources.displayMetrics.densityDpi.toFloat() / DisplayMetrics.DENSITY_DEFAULT)
+        val density = context.resources.displayMetrics.density
+        return px / density
+
     }
 
     fun setText(text: String) {
@@ -125,5 +138,9 @@ class CircleView(context: Context, attributeSet: AttributeSet) : View(context, a
         initTextPaint(color)
 
         invalidate()
+    }
+
+    companion object {
+        private const val TAG = "CircleView"
     }
 }

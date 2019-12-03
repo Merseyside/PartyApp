@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.provider.ContactsContract
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.BR
@@ -93,6 +94,8 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
                 title = getString(R.string.close_event_title),
                 message = getString(R.string.close_event_message),
                 isCancelable = false,
+                positiveButtonText = getString(R.string.close_event),
+                negativeButtonText = getString(R.string.cancel),
                 onPositiveClick = {
                     val animation = ValueAnimatorHelper()
 
@@ -122,6 +125,11 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
                     viewModel.closeEvent()
                 }
             )
+        }
+
+        binding.save.setOnClickListener {
+            binding.chips.editText.setText(StringBuilder(binding.chips.editText.text.toString()).append(",").toString(), TextView.BufferType.EDITABLE)
+            viewModel.onSaveClick()
         }
 
 //        val permission = arrayOf(Manifest.permission.READ_CONTACTS)

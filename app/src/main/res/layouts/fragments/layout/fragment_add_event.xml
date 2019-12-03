@@ -19,7 +19,6 @@
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:padding="@dimen/normal_spacing">
 
             <androidx.cardview.widget.CardView
@@ -50,6 +49,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:maxLines="2"
                             android:text="@={viewModel.eventName}"
                             style="@style/TextInputEditText" />
 
@@ -71,7 +71,8 @@
                             android:layout_height="wrap_content"
                             android:imeOptions="actionGo"
                             android:text="@={viewModel.notes}"
-                            android:minLines="5"
+                            android:minLines="4"
+                            android:maxLines="8"
                             style="@style/TextInputEditText"
                             android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
 
@@ -134,7 +135,7 @@
                             android:layout_height="wrap_content"
                             android:textColor="?attr/colorError"
                             android:text="@{viewModel.membersErrorText}"
-                            app:isVisibleOrGone="@{viewModel.membersErrorText.empty}"/>
+                            app:isVisibleOrGone="@{!viewModel.membersErrorText.empty}"/>
 
                         <TextView
                             android:layout_width="match_parent"

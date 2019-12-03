@@ -58,10 +58,6 @@ class CalcApplication : BaseApplication() {
             .build()
     }
 
-    override fun getBaseLanguage(): String {
-        return "en"
-    }
-
     private fun initDB() {
         val config = SupportSQLiteOpenHelper.Configuration.builder(this)
             .name(databaseName)

@@ -1,6 +1,7 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 
-import android.util.Log
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.AdapterView
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.databinding.BindingAdapter
@@ -15,6 +16,7 @@ import com.pchmn.materialchips.ChipsInput
 import com.pchmn.materialchips.model.Chip
 import com.merseyside.mvvmcleanarch.presentation.adapter.BaseSelectableAdapter
 import android.view.View
+import android.widget.EditText
 import android.widget.Spinner
 import com.merseyside.partyapp.data.db.item.MemberInfo
 
@@ -135,3 +137,33 @@ fun getSpinnerSelectedMember(spinner: AppCompatSpinner): MemberInfo? {
 
 @BindingAdapter("app:spinnerSelectedMember")
 fun setSpinnerSelectedMember(spinner: Spinner, member: MemberInfo?) {}
+
+//
+
+@BindingAdapter("bind:text")
+fun setText(editText: EditText, text: String?) {
+    if (editText.text.toString() != text) {
+        text?.let {
+            editText.setText(it)
+            editText.setSelection(it.length)
+        }
+    }
+}
+
+@BindingAdapter(value = ["textAttrChanged"]) // AttrChanged required postfix
+fun setTextListener(editText: EditText, listener: InverseBindingListener?) {
+    editText.addTextChangedListener(object: TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            listener?.onChange()
+        }
+    })
+}
+
+@InverseBindingAdapter(attribute = "bind:text")
+fun getText(editText: EditText): String? {
+    return editText.text.toString()
+}

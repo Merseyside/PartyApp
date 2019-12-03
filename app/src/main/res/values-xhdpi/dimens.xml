@@ -1,0 +1,32 @@
+<resources>
+
+    <dimen name="very_large_spacing">48dp</dimen>
+    <dimen name="large_spacing">36dp</dimen>
+    <dimen name="medium_spacing">24dp</dimen>
+    <dimen name="normal_spacing">16dp</dimen>
+    <dimen name="small_spacing">8dp</dimen>
+    <dimen name="very_small_spacing">4dp</dimen>
+    <dimen name="tiny_spacing">2dp</dimen>
+
+    <dimen name="small_text_size">12sp</dimen>
+    <dimen name="text_size">14sp</dimen>
+    <dimen name="medium_text_size">18sp</dimen>
+    <dimen name="large_text_size">24sp</dimen>
+    <dimen name="very_large_text_size">36sp</dimen>
+
+
+    <dimen name="icon_size">24dp</dimen>
+    <dimen name="corner_radius">16dp</dimen>
+    <dimen name="circle_size">48dp</dimen>
+    <dimen name="app_bar_height">200dp</dimen>
+    <dimen name="list_item_width">160dp</dimen>
+    <dimen name="list_item_height">100dp</dimen>
+    <dimen name="member_item_height">90dp</dimen>
+    <dimen name="member_container_corner_radius">45dp</dimen>
+    <dimen name="spinner_size">56dp</dimen>
+    <dimen name="price_field_width">90dp</dimen>
+    <dimen name="percent_field_width">70dp</dimen>
+    <dimen name="splash_image_size">200dp</dimen>
+    <dimen name="result_list_height">200dp</dimen>
+
+</resources>

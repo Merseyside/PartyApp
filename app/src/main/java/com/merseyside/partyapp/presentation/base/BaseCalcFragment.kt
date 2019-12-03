@@ -1,6 +1,7 @@
 package com.merseyside.partyapp.presentation.base
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
@@ -11,9 +12,15 @@ import androidx.lifecycle.Observer
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.mvvmcleanarch.presentation.fragment.BaseMvvmFragment
 import com.merseyside.mvvmcleanarch.presentation.view.IFocusManager
+import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.view.activity.main.view.HasAd
+import com.merseyside.partyapp.utils.PrefsHelper
+import javax.inject.Inject
 
 abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : BaseMvvmFragment<B, M>(), IFocusManager {
+
+    @Inject
+    lateinit var prefsHelper: PrefsHelper
 
     val appComponent = CalcApplication.getInstance().appComponent
     private lateinit var adView: HasAd
@@ -38,7 +45,7 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
         viewModel.interstitialLiveEvent.observe(this, interstitialObserver)
     }
 
-    protected fun goBack() {
+    private fun goBack() {
         viewModel.goBack()
     }
 
@@ -87,8 +94,36 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
 
     abstract fun hasTitleBackButton(): Boolean
 
+    fun shareStatistic(text: String) {
+        val sendIntent: Intent = Intent().apply {
+            action = Intent.ACTION_SEND
+            putExtra(
+                Intent.EXTRA_TEXT,
+                text
+            )
+            type = "text/plain"
+        }
+
+        val shareIntent = Intent.createChooser(sendIntent, null)
+        startActivity(shareIntent)
+    }
+
+    fun showRateUsDialog() {
+        showAlertDialog(
+            title = getActualString(R.string.rate_title),
+            message = getActualString(R.string.rate_description),
+            positiveButtonText = getActualString(R.string.rate_yes),
+            negativeButtonText = getActualString(R.string.rate_no),
+            onPositiveClick = {
+                prefsHelper.setRated(true)
+
+                //code to launch google play in browser
+            }
+        )
+    }
+
     fun logEvent(event: String, bundle: Bundle) {
-        (context as CalcApplication).logFirebaseEvent(event, bundle)
+        CalcApplication.getInstance().logFirebaseEvent(event, bundle)
     }
 
     companion object {

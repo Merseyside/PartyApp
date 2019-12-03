@@ -36,7 +36,7 @@
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:minLines="2"
-                android:text="@string/no_items"
+                android:text="@{viewModel.noItemsHint}"
                 app:isVisibleOrGone="@{!viewModel.itemsVisibility}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

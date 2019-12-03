@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.itemList.model
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.databinding.ObservableField
@@ -22,13 +23,20 @@ class ItemListViewModel(
     private var eventId: Long? = null
 
     val itemsContainer = ObservableField<List<Item>>()
-
     val itemsVisibility = ObservableField<Boolean>()
+
+    val noItemsHint = ObservableField<String>()
 
     fun init(eventId: Long) {
         this.eventId = eventId
 
         getItemsById(eventId)
+    }
+
+    override fun updateLanguage(context: Context) {
+        super.updateLanguage(context)
+
+        noItemsHint.set(context.getString(R.string.no_items))
     }
 
     override fun readFrom(bundle: Bundle) {}

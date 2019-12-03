@@ -14,6 +14,8 @@ class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
         fun onEditClick(event: Event)
 
         fun onDeleteClick(event: Event)
+
+        fun onStatisticClick(event: Event)
     }
 
     private var optionsListener: OnEventOptionsClickListener? = null
@@ -51,6 +53,10 @@ class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
 
                     R.id.action_delete -> {
                         optionsListener?.onDeleteClick(item)
+                    }
+
+                    R.id.action_statistic -> {
+                        optionsListener?.onStatisticClick(item)
                     }
 
                     else -> {

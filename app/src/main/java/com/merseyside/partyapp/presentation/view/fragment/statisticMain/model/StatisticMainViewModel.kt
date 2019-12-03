@@ -6,6 +6,7 @@ import android.util.Log
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import com.merseyside.mvvmcleanarch.utils.randomTrueOrFalse
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
@@ -37,7 +38,7 @@ class StatisticMainViewModel(
     var event: Event? = null
 
     override fun goBack() {
-        showInterstitial()
+        if (randomTrueOrFalse(0.2f)) showInterstitial()
         super.goBack()
     }
 

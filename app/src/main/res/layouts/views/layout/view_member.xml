@@ -27,7 +27,7 @@
             android:layout_marginEnd="@dimen/small_spacing"
             app:circleColor="@{obj.circleColor}"
             app:circleText="@{obj.circleText}"
-            app:circleTextColor="@{obj.circleTextColor}"/>
+            app:circleTextColor="@{obj.circleTextColor}" />
 
         <TextView
             android:id="@+id/title"

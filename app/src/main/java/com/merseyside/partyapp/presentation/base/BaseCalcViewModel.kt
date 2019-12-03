@@ -19,7 +19,6 @@ abstract class BaseCalcViewModel(private val router: Router? = null) : Parcelabl
     val interstitialLiveEvent = SingleLiveEvent<Boolean>()
 
     protected fun getString(@StringRes id: Int, vararg args: String): String {
-        Log.d(TAG, "${context.javaClass}")
         return getString(context, id, *args)
     }
 
@@ -27,12 +26,7 @@ abstract class BaseCalcViewModel(private val router: Router? = null) : Parcelabl
         router?.exit()
     }
 
-    fun showInterstitial(probability: Float = 1f) {
-        if (probability != 1f) {
-            val rand = Random()
-            if (rand.nextFloat() > probability) return
-        }
-
+    fun showInterstitial() {
         interstitialLiveEvent.value = true
     }
 

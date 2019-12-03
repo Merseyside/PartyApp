@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
     tools:context=".presentation.view.activity.main.view.MainActivity">
 
     <data>
@@ -10,44 +11,49 @@
             type="com.merseyside.partyapp.presentation.view.activity.main.model.MainViewModel" />
     </data>
 
-   <RelativeLayout
-       android:layout_width="match_parent"
-       android:layout_height="match_parent"
-       android:background="?attr/calcBackgroundColor">
+    <androidx.coordinatorlayout.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/appBar"
-            android:layout_height="wrap_content"
-            android:layout_width="match_parent">
-
-            <androidx.appcompat.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:theme="@style/ToolbarTheme"
-                app:popupTheme="@style/ToolbarTheme.Popup"
-                app:navigationIcon="@drawable/ic_arrow"/>
-
-        </com.google.android.material.appbar.AppBarLayout>
-
-        <FrameLayout
-            android:id="@+id/container"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:background="@color/transparent"
-            android:layout_below="@id/appBar"
-            android:layout_above="@+id/adView"/>
+            android:background="?attr/calcBackgroundColor">
 
-       <com.google.android.gms.ads.AdView
-           xmlns:ads="http://schemas.android.com/apk/res-auto"
-           android:id="@+id/adView"
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           ads:adSize="BANNER"
-           ads:adUnitId="@string/bannerId"
-           android:layout_alignParentBottom="true">
-       </com.google.android.gms.ads.AdView>
+             <com.google.android.material.appbar.AppBarLayout
+                 android:id="@+id/appBar"
+                 android:layout_height="wrap_content"
+                 android:layout_width="match_parent">
 
-   </RelativeLayout>
+                 <androidx.appcompat.widget.Toolbar
+                     android:id="@+id/toolbar"
+                     android:layout_width="match_parent"
+                     android:layout_height="?attr/actionBarSize"
+                     android:theme="@style/ToolbarTheme"
+                     app:popupTheme="@style/ToolbarTheme.Popup"
+                     app:navigationIcon="@drawable/ic_arrow"/>
+
+             </com.google.android.material.appbar.AppBarLayout>
+
+             <FrameLayout
+                 android:id="@+id/container"
+                 android:layout_width="match_parent"
+                 android:layout_height="match_parent"
+                 android:background="@color/transparent"
+                 android:layout_below="@id/appBar"
+                 android:layout_above="@+id/adView"/>
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                ads:adSize="BANNER"
+                ads:adUnitId="@string/bannerId"
+                android:layout_alignParentBottom="true">
+            </com.google.android.gms.ads.AdView>
+
+        </RelativeLayout>
+
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

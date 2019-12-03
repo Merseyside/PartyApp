@@ -2,9 +2,8 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMember.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.appcompat.app.ActionBar
+import com.merseyside.mvvmcleanarch.utils.randomTrueOrFalse
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
@@ -13,12 +12,8 @@ import com.merseyside.partyapp.databinding.FragmentMemberStatisticBinding
 import com.merseyside.partyapp.presentation.base.BaseCalcFragment
 import com.merseyside.partyapp.presentation.di.component.DaggerStatisticMemberComponent
 import com.merseyside.partyapp.presentation.di.module.StatisticMemberModule
-import com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter.OrderAdapter
-import com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter.ResultAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.StatisticMemberViewModel
 import com.merseyside.partyapp.utils.getMemberStatistic
-import com.merseyside.partyapp.utils.getShareableStatistic
-import com.merseyside.partyapp.utils.shareStatistic
 
 class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding, StatisticMemberViewModel>() {
 
@@ -73,10 +68,12 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
         }
 
         binding.shareMember.setOnClickListener {
-            shareStatistic(baseActivityView, getMemberStatistic(
+            shareStatistic(getMemberStatistic(
                 CalcApplication.getInstance().getContext(),
                 viewModel.statistic
             ))
+
+            if (!prefsHelper.isRated() && randomTrueOrFalse(0.20f)) showRateUsDialog()
 
             logEvent("share_member", Bundle())
         }

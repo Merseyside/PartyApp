@@ -12,7 +12,16 @@ class PrefsHelper(private val preferenceManager: PreferenceManager) {
         return preferenceManager.getStringPreference(CURRENCY_KEY, "")
     }
 
+    fun isRated(): Boolean {
+        return preferenceManager.getBoolPreference(RATE_KEY, false)
+    }
+
+    fun setRated(isRated: Boolean) {
+        preferenceManager.savePreference(RATE_KEY, isRated)
+    }
+
     companion object {
         private const val CURRENCY_KEY = "currency"
+        private const val RATE_KEY = "isRated"
     }
 }

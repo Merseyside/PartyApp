@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Тусовка</string>
     <string name="action_settings">Настройки</string>
 
     <string name="unknown_error">Неизвестная ошибка</string>
@@ -50,6 +51,7 @@
     <string name="action_edit">Изменить</string>
     <string name="action_delete">Удалить</string>
     <string name="action_share">Поделиться</string>
+    <string name="action_statistic">Статистика</string>
 
     <string name="delete_event_title">Удалить %1$s?</string>
     <string name="delete_event_message">Вы действительно хотите удалить это событие?</string>
@@ -80,5 +82,20 @@
     <string name="settings_interface">Интерфейс</string>
     <string name="language">Язык</string>
 
+    <string name="wrong_format">Неправильный формат ввода</string>
+    <string name="operators_hint">Примечание: используйте +-*/ при необходимости</string>
+
+    <string name="members_price_too_much_error">Установленные для участников цены больше общей стоимости</string>
+    <string name="members_price_too_few_error">Установленные для участников цены меньше общей общей стоимости</string>
+    <string name="reset">Сбросить</string>
+
+    <string name="delete">Удалить</string>
+    <string name="cancel">Отмена</string>
+
     <string name="share_member">Поделиться статистикой участника</string>
+
+    <string name="rate_title">Спасибо, что вы с нами!</string>
+    <string name="rate_description">Наша команда надеется, что Вам нравится приложение Тусовка! Пожалуйста, оцените нашу работу на Google Play, так же Вы можете написать свои пожелания.</string>
+    <string name="rate_yes">Google play</string>
+    <string name="rate_no">Не сейчас</string>
 </resources>

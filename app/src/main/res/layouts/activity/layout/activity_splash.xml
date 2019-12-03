@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".presentation.view.activity.splash.view.SplashActivity"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/calcBackgroundColor"
+    android:gravity="center">
+
+    <ImageView
+        android:layout_width="@dimen/splash_image_size"
+        android:layout_height="@dimen/splash_image_size"
+        android:scaleType="fitXY"
+        android:adjustViewBounds="true"
+        tools:ignore="ContentDescription"
+        app:srcCompat="@drawable/ic_coctail"
+        android:layout_marginRight="@dimen/small_spacing"/>
+
+</LinearLayout>

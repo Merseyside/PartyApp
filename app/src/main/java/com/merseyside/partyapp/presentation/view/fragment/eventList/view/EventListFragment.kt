@@ -85,6 +85,11 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
                 viewModel.onDeleteClick(event)
             }
 
+            override fun onStatisticClick(event: Event) {
+                sharedViewModel.eventContainer = event
+                viewModel.navigateToStatistic()
+            }
+
         })
 
         viewModel.showEvents()

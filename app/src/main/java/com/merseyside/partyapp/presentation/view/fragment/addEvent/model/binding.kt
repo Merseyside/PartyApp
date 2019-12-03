@@ -1,6 +1,5 @@
 package com.merseyside.partyapp.presentation.view.fragment.addEvent.model
 
-import android.widget.TextView
 import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
@@ -11,13 +10,10 @@ import com.pchmn.materialchips.model.ChipInterface
 @BindingAdapter(value = ["memberNamesAttrChanged"]) // AttrChanged required postfix
 fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
     if (listener != null) {
-       view.editText.setOnFocusChangeListener { v, hasFocus ->
-           if (!hasFocus) {
-               view.editText.setText(StringBuilder(view.editText.text.toString()).append(",").toString(), TextView.BufferType.EDITABLE)
-           }
-       }
 
        view.addChipsListener(object: ChipsInput.ChipsListener {
+           var prevText = ""
+
            override fun onChipAdded(chip: ChipInterface?, newSize: Int) {
                listener.onChange()
            }
@@ -36,7 +32,12 @@ fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
                    } else {
                        view.editText.setText("")
                    }
+               } else if (text.length == 24) {
+                   view.editText.setText(prevText)
+                   return
                }
+
+               prevText = text.toString()
            }
        })
     }

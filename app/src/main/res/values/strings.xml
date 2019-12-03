@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">PartyApp</string>
+    <string name="app_name">Party Calculator</string>
     <string name="action_settings">Settings</string>
 
     <string name="unknown_error">Unknown error</string>
@@ -51,6 +51,7 @@
     <string name="action_edit">Edit</string>
     <string name="action_delete">Delete</string>
     <string name="action_share">Share</string>
+    <string name="action_statistic">Statistic</string>
 
     <string name="delete_event_title">Delete %1$s?</string>
     <string name="delete_event_message">Are you sure want to delete that event?</string>
@@ -83,9 +84,24 @@
 
     <string name="share_member">Share member statistic</string>
 
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+
+    <string name="wrong_format">Wrong number format</string>
+    <string name="operators_hint">You can use +-*/ if necessary</string>
+
+    <string name="members_price_too_much_error">The set prices for members are greater than the total cost</string>
+    <string name="members_price_too_few_error">The set prices for members are less than the total cost</string>
+    <string name="reset">Reset</string>
+
     <string name="appId" translatable="false">ca-app-pub-2074462823823829~3546325123</string>
     <string name="bannerId" translatable="false">ca-app-pub-2074462823823829/5945612978</string>
     <string name="interstitialId" translatable="false">ca-app-pub-2074462823823829/2361591181</string>
+
+    <string name="rate_title">Thank you for using or app!</string>
+    <string name="rate_description">Our team hopes you have the best experience from using Party Calculator! Please rate us on Google Play, also you can leave a comment with your wishes.</string>
+    <string name="rate_yes">Go to Google play</string>
+    <string name="rate_no">Not now</string>
 
     <string-array name="language_entries">
         <item>ic_english</item>

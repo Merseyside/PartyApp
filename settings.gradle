@@ -11,5 +11,8 @@ pluginManagement {
 include ':app', ':shared', ':chipsLib'
 rootProject.name='PartyApp'
 
+include ':library'
+project(':library').projectDir = new File(settingsDir, '../mvvm-clean-arch-library/library')
+
 enableFeaturePreview("GRADLE_METADATA")
 

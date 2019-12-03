@@ -29,6 +29,7 @@
                 android:layout_height="match_parent"
                 app:events="@{viewModel.eventsContainer}"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                android:overScrollMode="never"
                 app:isVisibleOrGone="@{viewModel.eventsVisibility}">
             </androidx.recyclerview.widget.RecyclerView>
 
@@ -42,7 +43,7 @@
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:minLines="2"
-                android:text="@string/no_events"
+                android:text="@{viewModel.noEventHint}"
                 app:isVisibleOrGone="@{!viewModel.eventsVisibility}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
