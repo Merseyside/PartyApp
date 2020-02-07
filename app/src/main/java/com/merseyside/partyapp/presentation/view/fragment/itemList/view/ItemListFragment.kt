@@ -103,8 +103,12 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
         binding.itemList.adapter = adapter
 
         adapter.setOnItemClickListener(onItemClickListener)
+    }
 
-        viewModel.init(sharedViewModel.eventContainer!!.id)
+    override fun onStart() {
+        super.onStart()
+
+        viewModel.init(sharedViewModel.eventContainer!!)
     }
 
     private val onItemClickListener = object: BaseAdapter.OnItemClickListener<Item> {

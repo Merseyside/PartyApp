@@ -2,14 +2,17 @@ package com.merseyside.partyapp.presentation.view.activity.main.model
 
 import android.content.Context
 import android.os.Bundle
+import com.merseyside.mvvmcleanarch.data.serialization.deserialize
+import com.merseyside.mvvmcleanarch.data.serialization.serialize
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.item.Item
-import com.merseyside.mvvmcleanarch.data.deserialize
-import com.merseyside.mvvmcleanarch.data.serialize
 import com.merseyside.mvvmcleanarch.presentation.model.ParcelableViewModel
-import kotlinx.serialization.list
+import com.merseyside.partyapp.CalcApplication
 
 class SharedViewModel : ParcelableViewModel() {
+
+    override val application = CalcApplication.getInstance()
+
     override fun readFrom(bundle: Bundle) {
 
         bundle.apply {

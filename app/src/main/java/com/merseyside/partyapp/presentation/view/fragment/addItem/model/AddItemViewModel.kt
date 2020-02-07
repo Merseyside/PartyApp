@@ -8,6 +8,8 @@ import android.util.Log
 import android.view.View
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
+import com.merseyside.mvvmcleanarch.data.serialization.deserialize
+import com.merseyside.mvvmcleanarch.data.serialization.serialize
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
@@ -16,12 +18,11 @@ import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.domain.interactor.AddItemInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.*
-import com.merseyside.mvvmcleanarch.data.deserialize
-import com.merseyside.mvvmcleanarch.data.serialize
 import com.merseyside.mvvmcleanarch.utils.ext.isZero
 import com.merseyside.mvvmcleanarch.utils.randomTrueOrFalse
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.list
 import ru.terrakok.cicerone.Router
 import kotlin.NumberFormatException
 
@@ -36,16 +37,16 @@ class AddItemViewModel(
 
     val name = ObservableField<String>()
     val nameErrorText = ObservableField("")
-    val itemNameHint = ObservableField<String>()
+    val itemNameHint = ObservableField<String>(getString(R.string.item_title))
 
     val price = ObservableField<String>("")
     val priceErrorText = ObservableField("")
     val isPriceValid = ObservableField<Boolean>(true)
-    val priceHint = ObservableField<String>()
-    val operatorsHint = ObservableField<String>()
+    val priceHint = ObservableField<String>(getString(R.string.item_total_price))
+    val operatorsHint = ObservableField<String>(getString(R.string.operators_hint))
 
     val description = ObservableField<String>()
-    val itemDescriptionHint = ObservableField<String>()
+    val itemDescriptionHint = ObservableField<String>(getString(R.string.item_description))
 
     val percent = ObservableField<String>()
     val percentHint = ObservableField<String>()
@@ -54,18 +55,21 @@ class AddItemViewModel(
     private var memberPriceValue: String? = null
 
     val membersContainer = ObservableField<List<Member>>()
-    val selectableMembers = ObservableField<List<Pair<MemberInfo, Boolean>>>()
+    val selectableMembers = ObservableField<List<MemberInfo>>()
+    val selectedMembers = ObservableField<List<MemberInfo>>()
     val selectableMembersErrorText = ObservableField("")
 
     val spinnerSelectedMembers = ObservableField<List<MemberInfo>>()
     val spinnerSelectedMember = ObservableField<MemberInfo>()
 
     val payMember = ObservableField<Member>()
-    val whoPaysTitle = ObservableField<String>()
-    val forWhomTitle = ObservableField<String>()
-    val additionalSettingsTitle = ObservableField<String>()
-    val percentSettingsTitle = ObservableField<String>()
-    val save = ObservableField<String>()
+    val whoPaysTitle = ObservableField<String>(getString(R.string.choose_pays_member))
+    val forWhomTitle = ObservableField<String>(getString(R.string.with_whom_share))
+    val selectAllTitle = ObservableField<String>(getString(R.string.select_all))
+    val additionalSettingsTitle = ObservableField<String>(getString(R.string.additional_settings))
+    val additionalSettingsError = ObservableField<String>(getString(R.string.fill_price_error))
+    val percentSettingsTitle = ObservableField<String>(getString(R.string.percent_setting))
+    val save = ObservableField<String>(getString(R.string.save))
     val currency = ObservableField<String>()
 
     override fun updateLanguage(context: Context) {
@@ -77,7 +81,8 @@ class AddItemViewModel(
         operatorsHint.set(context.getString(R.string.operators_hint))
 
         whoPaysTitle.set(context.getString(R.string.choose_pays_member))
-        forWhomTitle.set(context.getString(R.string.choose_members))
+        forWhomTitle.set(context.getString(R.string.with_whom_share))
+        selectAllTitle.set(context.getString(R.string.select_all))
 
         additionalSettingsTitle.set(context.getString(R.string.additional_settings))
         percentSettingsTitle.set(context.getString(R.string.percent_setting))
@@ -106,18 +111,22 @@ class AddItemViewModel(
                     }
 
                     try {
-                        convertPriceToDouble(priceStr)
+                        val doublePrice = convertPriceToDouble(priceStr)
                         if (percent.get().isNullOrEmpty()) {
                             val percent = convertPercentToFloat(percentHint.get() ?: "0")
 
-                            memberPriceHint.set(doubleToStringPrice(convertPercentToPrice(percent, convertPriceToDouble(priceStr))))
+                            memberPriceHint.set(doubleToStringPrice(convertPercentToPrice(percent, doublePrice)))
                         } else {
                             val percent = convertPercentToFloat(percent.get()!!)
 
-                            memberPrice.set(doubleToStringPrice(convertPercentToPrice(percent, convertPriceToDouble(priceStr))))
+                            memberPrice.set(doubleToStringPrice(convertPercentToPrice(percent, doublePrice)))
                         }
 
-                    } catch (e: NumberFormatException) {}
+                        additionalSettingsError.set("")
+
+                    } catch (e: NumberFormatException) {
+                        additionalSettingsError.set(getString(R.string.fill_price_error))
+                    }
 
                     val calculatedPrice: String?
 
@@ -125,27 +134,34 @@ class AddItemViewModel(
                         val formattedString = priceStr.dropLast(1)
 
                         if (formattedString.last().isDigit()) {
-                            val result = calculate(formattedString)
-                            if (result != null) {
-                                price.set(result)
-
-                            } else {
-                                try {
-                                    price.set(doubleToStringPrice(formattedString.toDouble()))
-                                } catch (e: NumberFormatException) {
-                                    priceErrorText.set(getString(R.string.wrong_format))
+                            try {
+                                val result = calculate(formattedString)
+                                if (result != null) {
+                                    price.set(result)
+                                    return
+                                } else {
+                                    try {
+                                        price.set(doubleToStringPrice(formattedString.toDouble()))
+                                    } catch (e: NumberFormatException) {}
                                 }
+                            } catch (e: NumberFormatException) {
+                                priceErrorText.set(getString(R.string.price_error_msg))
                             }
                         } else {
                             price.set(formattedString.dropLast(1)+"\n")
                             return
                         }
+
+                        price.set(formattedString)
                     } else {
 
                         try {
                             calculatedPrice = checkPriceForCalculation(priceStr)
                         } catch (e: NumberFormatException) {
                             priceErrorText.set(getString(R.string.wrong_format))
+                            return
+                        } catch (e: IllegalStateException) {
+                            price.set(priceStr.dropLast(1))
                             return
                         }
 
@@ -163,27 +179,25 @@ class AddItemViewModel(
                     }
                 } else {
                     priceErrorText.set(getString(R.string.wrong_format))
+                    additionalSettingsError.set(getString(R.string.fill_price_error))
                 }
             }
         })
 
-        selectableMembers.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+        selectedMembers.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 if (!selectableMembersErrorText.get().isNullOrEmpty()) {
                     selectableMembersErrorText.set("")
                 }
 
-                if (selectableMembers.get()?.isNotEmpty() == true) {
-                    spinnerSelectedMembers.set(selectableMembers.get()!!.mapNotNull {
-                        if (it.second) {
-                            it.first
-                        } else {
-                            null
-                        }
-                    })
+                if (selectedMembers.get()?.isNotEmpty() == true) {
+                    spinnerSelectedMembers.set(selectedMembers.get()!!)
 
                     val calculatedPercent = calculatePercentHint()
+
+
                     percentHint.set(getHumanReadablePercents(calculatedPercent))
+
 
                     if (isPriceValid(price.get())) {
                         memberPriceHint.set(doubleToStringPrice(convertPercentToPrice(calculatedPercent, convertPriceToDouble(price.get()!!))))
@@ -212,6 +226,11 @@ class AddItemViewModel(
 
                         if (percentStr == "0") {
                             percent.set("")
+                            return
+                        }
+
+                        if (percentStr == ".") {
+                            percent.set("0.")
                             return
                         }
 
@@ -371,7 +390,11 @@ class AddItemViewModel(
                 }
             }
 
-            return hundred / equalCount
+            return if (equalCount == 0) {
+                hundred
+            } else {
+                hundred / equalCount
+            }
         } else {
             return 0f
         }
@@ -388,7 +411,7 @@ class AddItemViewModel(
             description.set(getString(DESCRIPTION_KEY)!!)
             price.set(getString(PRICE_KEY)!!)
 
-            selectableMembers.set(getString(SELECTED_MEMBERS_KEY)!!.deserialize(kSerializer))
+            selectableMembers.set(getString(SELECTED_MEMBERS_KEY)!!.deserialize(MemberInfo.serializer().list))
             payMember.set(getString(PAY_MEMBER_KEY)!!.deserialize())
         }
     }
@@ -408,7 +431,7 @@ class AddItemViewModel(
             putString(PAY_MEMBER_KEY, (payMember.get() ?: event.members.first()).serialize())
 
             if (selectableMembers.get() != null) {
-                putString(SELECTED_MEMBERS_KEY, selectableMembers.get()!!.serialize(kSerializer))
+                putString(SELECTED_MEMBERS_KEY, selectableMembers.get()!!.serialize(MemberInfo.serializer().list))
             }
         }
     }
@@ -429,12 +452,14 @@ class AddItemViewModel(
             selectableMembers.set(event.members.map { member ->
                 item.membersInfo.forEach { info ->
                     if (info.id == member.id) {
-                        return@map Pair(info, true)
+                        return@map info
                     }
                 }
 
-                return@map Pair(MemberInfo(member.id, member.name, 0f), false)
+                return@map MemberInfo(member.id, member.name, member.avatarUrl, member.phone, 0f)
             })
+
+            Handler(Looper.getMainLooper()).postDelayed({selectedMembers.set(item.membersInfo) }, 50)
 
             Handler(Looper.getMainLooper()).postDelayed({
                 setPayMember(item.payMember)
@@ -443,7 +468,7 @@ class AddItemViewModel(
         } else {
             setPayMember()
 
-            selectableMembers.set(event.members.map { Pair(MemberInfo(it.id, it.name, 0f), false) })
+            selectableMembers.set(event.members.map { MemberInfo(it.id, it.name, it.avatarUrl, it.phone, 0f)}.also { Log.d(TAG, it.toString()) })
         }
     }
 
@@ -462,19 +487,19 @@ class AddItemViewModel(
             return
         }
 
-        if (selectableMembers.get()?.filter { it.second }.isNullOrEmpty()) {
+        Log.d(TAG, "${spinnerSelectedMembers.get()}")
+        if (spinnerSelectedMembers.get() == null || spinnerSelectedMembers.get()!!.isEmpty()) {
             selectableMembersErrorText.set(getString(R.string.members_error_msg))
             return
         }
 
         var totalPercent = 0f
         var containsZeroPercentMember = false
-        selectableMembers.get()?.filter { it.second }!!
-            .forEach {
-                if (it.first.percent.isZero()) {
+        selectableMembers.get()!!.forEach {
+                if (it.percent.isZero()) {
                     containsZeroPercentMember = true
                 } else {
-                    totalPercent += it.first.percent
+                    totalPercent += it.percent
                 }
             }
 
@@ -500,13 +525,13 @@ class AddItemViewModel(
                 name = name.get()!!,
                 description = description.get() ?: "",
                 price = convertPriceToDouble(price.get()!!),
-                payMember = Member(payMember.get()!!.id, payMember.get()!!.name),
+                payMember = payMember.get()?.let {Member(it.id, it.name, it.avatarUrl, it.phone) } ?: throw IllegalStateException("Pay member is null!"),
                 membersInfo = spinnerSelectedMembers.get()!!
             ),
             onComplete = {
                 logItemEvent(item?.id)
 
-                if (randomTrueOrFalse(0.3f)) showInterstitial()
+                if (randomTrueOrFalse(0.25f)) showInterstitial()
 
                 goBack()
             },
@@ -516,7 +541,7 @@ class AddItemViewModel(
 
     private fun resetMembersPercents() {
         selectableMembers.get()?.forEach {
-            it.first.percent = 0f
+            it.percent = 0f
         }
 
         if (price.get()?.isNotEmpty() == true) {
@@ -543,6 +568,10 @@ class AddItemViewModel(
 
     fun onSaveClick() {
         saveItem()
+    }
+
+    fun onSelectAllClick() {
+        selectedMembers.set(selectableMembers.get())
     }
 
     companion object {

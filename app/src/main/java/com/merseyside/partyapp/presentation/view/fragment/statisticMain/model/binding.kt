@@ -11,7 +11,7 @@ fun setStatisticMembers(recyclerView: RecyclerView, members: List<Member>?) {
         if (recyclerView.adapter is MemberAdapter) {
             val adapter = recyclerView.adapter as MemberAdapter
 
-            adapter.removeAll()
+            adapter.clear()
             adapter.add(members)
         }
     }

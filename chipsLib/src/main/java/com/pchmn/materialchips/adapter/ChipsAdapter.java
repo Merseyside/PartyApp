@@ -4,6 +4,8 @@ import android.content.Context;
 import android.os.Build;
 
 import androidx.annotation.ColorInt;
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import android.text.Editable;
 import android.text.InputType;
@@ -136,30 +138,27 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         // prevent fullscreen on landscape
         mEditText.setImeOptions(EditorInfo.IME_FLAG_NO_EXTRACT_UI);
         mEditText.setPrivateImeOptions("nm");
-        // no suggestion
+//        // no suggestion
         mEditText.setInputType(InputType.TYPE_TEXT_VARIATION_FILTER | InputType.TYPE_TEXT_FLAG_NO_SUGGESTIONS);
 
+        mEditText.setInputType(InputType.TYPE_CLASS_TEXT | InputType.TYPE_TEXT_FLAG_MULTI_LINE | InputType.TYPE_TEXT_FLAG_CAP_WORDS);
+
         // handle back space
-        mEditText.setOnKeyListener(new View.OnKeyListener() {
-            @Override
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                // backspace
-                if(event.getAction() == KeyEvent.ACTION_DOWN
-                        && event.getKeyCode() == KeyEvent.KEYCODE_DEL) {
-                    // remove last chip
-                    if(mChipList.size() > 0 && mEditText.getText().toString().length() == 0)
-                        removeChip(mChipList.size() - 1);
-                }
-                return false;
+        mEditText.setOnKeyListener((v, keyCode, event) -> {
+            // backspace
+            if(event.getAction() == KeyEvent.ACTION_DOWN
+                    && event.getKeyCode() == KeyEvent.KEYCODE_DEL) {
+                // remove last chip
+                if(mChipList.size() > 0 && mEditText.getText().toString().length() == 0)
+                    removeChip(mChipList.size() - 1);
             }
+            return false;
         });
 
         // text changed
         mEditText.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
-            }
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -167,9 +166,7 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             }
 
             @Override
-            public void afterTextChanged(Editable s) {
-
-            }
+            public void afterTextChanged(Editable s) {}
         });
     }
 
@@ -383,5 +380,25 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         return false;
+    }
+
+    public void setChipSelected(Object id, boolean isSelected) {
+        for (int i = 0; i < mChipList.size(); i++) {
+            if (mChipList.get(i).getId() == id) {
+                //mChipList.get(i).setSelected(isSelected);
+                notifyItemRangeChanged(i, 1, isSelected);
+                return;
+            }
+        }
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position, @NonNull List<Object> payloads) {
+        if (!payloads.isEmpty()) {
+            ((ItemViewHolder)holder).chipView.setChipSelected((boolean)payloads.get(0));
+        } else {
+            super.onBindViewHolder(holder, position, payloads);
+        }
+
     }
 }

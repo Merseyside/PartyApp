@@ -2,10 +2,13 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMember.view
 
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
+import com.merseyside.mvvmcleanarch.utils.animation.AnimatorList
+import com.merseyside.mvvmcleanarch.utils.animation.ValueAnimatorHelper
 import com.merseyside.mvvmcleanarch.utils.randomTrueOrFalse
 import com.merseyside.partyapp.BR
-import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.databinding.FragmentMemberStatisticBinding
@@ -69,14 +72,74 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
 
         binding.shareMember.setOnClickListener {
             shareStatistic(getMemberStatistic(
-                CalcApplication.getInstance().getContext(),
-                viewModel.statistic
+                member = viewModel.statistic
             ))
 
-            if (!prefsHelper.isRated() && randomTrueOrFalse(0.20f)) showRateUsDialog()
+            if (!prefsHelper.isRated() && randomTrueOrFalse(0.2f)) showRateUsDialog()
 
             logEvent("share_member", Bundle())
         }
+
+        startAnimation()
+    }
+
+    private fun startAnimation() {
+        Handler(Looper.getMainLooper()).postDelayed({
+            val animatorHelper = ValueAnimatorHelper()
+
+            val animatorList = AnimatorList(AnimatorList.Approach.TOGETHER)
+
+            animatorList.addAnimator(
+                ValueAnimatorHelper.Builder(binding.orders)
+                    .translateAnimationPercent(
+                        pointPercents  = listOf(
+                            0f to ValueAnimatorHelper.MainPoint.TOP_RIGHT,
+                            0f to ValueAnimatorHelper.MainPoint.TOP_LEFT),
+                        animAxis  = ValueAnimatorHelper.AnimAxis.X_AXIS,
+                        duration  = 700
+                    ).build()
+            )
+
+            animatorList.addAnimator(
+                ValueAnimatorHelper.Builder(binding.orders)
+                    .alphaAnimation(
+                        floats  = *floatArrayOf(0f, 1f),
+                        duration  = 700
+                    ).build()
+            )
+
+            animatorList.addAnimator(
+                ValueAnimatorHelper.Builder(binding.stats)
+                    .alphaAnimation(
+                        floats  = *floatArrayOf(0f, 1f),
+                        duration  = 700
+                    ).build()
+            )
+
+            animatorList.addAnimator(
+                ValueAnimatorHelper.Builder(binding.results)
+                    .translateAnimationPercent(
+                        pointPercents  = listOf(
+                            1f to ValueAnimatorHelper.MainPoint.TOP_LEFT,
+                            0f to ValueAnimatorHelper.MainPoint.TOP_LEFT),
+                        animAxis  = ValueAnimatorHelper.AnimAxis.Y_AXIS,
+                        duration  = 700
+                    ).build()
+            )
+
+            animatorList.addAnimator(
+                ValueAnimatorHelper.Builder(binding.results)
+                    .alphaAnimation(
+                        floats  = *floatArrayOf(0f, 1f),
+                        duration  = 700
+                    ).build()
+            )
+
+            animatorHelper.addAnimatorList(animatorList)
+            animatorHelper.start()
+        }, 300)
+
+
     }
 
     companion object {

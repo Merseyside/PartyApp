@@ -13,7 +13,11 @@ class MemberAdapter : BaseSelectableAdapter<Member, MemberItemViewModel>() {
     }
 
     override fun getLayoutIdForPosition(position: Int): Int {
-        return R.layout.view_member
+        return if (getItemByPosition(position).avatarUrl.isNullOrEmpty()) {
+            R.layout.view_text_member
+        } else {
+            R.layout.view_image_member
+        }
     }
 
     override fun getBindingVariable(): Int {

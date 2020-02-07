@@ -1,15 +1,17 @@
 package com.merseyside.partyapp.presentation.view.fragment.addEvent.view
 
+import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Bundle
-import android.provider.ContactsContract
-import android.util.Log
 import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.merseyside.mvvmcleanarch.presentation.view.OnBackPressedListener
+import com.merseyside.mvvmcleanarch.utils.PermissionsManager
+import com.merseyside.mvvmcleanarch.utils.animation.AnimatorList
+import com.merseyside.mvvmcleanarch.utils.animation.ValueAnimatorHelper
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -19,19 +21,26 @@ import com.merseyside.partyapp.presentation.di.component.DaggerAddEventComponent
 import com.merseyside.partyapp.presentation.di.module.AddEventModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
-import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.ContactChip
-import com.merseyside.mvvmcleanarch.utils.ValueAnimatorHelper
 
 
-class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewModel>() {
+class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewModel>(), OnBackPressedListener {
 
     private val eventObserver = Observer<Event?> {
         if (it != null) {
             sharedViewModel.eventContainer = it
+            
         }
     }
 
+    private val isContactsLoadedObserver = Observer<Any?> {
+        binding.chips.editText.isEnabled = true
+    }
+
     private lateinit var sharedViewModel: SharedViewModel
+
+    override fun isShowAdBanner(): Boolean {
+        return false
+    }
 
     override fun hasTitleBackButton(): Boolean {
         return true
@@ -97,47 +106,62 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
                 positiveButtonText = getString(R.string.close_event),
                 negativeButtonText = getString(R.string.cancel),
                 onPositiveClick = {
-                    val animation = ValueAnimatorHelper()
-
-                    animation.addAnimation(ValueAnimatorHelper.Builder(binding.closeEvent)
-                        .translateAnimationPercent(
-                            percents  = *floatArrayOf(0f, -1f),
-                            mainPoint = ValueAnimatorHelper.MainPoint.TOP_LEFT,
-                            animAxis  = ValueAnimatorHelper.AnimAxis.Y_AXIS,
-                            duration  = 500
-                        ).build()
-                    )
-
-                    animation.addAnimation(ValueAnimatorHelper.Builder(binding.closeEvent)
-                        .alphaAnimation(
-                            1f, 0f,
-                            duration = 190
-                        ).build())
-
-                    animation.addAnimation(ValueAnimatorHelper.Builder(binding.chipsContainer)
-                        .alphaAnimation(
-                            1f, 0f,
-                            duration = 250
-                        ).build())
-
-                    animation.playTogether()
-
-                    viewModel.closeEvent()
+                    startAnimation()
                 }
             )
         }
 
         binding.save.setOnClickListener {
-            binding.chips.editText.setText(StringBuilder(binding.chips.editText.text.toString()).append(",").toString(), TextView.BufferType.EDITABLE)
+            binding.chips.editText.setText(StringBuilder(binding.chips.editText.text.toString()).append("\n").toString(), TextView.BufferType.EDITABLE)
             viewModel.onSaveClick()
         }
 
-//        val permission = arrayOf(Manifest.permission.READ_CONTACTS)
-//        if (PermissionsManager.isPermissionsGranted(baseActivityView, permission)) {
-//            getContactList()
-//        } else {
-//            PermissionsManager.verifyStoragePermissions(this, permission, PERMISSION_CODE)
-//        }
+        val permission = arrayOf(Manifest.permission.READ_CONTACTS)
+        if (PermissionsManager.isPermissionsGranted(baseActivityView, permission)) {
+            getContacts()
+        } else {
+            PermissionsManager.verifyStoragePermissions(this, permission, PERMISSION_CODE)
+        }
+    }
+
+    private fun startAnimation() {
+        val animatorHelper = ValueAnimatorHelper()
+
+        val animatorList = AnimatorList(AnimatorList.Approach.TOGETHER)
+
+        animatorList.addAnimator(ValueAnimatorHelper.Builder(binding.closeEvent)
+            .translateAnimationPercent(
+                pointPercents  = listOf(
+                    0f to ValueAnimatorHelper.MainPoint.TOP_LEFT,
+                    -1f to ValueAnimatorHelper.MainPoint.TOP_LEFT),
+                animAxis  = ValueAnimatorHelper.AnimAxis.Y_AXIS,
+                duration  = 500
+            ).build()
+        )
+
+        animatorList.addAnimator(ValueAnimatorHelper.Builder(binding.closeEvent)
+            .alphaAnimation(
+                1f, 0f,
+                duration = 190
+            ).build())
+
+        animatorList.addAnimator(ValueAnimatorHelper.Builder(binding.chipsContainer)
+            .alphaAnimation(
+                1f, 0f,
+                duration = 250
+            ).build())
+
+        animatorList.addAnimator(ValueAnimatorHelper.Builder(binding.buttonContainer)
+            .translateAnimationPercent(
+                pointPercents = listOf(0f to ValueAnimatorHelper.MainPoint.TOP_LEFT),
+                animAxis  = ValueAnimatorHelper.AnimAxis.Y_AXIS,
+                duration  = 1000
+            ).build())
+
+        animatorHelper.addAnimatorList(animatorList)
+        animatorHelper.start()
+
+        viewModel.closeEvent()
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -147,56 +171,27 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
             PERMISSION_CODE -> {
                 if (grantResults.isNotEmpty()
                     && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    getContactList()
+
+                    getContacts()
                 }
             }
         }
     }
 
-    private fun getContactList() {
+    private fun getContacts() {
+        binding.chips.editText.isEnabled = false
+        viewModel.getContacts()
 
-        val contactList = ArrayList<ContactChip>()
-        val phones = baseActivityView.contentResolver
-            .query(ContactsContract.Contacts.CONTENT_URI, null, null, null, null)
+        viewModel.contactsLoadedSingleEvent.observe(this, isContactsLoadedObserver)
+    }
 
-        if (phones != null) {
-            while (phones.moveToNext()) {
+    override fun onDestroyView() {
+        super.onDestroyView()
 
-                var phoneNumber: String? = null
-                val id = phones.getString(phones.getColumnIndex(ContactsContract.Contacts._ID))
-                val name =
-                    phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
-                val avatarUriString =
-                    phones.getString(phones.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI))
-                var avatarUri: Uri? = null
-                if (avatarUriString != null)
-                    avatarUri = Uri.parse(avatarUriString)
-
-                if (Integer.parseInt(phones.getString(phones.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0) {
-                    val pCur = baseActivityView.contentResolver.query(
-                        ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                        arrayOf<String>(id),
-                        null
-                    )
-
-                    while (pCur != null && pCur.moveToNext()) {
-                        phoneNumber =
-                            pCur.getString(pCur.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
-                    }
-
-                    pCur!!.close()
-
-                }
-
-                val contactChip = ContactChip(id, avatarUri, name, phoneNumber)
-                contactList.add(contactChip)
-            }
-            phones.close()
-        }
-
-        binding.chips.filterableList = contactList
+        viewModel.contactsLoadedSingleEvent.removeObserver(isContactsLoadedObserver)
+    }
+    override fun onBackPressed(): Boolean {
+        return binding.chips.onBackPressed()
     }
 
     companion object {

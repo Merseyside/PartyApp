@@ -3,8 +3,8 @@ package com.merseyside.partyapp.presentation.view.activity.main.view
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import android.view.View
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.gms.ads.*
 import com.merseyside.partyapp.BR
@@ -105,7 +105,7 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>(), Has
     }
 
     override fun getFragmentContainer(): Int? {
-        return R.id.container
+        return binding.container.id
     }
 
     override fun onResumeFragments() {
@@ -142,7 +142,6 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>(), Has
     }
 
     override fun showInterstitialAd() {
-        Log.d(TAG, "showInterstitial")
         if (interstitialAd.isLoaded) {
             interstitialAd.show()
         }
@@ -150,6 +149,14 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>(), Has
 
     override fun onRewardClosed() {
         throw NotImplementedError()
+    }
+
+    override fun setShowAdBanner(isShow: Boolean) {
+        if (isShow) {
+            binding.adView.visibility = View.VISIBLE
+        } else {
+            binding.adView.visibility = View.GONE
+        }
     }
 
     companion object {

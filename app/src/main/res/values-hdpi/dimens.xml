@@ -27,6 +27,6 @@
     <dimen name="price_field_width">100dp</dimen>
     <dimen name="percent_field_width">60dp</dimen>
     <dimen name="splash_image_size">150dp</dimen>
-    <dimen name="result_list_height">180dp</dimen>
+    <dimen name="result_list_height">120dp</dimen>
 
 </resources>

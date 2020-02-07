@@ -27,7 +27,7 @@ fun setOrderList(recyclerView: RecyclerView, orders: List<Order>?) {
         val adapter = recyclerView.adapter ?: OrderAdapter().also { recyclerView.adapter = it }
 
         (adapter as OrderAdapter).apply {
-            removeAll()
+            clear()
             add(orders)
         }
     }
@@ -36,11 +36,16 @@ fun setOrderList(recyclerView: RecyclerView, orders: List<Order>?) {
 @BindingAdapter("app:results")
 fun setResults(recyclerView: RecyclerView, results: List<Result>?) {
     if (!results.isNullOrEmpty()) {
-        val adapter = recyclerView.adapter ?: ResultAdapter().also { recyclerView.adapter = it }
+        recyclerView.postDelayed({
+            val adapter = recyclerView.adapter ?: ResultAdapter().also { recyclerView.adapter = it }
 
-        (adapter as ResultAdapter).apply {
-            removeAll()
-            add(results)
-        }
+            (adapter as ResultAdapter).apply {
+                clear()
+                add(results)
+            }
+        }, 50)
+
     }
 }
+
+private const val TAG = "MemberStatisticBinding"

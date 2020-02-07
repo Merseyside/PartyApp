@@ -4,6 +4,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.annotation.StringRes
+import com.merseyside.mvvmcleanarch.BaseApplication
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.presentation.exception.ErrorMessageFactory
 import com.merseyside.mvvmcleanarch.presentation.model.ParcelableViewModel
@@ -13,14 +14,11 @@ import java.util.*
 
 abstract class BaseCalcViewModel(private val router: Router? = null) : ParcelableViewModel() {
 
-    protected val context = CalcApplication.getInstance()
-    protected val errorMsgCreator = ErrorMessageFactory(context)
+    final override val application = CalcApplication.getInstance()
+
+    protected val errorMsgCreator = ErrorMessageFactory(application)
 
     val interstitialLiveEvent = SingleLiveEvent<Boolean>()
-
-    protected fun getString(@StringRes id: Int, vararg args: String): String {
-        return getString(context, id, *args)
-    }
 
     open fun goBack() {
         router?.exit()
@@ -33,7 +31,7 @@ abstract class BaseCalcViewModel(private val router: Router? = null) : Parcelabl
     override fun updateLanguage(context: Context) {}
 
     fun logEvent(event: String, bundle: Bundle) {
-        context.logFirebaseEvent(event, bundle)
+        application.logFirebaseEvent(event, bundle)
     }
 
     companion object {

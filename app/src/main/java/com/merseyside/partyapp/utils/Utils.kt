@@ -17,6 +17,7 @@ import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.data.entity.Statistic
+import java.lang.IllegalStateException
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
@@ -27,7 +28,7 @@ import kotlin.math.abs
 @SuppressLint("SimpleDateFormat")
 fun getDateTime(timestamp: Long): String? {
     return try {
-        val sdf = SimpleDateFormat("dd MMM EEEE", getCurrentLocale(CalcApplication.getInstance().getContext()))
+        val sdf = SimpleDateFormat("dd MMM EEEE", CalcApplication.getInstance().getLocale())
         val netDate = Date(timestamp)
         sdf.format(netDate)
     } catch (e: Exception) {
@@ -37,7 +38,7 @@ fun getDateTime(timestamp: Long): String? {
 
 fun getHoursDateTime(timestamp: Long): String? {
     return try {
-        val sdf = SimpleDateFormat("HH:mm", getCurrentLocale(CalcApplication.getInstance().getContext()))
+        val sdf = SimpleDateFormat("HH:mm", CalcApplication.getInstance().getLocale())
         val netDate = Date(timestamp)
         sdf.format(netDate)
     } catch (e: Exception) {
@@ -90,6 +91,7 @@ fun convertPercentToInt(percentStr: String): Int {
 }
 
 fun getHumanReadablePercents(percentFloat: Float): String {
+
     val bigInteger = BigDecimal((percentFloat * 100).toDouble())
 
     return doubleToStringPrice(bigInteger.setScale(2, RoundingMode.HALF_UP).toDouble())
@@ -106,7 +108,7 @@ fun isNameValid(name: String?): Boolean {
         isNameValid(name.drop(1))
     }
 
-    return name.length in 3..24
+    return name.length in 3..32
 }
 
 @Throws(NumberFormatException::class)
@@ -174,16 +176,26 @@ fun getCircleText(str: String): String {
 
     if (words.size >= 2) {
         (0..1).forEach { index ->
-            text.append(words[index][0])
+            if (words[index].isNotEmpty()) {
+                val char = words[index][0]
+                if (char.isLetter()) {
+                    text.append(char)
+                }
+            }
         }
     } else {
-        text.append(words[0][0])
+        val char = str.first()
+
+        if (char.isLetter()) {
+            text.append(char)
+        }
     }
 
-    return text.toString().toUpperCase(getCurrentLocale(CalcApplication.getInstance().getContext()))
+    return text.toString().toUpperCase(getCurrentLocale(CalcApplication.getInstance().context))
 }
 
-fun getShareableStatistic(context: Context, statistic: Statistic): String {
+fun getShareableStatistic(statistic: Statistic): String {
+    val context = CalcApplication.getInstance().context
     val builder = StringBuilder()
 
     fun getString(@StringRes resId: Int, vararg args: String): String {
@@ -199,10 +211,16 @@ fun getShareableStatistic(context: Context, statistic: Statistic): String {
         }
     }
 
+    builder.append(getString(R.string.powered))
+
     return builder.toString()
 }
 
-fun getMemberStatistic(context: Context, member: MemberStatistic, index: Int? = null): String {
+fun getMemberStatistic(
+    context: Context = CalcApplication.getInstance().context,
+    member: MemberStatistic,
+    index: Int? = null
+): String {
     fun getString(@StringRes resId: Int, vararg args: String): String {
         return context.getString(resId, *args)
     }
@@ -279,7 +297,7 @@ fun convertPercentToPrice(percent: Float, total: Double): Double {
     return bigInteger.setScale(2, RoundingMode.HALF_UP).toDouble()
 }
 
-@Throws(NumberFormatException::class)
+@Throws(NumberFormatException::class, IllegalStateException::class)
 fun checkPriceForCalculation(expression: String): String? {
     var formattedExpression = expression
 
@@ -293,6 +311,7 @@ fun checkPriceForCalculation(expression: String): String? {
         formattedExpression = formattedExpression.dropLast(1)
 
         calculate(formattedExpression)?.let {
+            if (convertPriceToDouble(it) < 0) throw IllegalStateException("Price can not be negative")
             return it + endingOperator
         }
     }
@@ -300,30 +319,57 @@ fun checkPriceForCalculation(expression: String): String? {
     return null
 }
 
+@Throws(NumberFormatException::class)
 fun calculate(expr: String): String? {
     return if (expr.contains("[*+\\-/]".toRegex())) {
 
-        val splits = expr.split("[*+\\-/]".toRegex())
+        var isFirstNegative = false
+        val splits = expr.split("[*+\\-/]".toRegex()).mapNotNull {
+            if (it.isNotEmpty()) {
+                it
+            } else {
+                isFirstNegative = true
+                null
+            }
+        }.toMutableList()
 
-        val result: Double = when {
-            expr.contains("*") -> {
-                splits[0].toDouble() * splits[1].toDouble()
+        if (splits.size == 2) {
+            if (isFirstNegative) splits[0] = "-${splits[0]}"
+
+            Log.d(TAG, "here1")
+            val result: Double = when {
+                expr.contains("*") -> {
+                    splits[0].toDouble() * splits[1].toDouble()
+                }
+                expr.contains("+") -> {
+                    splits[0].toDouble() + splits[1].toDouble()
+                }
+                expr.contains("-") -> {
+                    splits[0].toDouble() - splits[1].toDouble()
+                }
+                else -> {
+                    splits[0].toDouble() / splits[1].toDouble()
+                }
             }
-            expr.contains("+") -> {
-                splits[0].toDouble() + splits[1].toDouble()
-            }
-            expr.contains("-") -> {
-                splits[0].toDouble() - splits[1].toDouble()
-            }
-            else -> {
-                splits[0].toDouble() / splits[1].toDouble()
-            }
+
+            return doubleToStringPrice(result)
+        } else {
+            Log.d(TAG, "here")
+            throw NumberFormatException()
         }
-
-        return doubleToStringPrice(result)
     } else {
         null
     }
+}
+
+
+fun generateId(): String {
+    val charPool : List<Char> = ('0'..'9').toList()
+
+    return (1..10)
+        .map { kotlin.random.Random.nextInt(0, charPool.size) }
+        .map(charPool::get)
+        .joinToString("")
 }
 
 private const val TAG = "Utils"

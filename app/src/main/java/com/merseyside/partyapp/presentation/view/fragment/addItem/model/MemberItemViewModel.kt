@@ -64,6 +64,11 @@ class MemberItemViewModel(override var obj: Member) : BaseComparableAdapterViewM
         }
     }
 
+    @Bindable
+    fun getImageUrl(): String? {
+        return obj.avatarUrl
+    }
+
     companion object {
         private const val TAG = "StatisticMemberItem"
     }

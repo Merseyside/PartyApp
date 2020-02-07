@@ -16,7 +16,6 @@
         android:scaleType="fitXY"
         android:adjustViewBounds="true"
         tools:ignore="ContentDescription"
-        app:srcCompat="@drawable/ic_coctail"
-        android:layout_marginRight="@dimen/small_spacing"/>
+        app:srcCompat="@drawable/splash_screen" />
 
 </LinearLayout>

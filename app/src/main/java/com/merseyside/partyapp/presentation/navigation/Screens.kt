@@ -1,10 +1,7 @@
 package com.merseyside.partyapp.presentation.navigation
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.merseyside.partyapp.presentation.view.activity.main.view.MainActivity
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.view.AddEventFragment
 import com.merseyside.partyapp.presentation.view.fragment.addItem.view.AddItemFragment
 import com.merseyside.partyapp.presentation.view.fragment.eventList.view.EventListFragment

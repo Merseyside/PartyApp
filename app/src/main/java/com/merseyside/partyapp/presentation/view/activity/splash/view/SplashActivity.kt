@@ -1,21 +1,21 @@
 package com.merseyside.partyapp.presentation.view.activity.splash.view
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
-import com.google.android.play.core.install.model.ActivityResult.RESULT_IN_APP_UPDATE_FAILED
 import com.merseyside.mvvmcleanarch.presentation.activity.BaseActivity
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.view.activity.main.view.MainActivity
-import com.merseyside.partyapp.utils.UpdateManager
+import com.merseyside.mvvmcleanarch.utils.UpdateManager
 
 class SplashActivity : BaseActivity() {
 
-    private val updateManager: UpdateManager by lazy { UpdateManager(this) }
+    private val updateManager: UpdateManager by lazy {
+        UpdateManager(this)
+    }
 
     private lateinit var handler: Handler
 
@@ -26,10 +26,6 @@ class SplashActivity : BaseActivity() {
     override fun getToolbar(): Toolbar? {
         return null
     }
-
-    override fun handleError(throwable: Throwable) {}
-
-    override fun updateLanguage(context: Context) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,8 +85,10 @@ class SplashActivity : BaseActivity() {
     companion object {
         private const val TAG = "SplashActivity"
 
-        private const val SPLASH_TIME = 1000L
+        private const val SPLASH_TIME = 600L
 
-        private const val UPDATE_REQUEST_CODE = 72341
+        private const val UPDATE_REQUEST_CODE = 28100
+
+        private const val RESULT_IN_APP_UPDATE_FAILED = 1
     }
 }

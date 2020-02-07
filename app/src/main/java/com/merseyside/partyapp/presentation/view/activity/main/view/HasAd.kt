@@ -7,4 +7,6 @@ interface HasAd {
     fun showInterstitialAd()
 
     fun onRewardClosed()
+
+    fun setShowAdBanner(isShow: Boolean)
 }

@@ -1,13 +1,11 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMember.model
 
-import android.util.Log
 import androidx.annotation.AttrRes
 import androidx.databinding.Bindable
+import com.merseyside.mvvmcleanarch.presentation.model.BaseAdapterViewModel
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
-import com.merseyside.partyapp.data.entity.Order
-import com.merseyside.mvvmcleanarch.presentation.model.BaseAdapterViewModel
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.utils.doubleToStringPrice
 

@@ -14,10 +14,9 @@ fun setItems(recyclerView: RecyclerView, items: List<Item>?) {
         val itemsAdapter = recyclerView.adapter as ItemAdapter
         if (!items.isNullOrEmpty()) {
             if (itemsAdapter.isNotEmpty()) {
-                val request = UpdateRequest.Builder<Item>()
+                val request = UpdateRequest.Builder(items)
                     .isAddNew(true)
-                    .isDeleteOld(false)
-                    .setList(items)
+                    .isDeleteOld(true)
                     .build()
 
                 itemsAdapter.update(request)
@@ -25,7 +24,7 @@ fun setItems(recyclerView: RecyclerView, items: List<Item>?) {
                 itemsAdapter.add(items)
             }
         } else {
-            itemsAdapter.removeAll()
+            itemsAdapter.clear()
         }
     }
 }

@@ -4,15 +4,14 @@ apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'io.fabric'
 
-
 android {
     compileSdkVersion 29
     defaultConfig {
         applicationId "com.merseyside.partyapp"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 12
-        versionName "0.12"
+        versionCode 112
+        versionName "1.12"
         multiDexEnabled true
         vectorDrawables.useSupportLibrary true
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -28,7 +27,7 @@ android {
 
             applicationVariants.all { variant ->
                 variant.outputs.all { output ->
-                    def fileName = "vpn-debug.apk"
+                    def fileName = "calc-debug.apk"
                     outputFileName = fileName
                 }
             }
@@ -36,8 +35,16 @@ android {
 
         release {
             minifyEnabled true
+            shrinkResources true
             signingConfig signingConfigs.debug
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+
+            applicationVariants.all { variant ->
+                variant.outputs.all { output ->
+                    def fileName = "calc-release.apk"
+                    outputFileName = fileName
+                }
+            }
         }
     }
 
@@ -69,13 +76,12 @@ android {
 
 ext {
     appcompat = '1.1.0'
-    androidX = '1.1.0-alpha03'
-    materialDesign = '1.2.0-alpha02'
+    materialDesign = '1.2.0-alpha04'
     constraintLayout = '1.1.3'
     ktxCore = '1.1.0'
     lifecycleExtensions = '2.1.0'
 
-    coroutines = '1.3.2'
+    coroutines = '1.3.3'
 
     dagger2 = '2.25.2'
 
@@ -86,13 +92,15 @@ ext {
     cicerone = '5.0.0'
 
     serviceAds = '18.3.0'
-    firebase = '17.2.1'
+    firebase = '17.2.2'
     crashlytic = '2.10.1'
     playCore = '1.6.4'
 
+    circleImageView = '3.0.1'
+
     horizontalSelectorView = '1.13'
 
-    mvvmCleanArchLibrary = '1.33'
+    mvvmCleanArchLibrary = '1.35'
 }
 
 dependencies {
@@ -130,7 +138,8 @@ dependencies {
     implementation "com.google.firebase:firebase-core:$firebase"
     implementation "com.google.firebase:firebase-analytics:$firebase"
     implementation "com.crashlytics.sdk.android:crashlytics:$crashlytic"
-    implementation "com.google.android.play:core:$playCore"
+
+    implementation "de.hdodenhof:circleimageview:$circleImageView"
 
     //implementation "com.github.Merseyside.mvvm-clean-arch-library:library:$mvvmCleanArchLibrary"
 }

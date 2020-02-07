@@ -116,7 +116,6 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
             when (item.itemId) {
                 R.id.action_share -> {
                     shareStatistic(getShareableStatistic(
-                        CalcApplication.getInstance().getContext(),
                         statistic
                     ))
 

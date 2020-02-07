@@ -22,20 +22,20 @@
     <string name="not_chosen">Not chosen</string>
 
     <string name="event_title">Event name</string>
-    <string name="choose_members">For whom?</string>
+    <string name="with_whom_share">With whom do we share?</string>
     <string name="choose_pays_member">Who pays?</string>
     <string name="all_orders">All member orders</string>
     <string name="result">Result</string>
     <string name="add_members">Add item members</string>
-    <string name="notes_hint">Notes</string>
+    <string name="notes_hint">Notes(opt.)</string>
 
     <string name="item_title">Item name</string>
-    <string name="item_description">Item description</string>
+    <string name="item_description">Item description(opt.)</string>
     <string name="item_total_price">Total price</string>
 
     <string name="empty_title_error">Please, fill event title correctly</string>
     <string name="members_error">Add at least two members</string>
-    <string name="name_error_msg">Name field can not be empty</string>
+    <string name="name_error_msg">Name field must be from 3 to 32 characters</string>
     <string name="price_error_msg">Please, fill price field correctly</string>
     <string name="members_error_msg">Please, choose at least one member</string>
 
@@ -56,7 +56,7 @@
     <string name="delete_event_title">Delete %1$s?</string>
     <string name="delete_event_message">Are you sure want to delete that event?</string>
     <string name="complete">Complete</string>
-    <string name="event_name_error_msg">Event name must be from 3 to 24 non-space characters</string>
+    <string name="event_name_error_msg">Event name must be from 3 to 32 non-space characters</string>
     <string name="notes_error_msg">Your notes must be no more than 512 non-space characters</string>
 
     <string name="delete_item_title">Delete %1$s?</string>
@@ -66,8 +66,10 @@
     <string name="owed">Owed</string>
     <string name="lend">Lend</string>
 
-    <string name="use_comma">Note: use comma to separate participants. Names must be unique.</string>
+    <string name="use_comma">Note: use new line or point to separate participants. Names must be unique.</string>
     <string name="enter_currency">Enter your currency</string>
+    <string name="fill_price_error">In order to use member share fill total price correctly</string>
+    <string name="currency_error">Currency must be less than 12 symbols</string>
 
     <string name="for_member">for %1$s</string>
     <string name="from_member">from %1$s</string>
@@ -86,9 +88,10 @@
 
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
+    <string name="select_all">Select all</string>
 
     <string name="wrong_format">Wrong number format</string>
-    <string name="operators_hint">You can use +-*/ if necessary</string>
+    <string name="operators_hint">Note: You can use +-*/ if necessary</string>
 
     <string name="members_price_too_much_error">The set prices for members are greater than the total cost</string>
     <string name="members_price_too_few_error">The set prices for members are less than the total cost</string>
@@ -102,6 +105,10 @@
     <string name="rate_description">Our team hopes you have the best experience from using Party Calculator! Please rate us on Google Play, also you can leave a comment with your wishes.</string>
     <string name="rate_yes">Go to Google play</string>
     <string name="rate_no">Not now</string>
+
+    <string name="powered">Statistic powered by "Party Calculator" app</string>
+
+    <string name="version">App version: %1$s</string>
 
     <string-array name="language_entries">
         <item>ic_english</item>

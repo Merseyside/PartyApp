@@ -44,6 +44,11 @@ class ItemViewModel(
         return isLastItem
     }
 
+    @Bindable
+    fun getTime(): String {
+        return getHoursDateTime(obj.timestamp)!!
+    }
+
     fun setLast(isLast: Boolean) {
         isLastItem = isLast
 

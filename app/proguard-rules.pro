@@ -29,3 +29,22 @@
 -keepclasseswithmembers class com.merseyside.partyapp.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
+
+-keep class org.apache.http.** {
+    *;
+}
+-keep class !com.merseyside.**
+
+-keep class com.crashlytics.** { *; }
+-dontwarn com.crashlytics.**
+
+-keepattributes SourceFile,LineNumberTable
+-keep public class * extends java.lang.Exception
+
+-optimizationpasses 5
+-dontusemixedcaseclassnames
+-dontskipnonpubliclibraryclasses
+-dontpreverify
+-verbose
+-optimizations !code/simplification/arithmetic,!field
+-ignorewarnings

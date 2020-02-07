@@ -17,7 +17,7 @@
 
     <dimen name="icon_size">24dp</dimen>
     <dimen name="corner_radius">16dp</dimen>
-    <dimen name="circle_size">48dp</dimen>
+    <dimen name="circle_size">64dp</dimen>
     <dimen name="app_bar_height">200dp</dimen>
     <dimen name="list_item_width">170dp</dimen>
     <dimen name="list_item_height">130dp</dimen>
@@ -26,7 +26,7 @@
     <dimen name="spinner_size">56dp</dimen>
     <dimen name="price_field_width">90dp</dimen>
     <dimen name="percent_field_width">70dp</dimen>
-    <dimen name="splash_image_size">200dp</dimen>
-    <dimen name="result_list_height">220dp</dimen>
+    <dimen name="splash_image_size">280dp</dimen>
+    <dimen name="result_list_height">160dp</dimen>
 
 </resources>

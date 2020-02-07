@@ -16,10 +16,9 @@ fun setEvents(recyclerView: RecyclerView, events: List<Event>?) {
         val eventsAdapter = recyclerView.adapter as EventAdapter
         if (!events!!.isNullOrEmpty()) {
             if (eventsAdapter.isNotEmpty()) {
-                val request = UpdateRequest.Builder<Event>()
+                val request = UpdateRequest.Builder(events)
                     .isAddNew(true)
                     .isDeleteOld(true)
-                    .setList(events)
                     .build()
 
                 eventsAdapter.update(request)
@@ -27,7 +26,7 @@ fun setEvents(recyclerView: RecyclerView, events: List<Event>?) {
                 eventsAdapter.add(events)
             }
         } else {
-            eventsAdapter.removeAll()
+            eventsAdapter.clear()
         }
     }
 }

@@ -39,7 +39,7 @@ class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
     override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
         super.onBindViewHolder(holder, position)
         
-        val item = getObjByPosition(position)
+        val item = getItemByPosition(position)
 
         holder.itemView.rootView.setOnLongClickListener {
             val popup = PopupMenu(holder.itemView.context, holder.itemView.findViewById(R.id.status_container))

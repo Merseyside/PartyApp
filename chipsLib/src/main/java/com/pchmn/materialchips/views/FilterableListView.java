@@ -7,6 +7,8 @@ import android.content.res.Configuration;
 import android.graphics.PorterDuff;
 import android.graphics.Rect;
 import android.os.Build;
+
+import androidx.annotation.IdRes;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -16,6 +18,8 @@ import android.view.ViewGroup;
 import android.view.ViewTreeObserver;
 import android.view.animation.AlphaAnimation;
 import android.widget.Filter;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
 import com.pchmn.materialchips.ChipsInput;
@@ -41,10 +45,19 @@ public class FilterableListView extends RelativeLayout {
     // others
     private ChipsInput mChipsInput;
 
+    private @IdRes int containerId;
+
+    private boolean isBuildOver = false;
+
     public FilterableListView(Context context) {
         super(context);
         mContext = context;
+
         init();
+    }
+
+    public void setContainer(@IdRes int containerId) {
+        this.containerId = containerId;
     }
 
     private void init() {
@@ -76,44 +89,61 @@ public class FilterableListView extends RelativeLayout {
             @Override
             public void onGlobalLayout() {
 
+                if (getParent() != null) {
+                    ((ViewGroup)getParent()).removeView(FilterableListView.this);
+                }
                 // position
-                ViewGroup rootView = (ViewGroup) mChipsInput.getRootView();
+                ViewGroup rootView;
 
-                // size
-                RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                        ViewUtil.getWindowWidth(mContext),
-                        ViewGroup.LayoutParams.MATCH_PARENT);
-
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-
-                if(mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT){
-                    layoutParams.bottomMargin = ViewUtil.getNavBarHeight(mContext);
+                if (containerId == 0) {
+                    rootView = (ViewGroup) mChipsInput.getRootView();
+                } else {
+                    rootView = mChipsInput.getRootView().findViewById(containerId);
                 }
 
+                if (rootView != null) {
 
-                // add view
-                rootView.addView(FilterableListView.this, layoutParams);
+                    // size
+                    RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
+                            ViewUtil.getWindowWidth(mContext),
+                            ViewGroup.LayoutParams.MATCH_PARENT);
 
-                // remove the listener:
-                if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
-                    mChipsInput.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                } else {
-                    mChipsInput.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                    layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+
+                    if (mContext.getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+                        layoutParams.bottomMargin = ViewUtil.getNavBarHeight(mContext);
+                    }
+
+
+                    // add view
+                    rootView.addView(FilterableListView.this, layoutParams);
+
+                    // remove the listener:
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN) {
+                        mChipsInput.getViewTreeObserver().removeGlobalOnLayoutListener(this);
+                    } else {
+                        mChipsInput.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    }
+
+                    isBuildOver = true;
                 }
             }
-
         });
+
+
     }
 
     public void filterList(CharSequence text) {
-        mAdapter.getFilter().filter(text, count -> {
-            // show if there are results
-            if(mAdapter.getItemCount() > 0)
-                fadeIn();
-            else
-                fadeOut();
-        });
+        if (isBuildOver) {
+            mAdapter.getFilter().filter(text, count -> {
+                // show if there are results
+                if (mAdapter.getItemCount() > 0)
+                    fadeIn();
+                else
+                    fadeOut();
+            });
+        }
     }
 
     /**
@@ -124,15 +154,29 @@ public class FilterableListView extends RelativeLayout {
             return;
 
         // get visible window (keyboard shown)
-        final View rootView = getRootView();
-        Rect r = new Rect();
-        rootView.getWindowVisibleDisplayFrame(r);
-        int[] coord = new int[2];
-        mChipsInput.getLocationInWindow(coord);
+        final View rootView;
+
+        if (containerId == 0) {
+            rootView = getRootView();
+        } else {
+            rootView = getRootView().findViewById(containerId);
+        }
+
+        int[] rootCoord = calculateViewCoords(getRootView(), rootView);
+        int[] globalRootCoords = calculateViewCoords(getRootView(), mChipsInput);
+
         ViewGroup.MarginLayoutParams layoutParams = (MarginLayoutParams) getLayoutParams();
-        layoutParams.topMargin = coord[1] + mChipsInput.getHeight();
-        // height of the keyboard
-        layoutParams.bottomMargin = rootView.getHeight() - r.bottom;
+        if (globalRootCoords[1] < rootView.getMeasuredHeight() / 2) { // to bottom
+            Rect rect = new Rect();
+            int[] coord = calculateViewCoords(rootView, mChipsInput, rect);
+
+            layoutParams.topMargin = coord[1] - rootCoord[1] + mChipsInput.getHeight();
+            layoutParams.bottomMargin = getRootView().getHeight() - rect.bottom;
+        } else { // to top
+
+            layoutParams.bottomMargin = getRootView().getHeight() - globalRootCoords[1] - mChipsInput.getHeight();
+        }
+
         setLayoutParams(layoutParams);
 
         AlphaAnimation anim = new AlphaAnimation(0.0f, 1.0f);
@@ -140,6 +184,18 @@ public class FilterableListView extends RelativeLayout {
         startAnimation(anim);
         setVisibility(VISIBLE);
 
+    }
+
+    private int[] calculateViewCoords(View rootView, View view) {
+        return calculateViewCoords(rootView, view, new Rect());
+    }
+
+    private int[] calculateViewCoords(View rootView, View view, Rect rect) {
+        rootView.getWindowVisibleDisplayFrame(rect);
+        int[] coords = new int[2];
+        view.getLocationInWindow(coords);
+
+        return coords;
     }
 
     /**
@@ -153,5 +209,10 @@ public class FilterableListView extends RelativeLayout {
         anim.setDuration(200);
         startAnimation(anim);
         setVisibility(GONE);
+    }
+
+    float convertDpToPixel(float dp) {
+        float density = getContext().getResources().getDisplayMetrics().density;
+        return dp / density;
     }
 }

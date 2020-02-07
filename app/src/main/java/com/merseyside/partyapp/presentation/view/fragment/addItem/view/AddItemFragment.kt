@@ -18,6 +18,7 @@ import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewM
 import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberAdapter
 import com.merseyside.partyapp.presentation.view.fragment.addItem.model.AddItemViewModel
 import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
+import com.merseyside.mvvmcleanarch.presentation.view.OnBackPressedListener
 
 class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewModel>() {
 
@@ -54,18 +55,12 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
         super.onCreate(savedInstanceState)
 
         sharedViewModel = ViewModelProviders.of(baseActivityView).get(SharedViewModel::class.java)
-
-        init()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         doLayout()
-    }
-
-    private fun init() {
-
     }
 
     private fun doLayout() {
@@ -88,6 +83,10 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
         } else {
             viewModel.init(sharedViewModel.eventContainer!!)
         }
+
+        binding.price.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) binding.price.setText("${binding.price.text}\n")
+        }
     }
 
     companion object {
@@ -101,4 +100,6 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
             return AddItemFragment()
         }
     }
+
+
 }

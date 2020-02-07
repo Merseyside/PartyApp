@@ -1,7 +1,6 @@
 package com.merseyside.partyapp.presentation.di.module
 
 import android.os.Bundle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.domain.interactor.AddEventInteractor
@@ -10,6 +9,7 @@ import com.merseyside.partyapp.domain.interactor.GetEventByIdInteractor
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
 import com.merseyside.mvvmcleanarch.presentation.fragment.BaseFragment
 import com.merseyside.mvvmcleanarch.presentation.model.BundleAwareViewModelFactory
+import com.merseyside.partyapp.domain.interactor.GetContactsInteractor
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router
@@ -25,9 +25,10 @@ class AddEventModule(
         router: Router,
         addEventUseCase: AddEventInteractor,
         getEventByIdUseCase: GetEventByIdInteractor,
-        closeUseCaseUseCase: CloseEventInteractor
+        closeUseCaseUseCase: CloseEventInteractor,
+        getContactsUseCase: GetContactsInteractor
         ): ViewModelProvider.Factory {
-        return AddEventViewModelProviderFactory(bundle, router, addEventUseCase, getEventByIdUseCase, closeUseCaseUseCase)
+        return AddEventViewModelProviderFactory(bundle, router, addEventUseCase, getEventByIdUseCase, closeUseCaseUseCase, getContactsUseCase)
     }
 
     @Provides
@@ -50,15 +51,21 @@ class AddEventModule(
         return CloseEventInteractor()
     }
 
+    @Provides
+    internal fun provideGetContactsInteractor(): GetContactsInteractor {
+        return GetContactsInteractor()
+    }
+
     class AddEventViewModelProviderFactory(
         bundle: Bundle?,
         private val router: Router,
         private val addEventUseCase: AddEventInteractor,
         private val getEventByIdUseCase: GetEventByIdInteractor,
-        private val closeUseCaseUseCase: CloseEventInteractor
+        private val closeUseCaseUseCase: CloseEventInteractor,
+        private val getContactsUseCase: GetContactsInteractor
     ) : BundleAwareViewModelFactory<AddEventViewModel>(bundle) {
         override fun getViewModel(): AddEventViewModel {
-            return AddEventViewModel(router, addEventUseCase, getEventByIdUseCase, closeUseCaseUseCase)
+            return AddEventViewModel(router, addEventUseCase, getEventByIdUseCase, closeUseCaseUseCase, getContactsUseCase)
         }
     }
 }

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context="com.merseyside.partyapp.presentation.view.fragment.addEvent.view.AddEventFragment">
+    <data>
+        <variable
+            name="viewModel"
+            type="com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:id="@+id/main_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/normal_spacing">
+
+        <androidx.cardview.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:contentPadding="@dimen/normal_spacing"
+            app:cardCornerRadius="@dimen/small_spacing"
+            android:layout_marginTop="@dimen/very_small_spacing"
+            android:layout_marginBottom="@dimen/very_small_spacing"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
+            style="@style/MyCardView">
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="@dimen/small_spacing">
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/OutlinedTextInputLayout"
+                        android:hint="@{viewModel.eventNameHint}"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="32"
+                        app:errorEnabled="@{!viewModel.eventNameErrorText.empty}"
+                        app:errorText="@{viewModel.eventNameErrorText}"
+                        app:boxBackgroundColor="?attr/colorOnBackground">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:text="@={viewModel.eventName}"
+                            style="@style/TextInputEditText" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        style="@style/OutlinedTextInputLayout"
+                        android:layout_marginTop="@dimen/normal_spacing"
+                        android:hint="@{viewModel.notesHint}"
+                        app:errorEnabled="true"
+                        app:counterEnabled="true"
+                        app:counterMaxLength="512"
+                        app:boxBackgroundColor="?attr/colorOnBackground">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionGo"
+                            android:text="@={viewModel.notes}"
+                            android:minLines="4"
+                            android:maxLines="8"
+                            style="@style/TextInputEditText"
+                            android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                </LinearLayout>
+
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:layout_marginStart="@dimen/small_spacing">
+
+                    <LinearLayout
+                        android:id="@+id/chips_container"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingStart="@dimen/small_spacing"
+                        android:paddingEnd="@dimen/small_spacing"
+                        android:paddingTop="@dimen/small_spacing">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.addItemsTitle}"
+                            android:layout_marginTop="@dimen/small_spacing"
+                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                        <com.pchmn.materialchips.ChipsInput
+                            android:id="@+id/chips"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:maxRows="4"
+                            app:chip_backgroundColor="?attr/colorPrimary"
+                            app:chip_hasAvatarIcon="true"
+                            app:chip_deletable="true"
+                            app:chip_labelColor="@color/white"
+                            app:chip_deleteIconColor="?attr/colorOnError"
+                            app:textColor="?attr/calcTextColor"
+                            android:layout_marginTop="@dimen/very_small_spacing"
+                            app:contacts="@{viewModel.contacts}"
+                            app:chip_filterable_container="@id/main_container"
+                            app:memberNames="@={viewModel.members}" />
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/colorError"
+                            android:text="@{viewModel.membersErrorText}"
+                            app:isVisibleOrGone="@{!viewModel.membersErrorText.empty}"/>
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:textColor="?attr/calcTextColor"
+                            android:text="@{viewModel.useCommaHint}" />
+
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/button_container"
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/chips_container"
+                        android:layout_marginTop="@dimen/normal_spacing">
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/save"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="@{viewModel.save}"
+                            android:onClick="@{view -> viewModel.onSaveClick()}"/>
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/close_event"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                            android:text="@{viewModel.closeEvent}"
+                            app:strokeWidth="1dp"
+                            app:strokeColor="?attr/colorPrimary"
+                            app:isVisibleOrGone="@{viewModel.closeEventVisibility}"/>
+
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
+
+    </RelativeLayout>
+
+
+</layout>

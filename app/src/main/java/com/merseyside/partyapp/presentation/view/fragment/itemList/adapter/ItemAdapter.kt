@@ -40,7 +40,7 @@ class ItemAdapter : BaseSortedAdapter<Item, ItemViewModel>() {
             setLast(position == itemCount - 1)
         }
 
-        val item = getObjByPosition(position)
+        val item = getItemByPosition(position)
 
         holder.itemView.rootView.setOnLongClickListener {
             val popup = PopupMenu(holder.itemView.context, holder.itemView.findViewById(R.id.title))

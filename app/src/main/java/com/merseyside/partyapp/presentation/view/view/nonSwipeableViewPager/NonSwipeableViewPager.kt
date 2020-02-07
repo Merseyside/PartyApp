@@ -6,8 +6,11 @@ import android.view.MotionEvent
 import android.view.animation.DecelerateInterpolator
 import android.widget.Scroller
 import androidx.viewpager.widget.ViewPager
+import com.merseyside.partyapp.R
 
 class NonSwipeableViewPager : ViewPager {
+
+    private var duration: Int? = DEFAULT_DURATION
 
     constructor(context: Context) : super(context) {
         setMyScroller()
@@ -15,6 +18,15 @@ class NonSwipeableViewPager : ViewPager {
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
         setMyScroller()
+    }
+
+    private fun loadAttributes(attrsSet: AttributeSet) {
+        val array =
+            context.theme.obtainStyledAttributes(attrsSet, R.styleable.NonSwipeableViewPager, 0, 0)
+
+        duration = array.getInt(R.styleable.NonSwipeableViewPager_duration, DEFAULT_DURATION)
+
+        array.recycle()
     }
 
     override fun onInterceptTouchEvent(event: MotionEvent): Boolean {
@@ -26,7 +38,6 @@ class NonSwipeableViewPager : ViewPager {
     }
 
     //down one is added for smooth scrolling
-
     private fun setMyScroller() {
         try {
             val viewPager = ViewPager::class.java
@@ -43,7 +54,11 @@ class NonSwipeableViewPager : ViewPager {
         Scroller(context, DecelerateInterpolator()) {
 
         override fun startScroll(startX: Int, startY: Int, dx: Int, dy: Int, duration: Int) {
-            super.startScroll(startX, startY, dx, dy, 350)
+            super.startScroll(startX, startY, dx, dy, this.duration)
         }
+    }
+
+    companion object {
+        private const val DEFAULT_DURATION = 350
     }
 }
