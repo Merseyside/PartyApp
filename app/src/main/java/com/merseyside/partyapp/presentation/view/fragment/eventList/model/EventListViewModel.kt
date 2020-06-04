@@ -1,6 +1,5 @@
 package com.merseyside.partyapp.presentation.view.fragment.eventList.model
 
-import android.content.Context
 import android.os.Bundle
 import androidx.databinding.ObservableField
 import com.merseyside.partyapp.R
@@ -18,10 +17,8 @@ class EventListViewModel(
     private val deleteEventUseCase: DeleteEventInteractor
 ) : BaseCalcViewModel(router) {
 
-    val eventsVisibility = ObservableField<Boolean>()
+    val eventsVisibility = ObservableField(true)
     val eventsContainer = ObservableField<List<Event>>()
-
-    val noEventHint = ObservableField<String>()
 
     override fun readFrom(bundle: Bundle) {}
 
@@ -29,12 +26,6 @@ class EventListViewModel(
 
     override fun dispose() {
         getEventsUseCase.cancel()
-    }
-
-    override fun updateLanguage(context: Context) {
-        super.updateLanguage(context)
-
-        noEventHint.set(context.getString(R.string.no_events))
     }
 
     fun showEvents() {
@@ -71,7 +62,7 @@ class EventListViewModel(
             onPositiveClick = {
                 deleteEventUseCase.execute(
                     params = DeleteEventInteractor.Params(id = event.id),
-                    onComplete = {showEvents()},
+                    onComplete = { showEvents() },
                     onError = {
                         showErrorMsg(errorMsgCreator.createErrorMsg(it))
                     }
@@ -86,9 +77,5 @@ class EventListViewModel(
 
     fun navigateToStatistic() {
         router.navigateTo(Screens.StatisticScreen())
-    }
-
-    companion object {
-        private const val TAG = "EventListViewModel"
     }
 }

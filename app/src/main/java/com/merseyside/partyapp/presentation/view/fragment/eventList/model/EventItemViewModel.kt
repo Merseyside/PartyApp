@@ -1,16 +1,19 @@
 package com.merseyside.partyapp.presentation.view.fragment.eventList.model
 
+import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.databinding.Bindable
+import com.merseyside.merseyLib.model.BaseComparableAdapterViewModel
+import com.merseyside.merseyLib.presentation.interfaces.IStringHelper
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.utils.getDateTime
-import com.merseyside.mvvmcleanarch.presentation.model.BaseComparableAdapterViewModel
 
-class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewModel<Event>(obj) {
+class EventItemViewModel(override var obj: Event)
+    : BaseComparableAdapterViewModel<Event>(obj), IStringHelper {
 
     override fun notifyUpdate() {
 
@@ -40,12 +43,12 @@ class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewMod
 
     @Bindable
     fun getMemberInfo(): String {
-        return "${CalcApplication.getInstance().getActualString(R.string.member_count)} ${obj.members.size}"
+        return "${getString(R.string.member_count)} ${obj.members.size}"
     }
 
     @Bindable
     fun getDate(): String {
-        return "${CalcApplication.getInstance().getActualString(R.string.date)} ${getDateTime(obj.timestamp)}"
+        return "${getString(R.string.date)} ${getDateTime(obj.timestamp)}"
     }
 
     @Bindable
@@ -67,10 +70,10 @@ class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewMod
 
         return when (obj.status) {
             Status.IN_PROCESS -> {
-                CalcApplication.getInstance().getActualString(R.string.in_progress)
+                getString(R.string.in_progress)
             }
 
-            else -> CalcApplication.getInstance().getActualString(R.string.completed)
+            else -> getString(R.string.completed)
         }
     }
 
@@ -89,6 +92,10 @@ class EventItemViewModel(override var obj: Event) : BaseComparableAdapterViewMod
 
     companion object {
         private const val TAG = "EventItemViewModel"
+    }
+
+    override fun getLocaleContext(): Context {
+        return CalcApplication.getInstance()
     }
 
 }

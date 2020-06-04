@@ -1,12 +1,12 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter
 
+import com.merseyside.merseyLib.adapters.BaseAdapter
+import com.merseyside.merseyLib.view.BaseBindingHolder
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.ResultItemViewModel
-import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
 import com.merseyside.partyapp.data.entity.Result
-import com.merseyside.mvvmcleanarch.presentation.view.BaseViewHolder
 
 class ResultAdapter : BaseAdapter<Result, ResultItemViewModel>() {
 
@@ -22,7 +22,7 @@ class ResultAdapter : BaseAdapter<Result, ResultItemViewModel>() {
         return ResultItemViewModel(obj, CalcApplication.getInstance().prefsHelper.getCurrency())
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseBindingHolder<ResultItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
 
         if (position == itemCount - 1) {

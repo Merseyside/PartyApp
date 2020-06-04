@@ -33,7 +33,7 @@
                 app:isVisibleOrGone="@{viewModel.eventsVisibility}">
             </androidx.recyclerview.widget.RecyclerView>
 
-            <TextView
+            <com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
@@ -43,7 +43,7 @@
                 android:textAlignment="center"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:minLines="2"
-                android:text="@{viewModel.noEventHint}"
+                android:text="@string/no_events"
                 app:isVisibleOrGone="@{!viewModel.eventsVisibility}"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>

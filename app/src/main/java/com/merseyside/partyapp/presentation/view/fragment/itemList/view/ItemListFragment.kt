@@ -2,12 +2,12 @@ package com.merseyside.partyapp.presentation.view.fragment.itemList.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.merseyside.merseyLib.adapters.BaseAdapter
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.Item
@@ -18,7 +18,6 @@ import com.merseyside.partyapp.presentation.di.module.ItemListModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.itemList.adapter.ItemAdapter
 import com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemListViewModel
-import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
 import java.lang.IllegalStateException
 
 class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewModel>() {
@@ -57,7 +56,7 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedViewModel = ViewModelProviders.of(baseActivityView).get(SharedViewModel::class.java)
+        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
 
         setHasOptionsMenu(true)
 
@@ -71,7 +70,7 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        baseActivityView.menuInflater.inflate(R.menu.menu_items,  menu)
+        baseActivity.menuInflater.inflate(R.menu.menu_items,  menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -126,8 +125,6 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
     }
 
     companion object {
-        private const val TAG = "ItemListFragment"
-
         fun newInstance(): ItemListFragment {
             return ItemListFragment()
         }

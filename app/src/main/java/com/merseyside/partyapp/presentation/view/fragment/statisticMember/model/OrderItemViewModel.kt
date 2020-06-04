@@ -1,18 +1,20 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMember.model
 
+import android.content.Context
 import androidx.annotation.AttrRes
 import androidx.databinding.Bindable
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.utils.doubleToStringPrice
-import com.merseyside.mvvmcleanarch.presentation.model.BaseAdapterViewModel
+import com.merseyside.merseyLib.model.BaseAdapterViewModel
+import com.merseyside.merseyLib.presentation.interfaces.IStringHelper
 
 
 class OrderItemViewModel(
     override var obj: Order,
     private val currency: String
-) : BaseAdapterViewModel<Order>(obj) {
+) : BaseAdapterViewModel<Order>(obj), IStringHelper {
 
     override fun areItemsTheSame(obj: Order): Boolean {
         return this.obj == obj
@@ -29,18 +31,18 @@ class OrderItemViewModel(
     fun getAnotherMember(): String {
         return when (obj) {
             is Order.OrderOwner -> {
-                CalcApplication.getInstance().getActualString(R.string.for_member, obj.member.name)
+                getString(R.string.for_member, obj.member.name)
             }
 
             else -> {
-                CalcApplication.getInstance().getActualString(R.string.from_member, obj.member.name)
+                getString(R.string.from_member, obj.member.name)
             }
         }
     }
 
     @Bindable
     fun getPrice(): String {
-        return CalcApplication.getInstance().getActualString(R.string.price, doubleToStringPrice(obj.price), currency)
+        return getString(R.string.price, doubleToStringPrice(obj.price), currency)
     }
 
     @Bindable
@@ -78,6 +80,7 @@ class OrderItemViewModel(
         }
     }
 
-
-
+    override fun getLocaleContext(): Context {
+        return CalcApplication.getInstance()
+    }
 }

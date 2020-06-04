@@ -1,23 +1,23 @@
 package com.merseyside.partyapp.utils
 
-import com.merseyside.mvvmcleanarch.utils.PreferenceManager
+import com.merseyside.merseyLib.utils.PreferenceManager
 
 class PrefsHelper(private val preferenceManager: PreferenceManager) {
 
     fun setCurrency(value : String) {
-        preferenceManager.savePreference(CURRENCY_KEY, value)
+        preferenceManager.put(CURRENCY_KEY, value)
     }
 
     fun getCurrency(): String {
-        return preferenceManager.getStringPreference(CURRENCY_KEY, "")
+        return preferenceManager.getString(CURRENCY_KEY, "")
     }
 
     fun isRated(): Boolean {
-        return preferenceManager.getBoolPreference(RATE_KEY, false)
+        return preferenceManager.getBool(RATE_KEY, false)
     }
 
     fun setRated(isRated: Boolean) {
-        preferenceManager.savePreference(RATE_KEY, isRated)
+        preferenceManager.put(RATE_KEY, isRated)
     }
 
     companion object {

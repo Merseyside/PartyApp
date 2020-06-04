@@ -41,7 +41,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.google.android.material.textfield.TextInputLayout
+                        <com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/OutlinedTextInputLayout"
@@ -49,7 +49,7 @@
                             app:counterMaxLength="32"
                             app:errorEnabled="@{!viewModel.nameErrorText.empty}"
                             app:errorText="@{viewModel.nameErrorText}"
-                            android:hint="@{viewModel.itemNameHint}">
+                            android:hint="@string/item_title">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
@@ -57,15 +57,15 @@
                                 android:text="@={viewModel.name}"
                                 style="@style/TextInputEditText" />
 
-                        </com.google.android.material.textfield.TextInputLayout>
+                        </com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputLayout
+                        <com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/OutlinedTextInputLayout"
                             android:gravity="top|start"
                             android:layout_marginTop="@dimen/small_spacing"
-                            android:hint="@{viewModel.itemDescriptionHint}">
+                            android:hint="@string/item_description">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
@@ -75,14 +75,14 @@
                                 android:maxLines="2"
                                 android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
 
-                        </com.google.android.material.textfield.TextInputLayout>
+                        </com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextInputLayout>
 
                         <LinearLayout
                             android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <com.google.android.material.textfield.TextInputLayout
+                            <com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextInputLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 style="@style/OutlinedTextInputLayout"
@@ -101,13 +101,13 @@
                                     android:inputType="phone"
                                     bind:text="@={viewModel.price}" />
 
-                            </com.google.android.material.textfield.TextInputLayout>
+                            </com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextInputLayout>
 
-                            <TextView
+                            <com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textColor="?attr/calcTextColor"
-                                android:text="@{viewModel.operatorsHint}" />
+                                android:text="@string/operators_hint" />
 
                         </LinearLayout>
 
@@ -133,10 +133,10 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
-                            <TextView
+                            <com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.whoPaysTitle}"
+                                android:text="@string/choose_pays_member"
                                 tools:text="@string/choose_pays_member"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
@@ -164,10 +164,10 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <TextView
+                            <com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.forWhomTitle}"
+                                android:text="@string/with_whom_share"
                                 android:layout_centerVertical="true"
                                 android:layout_toStartOf="@+id/select_all"
                                 android:layout_alignParentStart="true"
@@ -175,7 +175,7 @@
                                 tools:text="@string/with_whom_share"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
-                            <com.google.android.material.button.MaterialButton
+                            <com.merseyside.merseyLib.presentation.view.localeViews.LocaleButton
                                 android:id="@+id/select_all"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
@@ -183,7 +183,7 @@
                                 android:layout_alignParentEnd="true"
                                 android:minHeight="0dp"
                                 style="@style/Widget.MaterialComponents.Button.TextButton"
-                                android:text="@{viewModel.selectAllTitle}"
+                                android:text="@string/select_all"
                                 tools:text="@string/select_all"
                                 android:onClick="@{view -> viewModel.onSelectAllClick()}"/>
 
@@ -240,10 +240,10 @@
                             android:focusable="true"
                             android:gravity="center">
 
-                            <TextView
+                            <com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.additionalSettingsTitle}"
+                                android:text="@string/additional_settings"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
 
                             <ImageView
@@ -264,11 +264,11 @@
                             app:layout_constraintTop_toBottomOf="@+id/additional_container"
                             android:padding="@dimen/small_spacing">
 
-                            <TextView
+                            <com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                                android:text="@{viewModel.percentSettingsTitle}"/>
+                                android:text="@string/percent_setting"/>
 
                             <LinearLayout
                                 android:orientation="vertical"
@@ -300,7 +300,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="match_parent">
 
-                                        <com.google.android.material.textfield.TextInputEditText
+                                        <com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextInputEditText
                                             android:layout_width="@dimen/percent_field_width"
                                             android:layout_height="wrap_content"
                                             bind:text="@={viewModel.percent}"
@@ -382,9 +382,10 @@
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.save}"
+            android:text="@string/save"
             android:layout_alignParentBottom="true"
-            android:onClick="@{view -> viewModel.onSaveClick()}"/>
+            android:onClick="@{view -> viewModel.onSaveClick()}"
+            android:backgroundTint="?attr/colorPrimary" />
 
     </RelativeLayout>
 </layout>

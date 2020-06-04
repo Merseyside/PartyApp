@@ -4,18 +4,9 @@ import androidx.databinding.Bindable
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member
-import com.merseyside.mvvmcleanarch.presentation.adapter.SelectableItemInterface
-import com.merseyside.mvvmcleanarch.presentation.model.BaseComparableAdapterViewModel
+import com.merseyside.merseyLib.model.BaseSelectableAdapterViewModel
 
-class MemberItemViewModel(override var obj: Member) : BaseComparableAdapterViewModel<Member>(obj),
-    SelectableItemInterface {
-
-    override var isSelected: Boolean = false
-    set(value) {
-        field = value
-
-        notifyUpdate()
-    }
+class MemberItemViewModel(override var obj: Member) : BaseSelectableAdapterViewModel<Member>(obj) {
 
     override fun areContentsTheSame(obj: Member): Boolean {
         return this.obj == obj
@@ -47,7 +38,7 @@ class MemberItemViewModel(override var obj: Member) : BaseComparableAdapterViewM
     @Bindable
     @AttrRes
     fun getCircleTextColor(): Int {
-        return if (isSelected) {
+        return if (isSelected()) {
             R.attr.colorOnBackground
         } else {
             R.attr.colorOnSurface
@@ -57,7 +48,7 @@ class MemberItemViewModel(override var obj: Member) : BaseComparableAdapterViewM
     @Bindable
     @AttrRes
     fun getCircleColor(): Int {
-        return if (isSelected) {
+        return if (isSelected()) {
             R.attr.colorPrimary
         } else {
             R.attr.colorSecondaryVariant
@@ -71,5 +62,11 @@ class MemberItemViewModel(override var obj: Member) : BaseComparableAdapterViewM
 
     companion object {
         private const val TAG = "StatisticMemberItem"
+    }
+
+    override fun notifySelectEnabled(isEnabled: Boolean) {}
+
+    override fun onSelectedChanged(isSelected: Boolean) {
+        notifyUpdate()
     }
 }

@@ -52,7 +52,7 @@
             android:layout_height="0.5dp"
             android:background="@color/transparent_grey"
             android:layout_below="@id/title"
-            app:isVisibleOrGone="@{!obj.last}"/>
+            app:isVisibleOrGone="@{!obj.lastItem}"/>
 
     </LinearLayout>
 

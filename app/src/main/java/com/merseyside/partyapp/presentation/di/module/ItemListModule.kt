@@ -8,8 +8,8 @@ import com.merseyside.partyapp.domain.interactor.DeleteItemInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventByIdInteractor
 import com.merseyside.partyapp.domain.interactor.GetItemsByEventIdInteractor
 import com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemListViewModel
-import com.merseyside.mvvmcleanarch.presentation.fragment.BaseFragment
-import com.merseyside.mvvmcleanarch.presentation.model.BundleAwareViewModelFactory
+import com.merseyside.merseyLib.presentation.fragment.BaseFragment
+import com.merseyside.merseyLib.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router

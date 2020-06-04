@@ -50,7 +50,7 @@ class CircleTextView(context: Context, attributeSet: AttributeSet) : View(contex
         text = array.getString(R.styleable.CircleTextView_text) ?: text
         circleTextColor = array.getColor(R.styleable.CircleTextView_textColor, circleTextColor)
         textColor = array.getColor(R.styleable.CircleTextView_textColor, textColor)
-        textSize = array.getDimensionPixelSize(R.styleable.CircleTextView_textSize, 0)
+        textSize = array.getDimensionPixelSize(R.styleable.CircleTextView_android_textSize, 0)
         array.getString(R.styleable.CircleTextView_font)?.let {
             if (it.isNotEmpty()) {
                 font = Typeface.createFromAsset(context.assets, "fonts/$it")

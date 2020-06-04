@@ -3,7 +3,7 @@ package com.merseyside.partyapp.utils
 import android.widget.TextView
 import androidx.annotation.AttrRes
 import androidx.databinding.BindingAdapter
-import com.merseyside.mvvmcleanarch.utils.ext.getColorFromAttr
+import com.merseyside.merseyLib.utils.ext.getColorFromAttr
 
 
 @BindingAdapter("app:attrTextColor")

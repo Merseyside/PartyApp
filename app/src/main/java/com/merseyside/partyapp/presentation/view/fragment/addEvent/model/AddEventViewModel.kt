@@ -2,12 +2,12 @@ package com.merseyside.partyapp.presentation.view.fragment.addEvent.model
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
-import com.merseyside.mvvmcleanarch.data.serialization.deserialize
-import com.merseyside.mvvmcleanarch.data.serialization.serialize
+import com.merseyside.merseyLib.utils.mvvm.SingleLiveEvent
+import com.merseyside.merseyLib.utils.serialization.deserialize
+import com.merseyside.merseyLib.utils.serialization.serialize
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.entity.Status
@@ -16,12 +16,11 @@ import com.merseyside.partyapp.domain.interactor.CloseEventInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventByIdInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.isNameValid
-import com.merseyside.mvvmcleanarch.utils.SingleLiveEvent
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.Contact
 import com.merseyside.partyapp.domain.interactor.GetContactsInteractor
 import kotlinx.coroutines.cancel
-import kotlinx.serialization.list
+import kotlinx.serialization.builtins.ListSerializer
 import ru.terrakok.cicerone.Router
 
 class AddEventViewModel(
@@ -106,7 +105,7 @@ class AddEventViewModel(
 
                 eventName.set(bundle.getString(NAME_KEY))
                 notes.set(bundle.getString(NOTES_KEY))
-                members.set(getString(MEMBERS_KEY)!!.deserialize(Member.serializer().list))
+                members.set(getString(MEMBERS_KEY)!!.deserialize(ListSerializer(Member.serializer())))
             }
         }
     }
@@ -117,7 +116,7 @@ class AddEventViewModel(
             putString(NOTES_KEY, notes.get() ?: "")
             putString(
                 MEMBERS_KEY,
-                members.get()?.serialize(Member.serializer().list) ?: ""
+                members.get()?.serialize(ListSerializer(Member.serializer())) ?: ""
             )
 
             if (modeField == MODE_EDIT) {

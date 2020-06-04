@@ -6,7 +6,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.presentation.view.fragment.eventList.adapter.EventAdapter
-import com.merseyside.mvvmcleanarch.presentation.adapter.UpdateRequest
+import com.merseyside.merseyLib.adapters.UpdateRequest
 
 @BindingAdapter("app:events")
 fun setEvents(recyclerView: RecyclerView, events: List<Event>?) {

@@ -1,15 +1,15 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
-import com.merseyside.mvvmcleanarch.data.serialization.deserialize
-import com.merseyside.mvvmcleanarch.data.serialization.serialize
+import com.merseyside.merseyLib.utils.ext.isZero
+import com.merseyside.merseyLib.utils.randomBool
+import com.merseyside.merseyLib.utils.serialization.deserialize
+import com.merseyside.merseyLib.utils.serialization.serialize
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
@@ -18,13 +18,9 @@ import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.domain.interactor.AddItemInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.*
-import com.merseyside.mvvmcleanarch.utils.ext.isZero
-import com.merseyside.mvvmcleanarch.utils.randomTrueOrFalse
 import kotlinx.coroutines.cancel
-import kotlinx.serialization.ImplicitReflectionSerializer
-import kotlinx.serialization.list
+import kotlinx.serialization.builtins.ListSerializer
 import ru.terrakok.cicerone.Router
-import kotlin.NumberFormatException
 
 class AddItemViewModel(
     router: Router,
@@ -37,16 +33,13 @@ class AddItemViewModel(
 
     val name = ObservableField<String>()
     val nameErrorText = ObservableField("")
-    val itemNameHint = ObservableField<String>(getString(R.string.item_title))
 
     val price = ObservableField<String>("")
     val priceErrorText = ObservableField("")
     val isPriceValid = ObservableField<Boolean>(true)
     val priceHint = ObservableField<String>(getString(R.string.item_total_price))
-    val operatorsHint = ObservableField<String>(getString(R.string.operators_hint))
 
     val description = ObservableField<String>()
-    val itemDescriptionHint = ObservableField<String>(getString(R.string.item_description))
 
     val percent = ObservableField<String>()
     val percentHint = ObservableField<String>()
@@ -63,31 +56,8 @@ class AddItemViewModel(
     val spinnerSelectedMember = ObservableField<MemberInfo>()
 
     val payMember = ObservableField<Member>()
-    val whoPaysTitle = ObservableField<String>(getString(R.string.choose_pays_member))
-    val forWhomTitle = ObservableField<String>(getString(R.string.with_whom_share))
-    val selectAllTitle = ObservableField<String>(getString(R.string.select_all))
-    val additionalSettingsTitle = ObservableField<String>(getString(R.string.additional_settings))
     val additionalSettingsError = ObservableField<String>(getString(R.string.fill_price_error))
-    val percentSettingsTitle = ObservableField<String>(getString(R.string.percent_setting))
-    val save = ObservableField<String>(getString(R.string.save))
     val currency = ObservableField<String>()
-
-    override fun updateLanguage(context: Context) {
-        super.updateLanguage(context)
-
-        itemNameHint.set(context.getString(R.string.item_title))
-        itemDescriptionHint.set(context.getString(R.string.item_description))
-        priceHint.set(context.getString(R.string.item_total_price))
-        operatorsHint.set(context.getString(R.string.operators_hint))
-
-        whoPaysTitle.set(context.getString(R.string.choose_pays_member))
-        forWhomTitle.set(context.getString(R.string.with_whom_share))
-        selectAllTitle.set(context.getString(R.string.select_all))
-
-        additionalSettingsTitle.set(context.getString(R.string.additional_settings))
-        percentSettingsTitle.set(context.getString(R.string.percent_setting))
-        save.set(context.getString(R.string.save))
-    }
 
     init {
         name.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
@@ -400,7 +370,6 @@ class AddItemViewModel(
         }
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     override fun readFrom(bundle: Bundle) {
         bundle.apply {
             event = getString(EVENT_KEY)!!.deserialize()
@@ -411,12 +380,11 @@ class AddItemViewModel(
             description.set(getString(DESCRIPTION_KEY)!!)
             price.set(getString(PRICE_KEY)!!)
 
-            selectableMembers.set(getString(SELECTED_MEMBERS_KEY)!!.deserialize(MemberInfo.serializer().list))
+            selectableMembers.set(getString(SELECTED_MEMBERS_KEY)!!.deserialize(ListSerializer(MemberInfo.serializer())))
             payMember.set(getString(PAY_MEMBER_KEY)!!.deserialize())
         }
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     override fun writeTo(bundle: Bundle) {
         bundle.apply {
             putString(EVENT_KEY, event.serialize())
@@ -431,7 +399,7 @@ class AddItemViewModel(
             putString(PAY_MEMBER_KEY, (payMember.get() ?: event.members.first()).serialize())
 
             if (selectableMembers.get() != null) {
-                putString(SELECTED_MEMBERS_KEY, selectableMembers.get()!!.serialize(MemberInfo.serializer().list))
+                putString(SELECTED_MEMBERS_KEY, selectableMembers.get()!!.serialize(ListSerializer(MemberInfo.serializer())))
             }
         }
     }
@@ -505,15 +473,15 @@ class AddItemViewModel(
 
         if (containsZeroPercentMember) {
             if (totalPercent > 1f) {
-                showErrorMsg(getString(R.string.members_price_too_much_error), getString(R.string.reset), View.OnClickListener { resetMembersPercents() })
+                showErrorMsg(getString(R.string.members_price_too_much_error), getString(R.string.reset)) { resetMembersPercents() }
                 return
             }
         } else {
             if (totalPercent < 0.95f) {
-                showErrorMsg(getString(R.string.members_price_too_few_error), getString(R.string.reset), View.OnClickListener { resetMembersPercents() })
+                showErrorMsg(getString(R.string.members_price_too_few_error), getString(R.string.reset)) { resetMembersPercents() }
                 return
             } else if (totalPercent > 1f) {
-                showErrorMsg(getString(R.string.members_price_too_much_error), getString(R.string.reset), View.OnClickListener { resetMembersPercents() })
+                showErrorMsg(getString(R.string.members_price_too_much_error), getString(R.string.reset)) { resetMembersPercents() }
                 return
             }
         }
@@ -531,7 +499,7 @@ class AddItemViewModel(
             onComplete = {
                 logItemEvent(item?.id)
 
-                if (randomTrueOrFalse(0.25f)) showInterstitial()
+                if (randomBool(0.25f)) showInterstitial()
 
                 goBack()
             },

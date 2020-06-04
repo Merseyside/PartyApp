@@ -9,9 +9,8 @@ import android.view.View
 import androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
+import com.merseyside.merseyLib.adapters.BaseAdapter
 import com.merseyside.partyapp.BR
-import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.MemberStatistic
@@ -71,7 +70,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedViewModel = ViewModelProviders.of(baseActivityView).get(SharedViewModel::class.java)
+        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
 
         retainInstance = true
     }
@@ -83,7 +82,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
     }
 
     private fun doLayout() {
-        viewModel.memberStatisticLiveData.observe(this, memberStatisticObserver)
+        viewModel.memberStatisticLiveData.observe(viewLifecycleOwner, memberStatisticObserver)
         binding.memberList.adapter = adapter
 
         adapter.setOnItemClickListener(onMemberClickListener)
@@ -107,7 +106,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        baseActivityView.menuInflater.inflate(R.menu.menu_statistic, menu)
+        baseActivity.menuInflater.inflate(R.menu.menu_statistic, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

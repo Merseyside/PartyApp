@@ -5,9 +5,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.presentation.view.fragment.settings.model.SettingsViewModel
 import com.merseyside.partyapp.utils.PrefsHelper
-import com.merseyside.mvvmcleanarch.presentation.fragment.BaseFragment
-import com.merseyside.mvvmcleanarch.presentation.model.BundleAwareViewModelFactory
-import com.merseyside.mvvmcleanarch.utils.PreferenceManager
+import com.merseyside.merseyLib.presentation.fragment.BaseFragment
+import com.merseyside.merseyLib.presentation.model.BundleAwareViewModelFactory
+import com.merseyside.merseyLib.utils.PreferenceManager
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router

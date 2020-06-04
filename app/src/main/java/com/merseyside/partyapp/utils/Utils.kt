@@ -10,7 +10,7 @@ import android.util.Log
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
-import com.merseyside.mvvmcleanarch.utils.ext.isNotZero
+import com.merseyside.merseyLib.utils.ext.isNotZero
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.MemberStatistic

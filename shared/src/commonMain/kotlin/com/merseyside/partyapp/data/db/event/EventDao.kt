@@ -1,9 +1,9 @@
 package com.merseyside.partyapp.data.db.event
 
+import com.merseyside.kmpMerseyLib.utils.time.getCurrentTimeMillis
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.data.entity.mapper.EventDataMapper
-import com.merseyside.partyapp.utils.getTimestamp
 
 class EventDao(database: CalcDatabase) {
 
@@ -15,7 +15,7 @@ class EventDao(database: CalcDatabase) {
 
         val membersModel = MembersModel(members)
 
-        db.insertItem(name, membersModel, notes, Status.IN_PROCESS.toString(), getTimestamp())
+        db.insertItem(name, membersModel, notes, Status.IN_PROCESS.toString(), getCurrentTimeMillis())
 
         return getEventById(db.lastInsertRowId().executeAsOne())
     }

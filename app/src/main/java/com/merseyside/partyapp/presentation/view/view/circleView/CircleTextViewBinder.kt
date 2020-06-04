@@ -2,7 +2,7 @@ package com.merseyside.partyapp.presentation.view.view.circleView
 
 import androidx.annotation.AttrRes
 import androidx.databinding.BindingAdapter
-import com.merseyside.mvvmcleanarch.utils.ext.getColorFromAttr
+import com.merseyside.merseyLib.utils.ext.getColorFromAttr
 
 @BindingAdapter("app:circleText")
 fun setCircleText(view: CircleTextView, value: String?) {

@@ -5,9 +5,17 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.View
-import com.merseyside.mvvmcleanarch.utils.animation.AnimatorList
-import com.merseyside.mvvmcleanarch.utils.animation.ValueAnimatorHelper
-import com.merseyside.mvvmcleanarch.utils.randomTrueOrFalse
+import android.view.animation.TranslateAnimation
+import com.merseyside.merseyLib.AnimatorList
+import com.merseyside.merseyLib.Approach
+import com.merseyside.merseyLib.Axis
+import com.merseyside.merseyLib.MainPoint
+import com.merseyside.merseyLib.animator.AlphaAnimator
+import com.merseyside.merseyLib.animator.TransitionAnimator
+import com.merseyside.merseyLib.utils.delayedMainThread
+import com.merseyside.merseyLib.utils.mainThread
+import com.merseyside.merseyLib.utils.randomBool
+import com.merseyside.merseyLib.utils.time.Millis
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.MemberStatistic
@@ -21,6 +29,8 @@ import com.merseyside.partyapp.utils.getMemberStatistic
 class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding, StatisticMemberViewModel>() {
 
     private var statistic: MemberStatistic? = null
+
+    private var animatorList: AnimatorList? = null
 
     override fun hasTitleBackButton(): Boolean {
         return true
@@ -75,7 +85,7 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
                 member = viewModel.statistic
             ))
 
-            if (!prefsHelper.isRated() && randomTrueOrFalse(0.2f)) showRateUsDialog()
+            if (!prefsHelper.isRated() && randomBool(0.2f)) showRateUsDialog()
 
             logEvent("share_member", Bundle())
         }
@@ -84,71 +94,76 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
     }
 
     private fun startAnimation() {
-        Handler(Looper.getMainLooper()).postDelayed({
-            val animatorHelper = ValueAnimatorHelper()
+        if (animatorList == null) {
+            animatorList = AnimatorList(Approach.TOGETHER).apply {
+                addAnimator(
+                    TransitionAnimator(TransitionAnimator.Builder(
+                        view = binding.orders,
+                        duration = duration
+                    ).apply {
+                        setInPercents(
+                            0f to MainPoint.TOP_RIGHT,
+                            0f to MainPoint.TOP_LEFT,
+                            axis = Axis.X
+                        )
+                    })
+                )
 
-            val animatorList = AnimatorList(AnimatorList.Approach.TOGETHER)
+                addAnimator(
+                    AlphaAnimator(AlphaAnimator.Builder(
+                        view = binding.orders,
+                        duration = duration
+                    ).apply {
+                        values(0f, 1f)
+                    })
+                )
 
-            animatorList.addAnimator(
-                ValueAnimatorHelper.Builder(binding.orders)
-                    .translateAnimationPercent(
-                        pointPercents  = listOf(
-                            0f to ValueAnimatorHelper.MainPoint.TOP_RIGHT,
-                            0f to ValueAnimatorHelper.MainPoint.TOP_LEFT),
-                        animAxis  = ValueAnimatorHelper.AnimAxis.X_AXIS,
-                        duration  = 700
-                    ).build()
-            )
+                addAnimator(
+                    AlphaAnimator(AlphaAnimator.Builder(
+                        view = binding.stats,
+                        duration = duration
+                    ).apply {
+                        values(0f, 1f)
+                    })
+                )
 
-            animatorList.addAnimator(
-                ValueAnimatorHelper.Builder(binding.orders)
-                    .alphaAnimation(
-                        floats  = *floatArrayOf(0f, 1f),
-                        duration  = 700
-                    ).build()
-            )
+                addAnimator(
+                    TransitionAnimator(TransitionAnimator.Builder(
+                        view = binding.results,
+                        duration = duration
+                    ).apply {
+                        setInPercents(
+                            1f to MainPoint.TOP_LEFT,
+                            0f to MainPoint.TOP_LEFT,
+                            axis = Axis.Y
+                        )
+                    })
+                )
 
-            animatorList.addAnimator(
-                ValueAnimatorHelper.Builder(binding.stats)
-                    .alphaAnimation(
-                        floats  = *floatArrayOf(0f, 1f),
-                        duration  = 700
-                    ).build()
-            )
+                addAnimator(
+                    AlphaAnimator(AlphaAnimator.Builder(
+                        view = binding.results,
+                        duration = duration
+                    ).apply {
+                        values(0f, 1f)
+                    })
+                )
+            }
+        }
 
-            animatorList.addAnimator(
-                ValueAnimatorHelper.Builder(binding.results)
-                    .translateAnimationPercent(
-                        pointPercents  = listOf(
-                            1f to ValueAnimatorHelper.MainPoint.TOP_LEFT,
-                            0f to ValueAnimatorHelper.MainPoint.TOP_LEFT),
-                        animAxis  = ValueAnimatorHelper.AnimAxis.Y_AXIS,
-                        duration  = 700
-                    ).build()
-            )
-
-            animatorList.addAnimator(
-                ValueAnimatorHelper.Builder(binding.results)
-                    .alphaAnimation(
-                        floats  = *floatArrayOf(0f, 1f),
-                        duration  = 700
-                    ).build()
-            )
-
-            animatorHelper.addAnimatorList(animatorList)
-            animatorHelper.start()
-        }, 300)
-
-
+        delayedMainThread(Millis(300)) {
+            animatorList!!.start()
+        }
     }
 
     companion object {
-        private const val TAG = "StatisticMemberFragment"
 
         fun newInstance(statistic: MemberStatistic): StatisticMemberFragment {
             return StatisticMemberFragment().apply {
                 this.statistic = statistic
             }
         }
+
+        val duration = Millis(700)
     }
 }

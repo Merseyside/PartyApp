@@ -10,8 +10,8 @@ import androidx.annotation.CallSuper
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
-import com.merseyside.mvvmcleanarch.presentation.fragment.BaseMvvmFragment
-import com.merseyside.mvvmcleanarch.presentation.view.IFocusManager
+import com.merseyside.merseyLib.presentation.fragment.BaseVMFragment
+import com.merseyside.merseyLib.presentation.view.IFocusManager
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.view.activity.main.view.HasAd
@@ -19,7 +19,7 @@ import com.merseyside.partyapp.utils.PrefsHelper
 import javax.inject.Inject
 
 
-abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : BaseMvvmFragment<B, M>(), IFocusManager {
+abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : BaseVMFragment<B, M>(), IFocusManager {
 
     @Inject
     lateinit var prefsHelper: PrefsHelper

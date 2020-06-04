@@ -3,8 +3,8 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMember.model
 import android.content.Context
 import android.os.Bundle
 import androidx.databinding.ObservableField
-import com.merseyside.mvvmcleanarch.data.serialization.deserialize
-import com.merseyside.mvvmcleanarch.data.serialization.serialize
+import com.merseyside.merseyLib.utils.serialization.deserialize
+import com.merseyside.merseyLib.utils.serialization.serialize
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.data.entity.Order

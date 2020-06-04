@@ -6,10 +6,10 @@ import android.os.Handler
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
-import com.merseyside.mvvmcleanarch.presentation.activity.BaseActivity
+import com.merseyside.merseyLib.presentation.activity.BaseActivity
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.view.activity.main.view.MainActivity
-import com.merseyside.mvvmcleanarch.utils.UpdateManager
+import com.merseyside.merseyLib.utils.UpdateManager
 
 class SplashActivity : BaseActivity() {
 
@@ -27,6 +27,12 @@ class SplashActivity : BaseActivity() {
         return null
     }
 
+    override fun getFragmentContainer(): Int? {
+        return null
+    }
+
+    override fun performInjection(bundle: Bundle?) {}
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,7 +42,13 @@ class SplashActivity : BaseActivity() {
         )
 
         updateManager.setOnAppUpdateListener(object: UpdateManager.OnAppUpdateListener {
-            override fun updateAvailable() {
+
+            override fun immediateUpdateAvailable() {
+                stopTimer()
+                updateManager.startImmediateUpdate(UPDATE_REQUEST_CODE)
+            }
+
+            override fun flexibleUpdateAvailable() {
                 stopTimer()
                 updateManager.startImmediateUpdate(UPDATE_REQUEST_CODE)
             }
@@ -75,11 +87,6 @@ class SplashActivity : BaseActivity() {
                 else -> startTimer()
             }
         }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        updateManager.setOnAppUpdateListener(null)
     }
 
     companion object {

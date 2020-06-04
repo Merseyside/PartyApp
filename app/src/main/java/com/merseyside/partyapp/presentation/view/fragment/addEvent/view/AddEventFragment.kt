@@ -8,10 +8,15 @@ import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.merseyside.mvvmcleanarch.presentation.view.OnBackPressedListener
-import com.merseyside.mvvmcleanarch.utils.PermissionsManager
-import com.merseyside.mvvmcleanarch.utils.animation.AnimatorList
-import com.merseyside.mvvmcleanarch.utils.animation.ValueAnimatorHelper
+import com.merseyside.merseyLib.presentation.view.OnBackPressedListener
+import com.merseyside.merseyLib.AnimatorList
+import com.merseyside.merseyLib.Approach
+import com.merseyside.merseyLib.Axis
+import com.merseyside.merseyLib.MainPoint
+import com.merseyside.merseyLib.animator.AlphaAnimator
+import com.merseyside.merseyLib.animator.TransitionAnimator
+import com.merseyside.merseyLib.utils.PermissionManager
+import com.merseyside.merseyLib.utils.time.Millis
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -24,6 +29,8 @@ import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEven
 
 
 class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewModel>(), OnBackPressedListener {
+
+    var animatorList: AnimatorList? = null
 
     private val eventObserver = Observer<Event?> {
         if (it != null) {
@@ -76,7 +83,7 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedViewModel = ViewModelProviders.of(baseActivityView).get(SharedViewModel::class.java)
+        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
 
         init()
     }
@@ -117,49 +124,66 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
         }
 
         val permission = arrayOf(Manifest.permission.READ_CONTACTS)
-        if (PermissionsManager.isPermissionsGranted(baseActivityView, permission)) {
+        if (PermissionManager.isPermissionsGranted(baseActivity, *permission)) {
             getContacts()
         } else {
-            PermissionsManager.verifyStoragePermissions(this, permission, PERMISSION_CODE)
+            PermissionManager.requestPermissions(
+                this,
+                *permission,
+                requestCode = PERMISSION_CODE)
         }
     }
 
     private fun startAnimation() {
-        val animatorHelper = ValueAnimatorHelper()
 
-        val animatorList = AnimatorList(AnimatorList.Approach.TOGETHER)
+        if (animatorList == null) {
+            animatorList = AnimatorList(Approach.TOGETHER).apply {
+                addAnimator(
+                    TransitionAnimator(TransitionAnimator.Builder(
+                        view = binding.closeEvent,
+                        duration = duration
+                    ).apply {
+                        setInPercents(
+                            0f to MainPoint.TOP_LEFT,
+                            -1f to MainPoint.TOP_LEFT,
+                            axis = Axis.Y
+                        )
+                    })
+                )
 
-        animatorList.addAnimator(ValueAnimatorHelper.Builder(binding.closeEvent)
-            .translateAnimationPercent(
-                pointPercents  = listOf(
-                    0f to ValueAnimatorHelper.MainPoint.TOP_LEFT,
-                    -1f to ValueAnimatorHelper.MainPoint.TOP_LEFT),
-                animAxis  = ValueAnimatorHelper.AnimAxis.Y_AXIS,
-                duration  = 500
-            ).build()
-        )
+                addAnimator(
+                    AlphaAnimator(AlphaAnimator.Builder(
+                        view = binding.closeEvent,
+                        duration = Millis(190)
+                    ).apply {
+                        values(1f, 0f)
+                    })
+                )
 
-        animatorList.addAnimator(ValueAnimatorHelper.Builder(binding.closeEvent)
-            .alphaAnimation(
-                1f, 0f,
-                duration = 190
-            ).build())
+                addAnimator(
+                    AlphaAnimator(AlphaAnimator.Builder(
+                        view = binding.chipsContainer,
+                        duration = Millis(250)
+                    ).apply {
+                        values(1f, 0f)
+                    })
+                )
 
-        animatorList.addAnimator(ValueAnimatorHelper.Builder(binding.chipsContainer)
-            .alphaAnimation(
-                1f, 0f,
-                duration = 250
-            ).build())
+                addAnimator(
+                    TransitionAnimator(TransitionAnimator.Builder(
+                        view = binding.buttonContainer,
+                        duration = Millis(1000)
+                    ).apply {
+                        setInPercents(
+                            0f to MainPoint.TOP_LEFT,
+                            axis = Axis.Y
+                        )
+                    })
+                )
+            }
+        }
 
-        animatorList.addAnimator(ValueAnimatorHelper.Builder(binding.buttonContainer)
-            .translateAnimationPercent(
-                pointPercents = listOf(0f to ValueAnimatorHelper.MainPoint.TOP_LEFT),
-                animAxis  = ValueAnimatorHelper.AnimAxis.Y_AXIS,
-                duration  = 1000
-            ).build())
-
-        animatorHelper.addAnimatorList(animatorList)
-        animatorHelper.start()
+        animatorList!!.start()
 
         viewModel.closeEvent()
     }
@@ -182,7 +206,7 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
         binding.chips.editText.isEnabled = false
         viewModel.getContacts()
 
-        viewModel.contactsLoadedSingleEvent.observe(this, isContactsLoadedObserver)
+        viewModel.contactsLoadedSingleEvent.observe(viewLifecycleOwner, isContactsLoadedObserver)
     }
 
     override fun onDestroyView() {
@@ -195,11 +219,11 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     }
 
     companion object {
-        private const val TAG = "AddEventFragment"
-
         private const val PERMISSION_CODE = 23674
 
         const val KEY_EDIT_ID = "action"
+
+        val duration = Millis(500)
 
         fun newInstance(): AddEventFragment {
             return AddEventFragment()

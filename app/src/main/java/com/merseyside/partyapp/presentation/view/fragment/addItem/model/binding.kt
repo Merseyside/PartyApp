@@ -3,7 +3,6 @@ package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 import android.net.Uri
 import android.text.Editable
 import android.text.TextWatcher
-import android.util.Log
 import android.widget.AdapterView
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.databinding.BindingAdapter
@@ -15,12 +14,12 @@ import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberAdapter
 import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberSpinnerAdapter
 import com.pchmn.materialchips.ChipsInput
-import com.merseyside.mvvmcleanarch.presentation.adapter.BaseSelectableAdapter
 import android.view.View
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.annotation.AttrRes
-import com.merseyside.mvvmcleanarch.utils.ext.getColorFromAttr
+import com.merseyside.merseyLib.adapters.BaseSelectableAdapter
+import com.merseyside.merseyLib.utils.ext.getColorFromAttr
 import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.ContactChip
 import com.merseyside.partyapp.utils.setTextWithCursor
@@ -92,7 +91,8 @@ fun setPayMemberListener(recyclerView: RecyclerView, listener: InverseBindingLis
     recyclerView.adapter = adapter
 
     adapter.setOnItemSelectedListener(object: BaseSelectableAdapter.OnItemSelectedListener<Member> {
-        override fun onSelected(isSelected: Boolean, item: Member) {
+
+        override fun onSelected(item: Member, isSelected: Boolean, isSelectedByUser: Boolean) {
             if (isSelected) {
                 listener?.onChange()
             }

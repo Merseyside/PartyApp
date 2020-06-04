@@ -7,6 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.merseyside.merseyLib.adapters.BaseAdapter
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -17,8 +18,6 @@ import com.merseyside.partyapp.presentation.di.module.EventListModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.eventList.adapter.EventAdapter
 import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventListViewModel
-import com.merseyside.mvvmcleanarch.presentation.adapter.BaseAdapter
-import java.lang.IllegalStateException
 
 class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListViewModel>() {
 
@@ -69,7 +68,7 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
     }
 
     private fun init() {
-        sharedViewModel = ViewModelProviders.of(baseActivityView).get(SharedViewModel::class.java)
+        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
     }
 
     private fun doLayout() {
@@ -109,7 +108,7 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        baseActivityView.menuInflater.inflate(R.menu.menu_main,  menu)
+        baseActivity.menuInflater.inflate(R.menu.menu_main,  menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

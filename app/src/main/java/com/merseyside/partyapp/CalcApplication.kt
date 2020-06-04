@@ -7,7 +7,7 @@ import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
 import com.crashlytics.android.Crashlytics
 import com.crashlytics.android.core.CrashlyticsCore
 import com.google.firebase.analytics.FirebaseAnalytics
-import com.merseyside.mvvmcleanarch.BaseApplication
+import com.merseyside.merseyLib.BaseApplication
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.di.baseContentResolver
 import com.merseyside.partyapp.di.sqlDriver
@@ -71,7 +71,12 @@ class CalcApplication : BaseApplication() {
                     CalcDatabase.Schema.create(driver)
                 }
 
-                override fun onUpgrade(db: SupportSQLiteDatabase?, oldVersion: Int, newVersion: Int) {}
+                override fun onUpgrade(
+                    db: SupportSQLiteDatabase,
+                    oldVersion: Int,
+                    newVersion: Int
+                ) {}
+
             })
             .build()
 

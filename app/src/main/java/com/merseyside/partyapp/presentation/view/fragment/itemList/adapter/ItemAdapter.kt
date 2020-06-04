@@ -5,8 +5,8 @@ import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemViewModel
-import com.merseyside.mvvmcleanarch.presentation.adapter.BaseSortedAdapter
-import com.merseyside.mvvmcleanarch.presentation.view.BaseViewHolder
+import com.merseyside.merseyLib.adapters.BaseSortedAdapter
+import com.merseyside.merseyLib.view.BaseBindingHolder
 
 class ItemAdapter : BaseSortedAdapter<Item, ItemViewModel>() {
 
@@ -33,7 +33,7 @@ class ItemAdapter : BaseSortedAdapter<Item, ItemViewModel>() {
         this.optionsListener = listener
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: BaseBindingHolder<ItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
 
         getModelByPosition(position).apply {

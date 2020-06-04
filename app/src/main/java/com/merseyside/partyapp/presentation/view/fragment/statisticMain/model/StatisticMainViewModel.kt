@@ -2,11 +2,9 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMain.model
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
-import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
-import com.merseyside.mvvmcleanarch.utils.randomTrueOrFalse
+import com.merseyside.merseyLib.utils.randomBool
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
@@ -15,7 +13,6 @@ import com.merseyside.partyapp.data.entity.Statistic
 import com.merseyside.partyapp.domain.interactor.GetStatisticInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.doubleToStringPrice
-import com.merseyside.partyapp.utils.getHumanReadablePercents
 import kotlinx.coroutines.cancel
 import ru.terrakok.cicerone.Router
 
@@ -38,7 +35,7 @@ class StatisticMainViewModel(
     var event: Event? = null
 
     override fun goBack() {
-        if (randomTrueOrFalse(0.2f)) showInterstitial()
+        if (randomBool(0.2f)) showInterstitial()
         super.goBack()
     }
 
