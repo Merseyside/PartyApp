@@ -5,11 +5,11 @@ import androidx.annotation.AttrRes
 import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.merseyside.merseyLib.utils.ext.getColorFromAttr
 import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter.OrderAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter.ResultAdapter
+import com.merseyside.utils.ext.getColorFromAttr
 
 @BindingAdapter("app:attrCardBackgroundColor")
 fun setCardViewBackgroundColor(cardView: CardView, @AttrRes res: Int) {

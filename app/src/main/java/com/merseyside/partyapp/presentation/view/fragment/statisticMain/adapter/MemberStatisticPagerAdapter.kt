@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.view.StatisticMemberFragment
-import com.merseyside.merseyLib.adapters.BaseFragmentPagerAdapter
+import com.merseyside.adapters.base.BaseFragmentPagerAdapter
 
 class MemberStatisticPagerAdapter(
     fm: FragmentManager,

@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.merseyside.archy.presentation.view.circleView.CircleTextView
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.MemberInfo
-import com.merseyside.partyapp.presentation.view.view.circleView.CircleTextView
 import com.merseyside.partyapp.utils.getCircleText
 
 class MemberSpinnerAdapter (

@@ -2,7 +2,7 @@ package com.merseyside.partyapp.presentation.di.component
 
 import com.merseyside.partyapp.presentation.di.module.ItemListModule
 import com.merseyside.partyapp.presentation.view.fragment.itemList.view.ItemListFragment
-import com.merseyside.merseyLib.presentation.di.qualifiers.FragmentScope
+import com.merseyside.archy.presentation.di.qualifiers.FragmentScope
 import dagger.Component
 
 @FragmentScope

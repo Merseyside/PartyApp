@@ -7,7 +7,7 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.merseyside.merseyLib.adapters.BaseAdapter
+import com.merseyside.adapters.base.OnItemClickListener
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.Item
@@ -110,7 +110,7 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
         viewModel.init(sharedViewModel.eventContainer!!)
     }
 
-    private val onItemClickListener = object: BaseAdapter.OnItemClickListener<Item> {
+    private val onItemClickListener = object: OnItemClickListener<Item> {
         override fun onItemClicked(obj: Item) {
             sharedViewModel.itemContainer = obj
             viewModel.navigateToEditItemScreen()

@@ -2,20 +2,13 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMember.view
 
 import android.content.Context
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.View
-import android.view.animation.TranslateAnimation
-import com.merseyside.merseyLib.AnimatorList
-import com.merseyside.merseyLib.Approach
-import com.merseyside.merseyLib.Axis
-import com.merseyside.merseyLib.MainPoint
-import com.merseyside.merseyLib.animator.AlphaAnimator
-import com.merseyside.merseyLib.animator.TransitionAnimator
-import com.merseyside.merseyLib.utils.delayedMainThread
-import com.merseyside.merseyLib.utils.mainThread
-import com.merseyside.merseyLib.utils.randomBool
-import com.merseyside.merseyLib.utils.time.Millis
+import com.merseyside.animators.AnimatorList
+import com.merseyside.animators.Approach
+import com.merseyside.animators.Axis
+import com.merseyside.animators.MainPoint
+import com.merseyside.animators.animator.AlphaAnimator
+import com.merseyside.animators.animator.TransitionAnimator
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.MemberStatistic
@@ -25,6 +18,10 @@ import com.merseyside.partyapp.presentation.di.component.DaggerStatisticMemberCo
 import com.merseyside.partyapp.presentation.di.module.StatisticMemberModule
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.StatisticMemberViewModel
 import com.merseyside.partyapp.utils.getMemberStatistic
+import com.merseyside.utils.Logger
+import com.merseyside.utils.delayedMainThread
+import com.merseyside.utils.randomBool
+import com.merseyside.utils.time.Millis
 
 class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding, StatisticMemberViewModel>() {
 
@@ -59,20 +56,10 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
         return null
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        init()
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         doLayout()
-    }
-
-    private fun init() {
-
     }
 
     private fun doLayout() {
@@ -97,7 +84,8 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
         if (animatorList == null) {
             animatorList = AnimatorList(Approach.TOGETHER).apply {
                 addAnimator(
-                    TransitionAnimator(TransitionAnimator.Builder(
+                    TransitionAnimator(
+                        TransitionAnimator.Builder(
                         view = binding.orders,
                         duration = duration
                     ).apply {
@@ -119,7 +107,8 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
                 )
 
                 addAnimator(
-                    AlphaAnimator(AlphaAnimator.Builder(
+                    AlphaAnimator(
+                        AlphaAnimator.Builder(
                         view = binding.stats,
                         duration = duration
                     ).apply {
@@ -153,6 +142,7 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
 
         delayedMainThread(Millis(300)) {
             animatorList!!.start()
+            animatorList = null
         }
     }
 

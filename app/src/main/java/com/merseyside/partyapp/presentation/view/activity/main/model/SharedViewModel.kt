@@ -4,10 +4,10 @@ import android.content.Context
 import android.os.Bundle
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.item.Item
-import com.merseyside.merseyLib.presentation.model.ParcelableViewModel
-import com.merseyside.merseyLib.utils.serialization.deserialize
-import com.merseyside.merseyLib.utils.serialization.serialize
+import com.merseyside.archy.presentation.model.ParcelableViewModel
 import com.merseyside.partyapp.CalcApplication
+import com.merseyside.utils.serialization.deserialize
+import com.merseyside.utils.serialization.serialize
 
 class SharedViewModel : ParcelableViewModel() {
 

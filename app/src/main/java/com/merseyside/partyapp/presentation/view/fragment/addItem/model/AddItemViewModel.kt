@@ -6,10 +6,8 @@ import android.os.Looper
 import android.util.Log
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
-import com.merseyside.merseyLib.utils.ext.isZero
-import com.merseyside.merseyLib.utils.randomBool
-import com.merseyside.merseyLib.utils.serialization.deserialize
-import com.merseyside.merseyLib.utils.serialization.serialize
+import com.merseyside.kmpMerseyLib.utils.serialization.deserialize
+import com.merseyside.kmpMerseyLib.utils.serialization.serialize
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
@@ -18,6 +16,8 @@ import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.domain.interactor.AddItemInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.*
+import com.merseyside.utils.ext.isZero
+import com.merseyside.utils.randomBool
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.builtins.ListSerializer
 import ru.terrakok.cicerone.Router

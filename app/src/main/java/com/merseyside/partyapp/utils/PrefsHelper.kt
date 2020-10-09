@@ -1,6 +1,7 @@
 package com.merseyside.partyapp.utils
 
-import com.merseyside.merseyLib.utils.PreferenceManager
+import com.merseyside.utils.preferences.PreferenceManager
+
 
 class PrefsHelper(private val preferenceManager: PreferenceManager) {
 

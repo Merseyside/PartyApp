@@ -3,12 +3,12 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMember.model
 import android.content.Context
 import androidx.annotation.AttrRes
 import androidx.databinding.Bindable
+import com.merseyside.adapters.model.BaseAdapterViewModel
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.utils.doubleToStringPrice
-import com.merseyside.merseyLib.model.BaseAdapterViewModel
-import com.merseyside.merseyLib.presentation.interfaces.IStringHelper
+import com.merseyside.archy.presentation.interfaces.IStringHelper
 
 
 class OrderItemViewModel(

@@ -6,10 +6,10 @@ import android.os.Handler
 import android.util.Log
 import android.view.WindowManager
 import androidx.appcompat.widget.Toolbar
-import com.merseyside.merseyLib.presentation.activity.BaseActivity
+import com.merseyside.archy.presentation.activity.BaseActivity
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.view.activity.main.view.MainActivity
-import com.merseyside.merseyLib.utils.UpdateManager
+import com.merseyside.utils.UpdateManager
 
 class SplashActivity : BaseActivity() {
 

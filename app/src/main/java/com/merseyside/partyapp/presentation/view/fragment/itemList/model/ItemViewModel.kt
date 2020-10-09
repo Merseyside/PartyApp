@@ -1,7 +1,7 @@
 package com.merseyside.partyapp.presentation.view.fragment.itemList.model
 
 import androidx.databinding.Bindable
-import com.merseyside.merseyLib.model.BaseComparableAdapterViewModel
+import com.merseyside.adapters.model.BaseComparableAdapterViewModel
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.utils.getHoursDateTime

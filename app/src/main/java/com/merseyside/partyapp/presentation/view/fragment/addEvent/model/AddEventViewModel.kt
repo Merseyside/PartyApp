@@ -5,9 +5,6 @@ import android.os.Bundle
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
-import com.merseyside.merseyLib.utils.mvvm.SingleLiveEvent
-import com.merseyside.merseyLib.utils.serialization.deserialize
-import com.merseyside.merseyLib.utils.serialization.serialize
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.entity.Status
@@ -19,6 +16,9 @@ import com.merseyside.partyapp.utils.isNameValid
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.Contact
 import com.merseyside.partyapp.domain.interactor.GetContactsInteractor
+import com.merseyside.utils.mvvm.SingleLiveEvent
+import com.merseyside.utils.serialization.deserialize
+import com.merseyside.utils.serialization.serialize
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.builtins.ListSerializer
 import ru.terrakok.cicerone.Router

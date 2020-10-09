@@ -7,8 +7,8 @@ import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.domain.interactor.DeleteEventInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventsInteractor
 import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventListViewModel
-import com.merseyside.merseyLib.presentation.fragment.BaseFragment
-import com.merseyside.merseyLib.presentation.model.BundleAwareViewModelFactory
+import com.merseyside.archy.presentation.fragment.BaseFragment
+import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
 import ru.terrakok.cicerone.Router

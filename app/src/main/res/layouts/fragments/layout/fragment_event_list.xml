@@ -33,7 +33,7 @@
                 app:isVisibleOrGone="@{viewModel.eventsVisibility}">
             </androidx.recyclerview.widget.RecyclerView>
 
-            <com.merseyside.merseyLib.presentation.view.localeViews.LocaleTextView
+            <com.merseyside.archy.presentation.view.localeViews.LocaleTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"

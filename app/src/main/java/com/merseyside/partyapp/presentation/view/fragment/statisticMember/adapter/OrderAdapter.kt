@@ -1,6 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter
 
-import com.merseyside.merseyLib.adapters.BaseAdapter
+import com.merseyside.adapters.base.BaseAdapter
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R

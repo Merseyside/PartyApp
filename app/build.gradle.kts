@@ -99,7 +99,7 @@ val androidLibs = listOf(
 val modulez = listOf(
     ":shared",
     ":chipsLib",
-    LibraryModules.Android.cleanMvvmArch,
+    LibraryModules.Android.archy,
     LibraryModules.Android.adapters,
     LibraryModules.Android.animators,
     LibraryModules.Android.utils

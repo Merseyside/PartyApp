@@ -35,9 +35,7 @@ class ItemListViewModel(
         this.event = event
         eventStatus.set(event.status == Status.IN_PROCESS)
 
-        //if (itemsContainer.get() == null || itemsContainer.get()!!.isEmpty()) {
         getItemsById(event.id)
-        //}
     }
 
     override fun updateLanguage(context: Context) {

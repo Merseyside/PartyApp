@@ -8,7 +8,7 @@
     android:padding="@dimen/small_spacing"
     android:foreground="@drawable/card_view_ripple">
 
-    <com.merseyside.partyapp.presentation.view.view.circleView.CircleTextView
+    <com.merseyside.archy.presentation.view.circleView.CircleTextView
         android:id="@+id/circle"
         android:layout_width="@dimen/circle_size"
         android:layout_height="@dimen/circle_size"

@@ -1,12 +1,12 @@
 package com.merseyside.partyapp.presentation.view.fragment.eventList.adapter
 
 import androidx.appcompat.widget.PopupMenu
+import com.merseyside.adapters.base.BaseSortedAdapter
+import com.merseyside.adapters.view.TypedBindingHolder
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventItemViewModel
-import com.merseyside.merseyLib.adapters.BaseSortedAdapter
-import com.merseyside.merseyLib.view.BaseBindingHolder
 
 class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
 
@@ -36,7 +36,7 @@ class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
         this.optionsListener = listener
     }
 
-    override fun onBindViewHolder(holder: BaseBindingHolder<EventItemViewModel>, position: Int) {
+    override fun onBindViewHolder(holder: TypedBindingHolder<EventItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
         
         val item = getItemByPosition(position)

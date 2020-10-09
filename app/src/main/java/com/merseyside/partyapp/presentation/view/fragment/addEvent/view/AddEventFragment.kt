@@ -8,15 +8,13 @@ import android.view.View
 import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.merseyside.merseyLib.presentation.view.OnBackPressedListener
-import com.merseyside.merseyLib.AnimatorList
-import com.merseyside.merseyLib.Approach
-import com.merseyside.merseyLib.Axis
-import com.merseyside.merseyLib.MainPoint
-import com.merseyside.merseyLib.animator.AlphaAnimator
-import com.merseyside.merseyLib.animator.TransitionAnimator
-import com.merseyside.merseyLib.utils.PermissionManager
-import com.merseyside.merseyLib.utils.time.Millis
+import com.merseyside.animators.AnimatorList
+import com.merseyside.animators.Approach
+import com.merseyside.animators.Axis
+import com.merseyside.animators.MainPoint
+import com.merseyside.animators.animator.AlphaAnimator
+import com.merseyside.animators.animator.TransitionAnimator
+import com.merseyside.archy.presentation.view.OnBackPressedListener
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -26,6 +24,8 @@ import com.merseyside.partyapp.presentation.di.component.DaggerAddEventComponent
 import com.merseyside.partyapp.presentation.di.module.AddEventModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
+import com.merseyside.utils.PermissionManager
+import com.merseyside.utils.time.Millis
 
 
 class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewModel>(), OnBackPressedListener {
@@ -139,7 +139,8 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
         if (animatorList == null) {
             animatorList = AnimatorList(Approach.TOGETHER).apply {
                 addAnimator(
-                    TransitionAnimator(TransitionAnimator.Builder(
+                    TransitionAnimator(
+                        TransitionAnimator.Builder(
                         view = binding.closeEvent,
                         duration = duration
                     ).apply {
@@ -152,7 +153,8 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
                 )
 
                 addAnimator(
-                    AlphaAnimator(AlphaAnimator.Builder(
+                    AlphaAnimator(
+                        AlphaAnimator.Builder(
                         view = binding.closeEvent,
                         duration = Millis(190)
                     ).apply {

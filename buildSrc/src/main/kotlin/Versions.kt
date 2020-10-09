@@ -5,8 +5,8 @@ object Versions {
         const val targetSdk = 29
         const val minSdk = 17
 
-        const val version = "1.13"
-        const val versionCode = 113
+        const val version = "1.14"
+        const val versionCode = 114
     }
 
     const val kotlin = "1.3.72"
@@ -27,7 +27,7 @@ object Versions {
         }
 
         object Android {
-            const val kotlinStdLib = Versions.kotlin
+            const val kotlinStdLib = kotlin
             const val coroutines = "1.3.7"
             const val appCompat = "1.1.0"
             const val material = "1.2.0-beta01"
@@ -57,7 +57,7 @@ object Versions {
         }
 
         object MultiPlatform {
-            const val kotlinStdLib = Versions.kotlin
+            const val kotlinStdLib = kotlin
 
             const val coroutines = "1.3.5"
             const val serialization = "0.20.0"

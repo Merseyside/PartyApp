@@ -1,6 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.adapter
 
-import com.merseyside.merseyLib.adapters.BaseSelectableAdapter
+import com.merseyside.adapters.base.BaseSelectableAdapter
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member

@@ -18,11 +18,11 @@ import android.view.View
 import android.widget.EditText
 import android.widget.Spinner
 import androidx.annotation.AttrRes
-import com.merseyside.merseyLib.adapters.BaseSelectableAdapter
-import com.merseyside.merseyLib.utils.ext.getColorFromAttr
+import com.merseyside.adapters.base.BaseSelectableAdapter
 import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.ContactChip
 import com.merseyside.partyapp.utils.setTextWithCursor
+import com.merseyside.utils.ext.getColorFromAttr
 import de.hdodenhof.circleimageview.CircleImageView
 
 @BindingAdapter("app:selectableMembers")

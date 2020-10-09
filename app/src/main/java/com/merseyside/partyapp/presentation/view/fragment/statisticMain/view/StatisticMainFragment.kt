@@ -9,7 +9,8 @@ import android.view.View
 import androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
-import com.merseyside.merseyLib.adapters.BaseAdapter
+import com.merseyside.adapters.base.BaseAdapter
+import com.merseyside.adapters.base.OnItemClickListener
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member
@@ -90,7 +91,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         viewModel.initWithEvent(sharedViewModel.eventContainer)
     }
 
-    private val onMemberClickListener = object: BaseAdapter.OnItemClickListener<Member> {
+    private val onMemberClickListener = object: OnItemClickListener<Member> {
         override fun onItemClicked(obj: Member) {
             val position = adapter.getPositionOfObj(obj)
 

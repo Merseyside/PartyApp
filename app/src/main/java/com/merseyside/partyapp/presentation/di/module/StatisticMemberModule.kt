@@ -5,8 +5,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.StatisticMemberViewModel
-import com.merseyside.merseyLib.presentation.fragment.BaseFragment
-import com.merseyside.merseyLib.presentation.model.BundleAwareViewModelFactory
+import com.merseyside.archy.presentation.fragment.BaseFragment
+import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
 

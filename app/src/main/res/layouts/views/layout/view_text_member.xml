@@ -19,15 +19,15 @@
         android:foreground="@drawable/card_view_ripple"
         android:gravity="center">
 
-        <com.merseyside.partyapp.presentation.view.view.circleView.CircleTextView
+        <com.merseyside.archy.presentation.view.circleView.CircleTextView
             android:id="@+id/circle"
             android:layout_width="@dimen/circle_size"
             android:layout_height="@dimen/circle_size"
             android:layout_marginStart="@dimen/small_spacing"
             android:layout_marginEnd="@dimen/small_spacing"
-            app:circleColor="@{obj.circleColor}"
+            app:circleAttrColor="@{obj.circleColor}"
             app:circleText="@{obj.circleText}"
-            app:circleTextColor="@{obj.circleTextColor}" />
+            app:circleAttrTextColor="@{obj.circleTextColor}" />
 
         <TextView
             android:id="@+id/title"

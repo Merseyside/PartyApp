@@ -7,7 +7,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
-import com.merseyside.merseyLib.adapters.BaseAdapter
+import com.merseyside.adapters.base.OnItemClickListener
+import com.merseyside.adapters.base.BaseAdapter
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -94,7 +95,7 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
         viewModel.showEvents()
     }
 
-    private val onItemClickListener = object: BaseAdapter.OnItemClickListener<Event> {
+    private val onItemClickListener = object: OnItemClickListener<Event> {
         override fun onItemClicked(obj: Event) {
             sharedViewModel.eventContainer = obj
             viewModel.onEventClick()

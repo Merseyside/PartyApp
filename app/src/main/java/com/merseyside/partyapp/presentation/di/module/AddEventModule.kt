@@ -7,8 +7,8 @@ import com.merseyside.partyapp.domain.interactor.AddEventInteractor
 import com.merseyside.partyapp.domain.interactor.CloseEventInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventByIdInteractor
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
-import com.merseyside.merseyLib.presentation.fragment.BaseFragment
-import com.merseyside.merseyLib.presentation.model.BundleAwareViewModelFactory
+import com.merseyside.archy.presentation.fragment.BaseFragment
+import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
 import com.merseyside.partyapp.domain.interactor.GetContactsInteractor
 import dagger.Module
 import dagger.Provides

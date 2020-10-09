@@ -1,10 +1,10 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 import androidx.annotation.AttrRes
 import androidx.databinding.Bindable
+import com.merseyside.adapters.model.BaseSelectableAdapterViewModel
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member
-import com.merseyside.merseyLib.model.BaseSelectableAdapterViewModel
 
 class MemberItemViewModel(override var obj: Member) : BaseSelectableAdapterViewModel<Member>(obj) {
 

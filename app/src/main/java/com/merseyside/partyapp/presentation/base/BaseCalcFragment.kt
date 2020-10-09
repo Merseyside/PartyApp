@@ -10,8 +10,8 @@ import androidx.annotation.CallSuper
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
-import com.merseyside.merseyLib.presentation.fragment.BaseVMFragment
-import com.merseyside.merseyLib.presentation.view.IFocusManager
+import com.merseyside.archy.presentation.fragment.BaseVMFragment
+import com.merseyside.archy.presentation.view.IFocusManager
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.view.activity.main.view.HasAd

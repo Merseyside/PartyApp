@@ -6,8 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.domain.interactor.AddItemInteractor
 import com.merseyside.partyapp.presentation.view.fragment.addItem.model.AddItemViewModel
-import com.merseyside.merseyLib.presentation.fragment.BaseFragment
-import com.merseyside.merseyLib.presentation.model.BundleAwareViewModelFactory
+import com.merseyside.archy.presentation.fragment.BaseFragment
+import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
 import com.merseyside.partyapp.utils.PrefsHelper
 import dagger.Module
 import dagger.Provides

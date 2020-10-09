@@ -4,7 +4,7 @@ import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.presentation.view.fragment.itemList.adapter.ItemAdapter
-import com.merseyside.merseyLib.adapters.UpdateRequest
+import com.merseyside.adapters.base.UpdateRequest
 
 @BindingAdapter("app:items")
 fun setItems(recyclerView: RecyclerView, items: List<Item>?) {

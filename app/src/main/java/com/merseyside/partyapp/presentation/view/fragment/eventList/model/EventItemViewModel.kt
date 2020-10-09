@@ -3,8 +3,8 @@ package com.merseyside.partyapp.presentation.view.fragment.eventList.model
 import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.databinding.Bindable
-import com.merseyside.merseyLib.model.BaseComparableAdapterViewModel
-import com.merseyside.merseyLib.presentation.interfaces.IStringHelper
+import com.merseyside.adapters.model.BaseComparableAdapterViewModel
+import com.merseyside.archy.presentation.interfaces.IStringHelper
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
