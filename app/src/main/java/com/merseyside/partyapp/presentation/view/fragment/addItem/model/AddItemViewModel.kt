@@ -1,12 +1,13 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 
-import android.content.Context
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
+import com.merseyside.kmpMerseyLib.utils.serialization.deserialize
+import com.merseyside.kmpMerseyLib.utils.serialization.serialize
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
@@ -15,14 +16,15 @@ import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.domain.interactor.AddItemInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.*
-import com.upstream.basemvvmimpl.data.deserialize
-import com.upstream.basemvvmimpl.data.serialize
+import com.merseyside.utils.ext.isZero
+import com.merseyside.utils.randomBool
 import kotlinx.coroutines.cancel
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.builtins.ListSerializer
 import ru.terrakok.cicerone.Router
 
 class AddItemViewModel(
     router: Router,
+    private val prefsHelper: PrefsHelper,
     private val addItemUseCase: AddItemInteractor
 ) : BaseCalcViewModel(router) {
 
@@ -31,46 +33,31 @@ class AddItemViewModel(
 
     val name = ObservableField<String>()
     val nameErrorText = ObservableField("")
-    val itemNameHint = ObservableField<String>()
 
-    val price = ObservableField<String>()
+    val price = ObservableField<String>("")
     val priceErrorText = ObservableField("")
-    val priceHint = ObservableField<String>()
+    val isPriceValid = ObservableField<Boolean>(true)
+    val priceHint = ObservableField<String>(getString(R.string.item_total_price))
 
     val description = ObservableField<String>()
-    val itemDescriptionHint = ObservableField<String>()
 
     val percent = ObservableField<String>()
     val percentHint = ObservableField<String>()
+    val memberPrice = ObservableField<String>()
+    val memberPriceHint = ObservableField<String>()
+    private var memberPriceValue: String? = null
 
     val membersContainer = ObservableField<List<Member>>()
-    val selectableMembers = ObservableField<List<Pair<MemberInfo, Boolean>>>()
+    val selectableMembers = ObservableField<List<MemberInfo>>()
+    val selectedMembers = ObservableField<List<MemberInfo>>()
     val selectableMembersErrorText = ObservableField("")
 
     val spinnerSelectedMembers = ObservableField<List<MemberInfo>>()
     val spinnerSelectedMember = ObservableField<MemberInfo>()
 
     val payMember = ObservableField<Member>()
-    val whoPaysTitle = ObservableField<String>()
-    val forWhomTitle = ObservableField<String>()
-    val additionalSettingsTitle = ObservableField<String>()
-    val percentSettingsTitle = ObservableField<String>()
-    val save = ObservableField<String>()
-
-    override fun updateLanguage(context: Context) {
-        super.updateLanguage(context)
-
-        itemNameHint.set(context.getString(R.string.item_title))
-        itemDescriptionHint.set(context.getString(R.string.item_description))
-        priceHint.set(context.getString(R.string.item_total_price))
-
-        whoPaysTitle.set(context.getString(R.string.choose_pays_member))
-        forWhomTitle.set(context.getString(R.string.choose_members))
-
-        additionalSettingsTitle.set(context.getString(R.string.additional_settings))
-        percentSettingsTitle.set(context.getString(R.string.percent_setting))
-        save.set(context.getString(R.string.save))
-    }
+    val additionalSettingsError = ObservableField<String>(getString(R.string.fill_price_error))
+    val currency = ObservableField<String>()
 
     init {
         name.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
@@ -83,37 +70,108 @@ class AddItemViewModel(
 
         price.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
-                val priceStr = price.get()!!
+                val priceStr = price.get()
 
-                if (!priceErrorText.get().isNullOrEmpty()) {
-                    priceErrorText.set("")
-                }
+                if (!priceStr.isNullOrEmpty()) {
 
-                if (priceStr.contains(".")) {
-                    val subs = priceStr.split(".")
-                    if (subs.last().length > 2) {
-                        price.set(priceStr.dropLast(1))
+                    isPriceValid.set(isPriceValid(priceStr))
+
+                    if (!priceErrorText.get().isNullOrEmpty()) {
+                        priceErrorText.set("")
                     }
+
+                    try {
+                        val doublePrice = convertPriceToDouble(priceStr)
+                        if (percent.get().isNullOrEmpty()) {
+                            val percent = convertPercentToFloat(percentHint.get() ?: "0")
+
+                            memberPriceHint.set(doubleToStringPrice(convertPercentToPrice(percent, doublePrice)))
+                        } else {
+                            val percent = convertPercentToFloat(percent.get()!!)
+
+                            memberPrice.set(doubleToStringPrice(convertPercentToPrice(percent, doublePrice)))
+                        }
+
+                        additionalSettingsError.set("")
+
+                    } catch (e: NumberFormatException) {
+                        additionalSettingsError.set(getString(R.string.fill_price_error))
+                    }
+
+                    val calculatedPrice: String?
+
+                    if (priceStr.endsWith("\n") && priceStr.length > 1) {
+                        val formattedString = priceStr.dropLast(1)
+
+                        if (formattedString.last().isDigit()) {
+                            try {
+                                val result = calculate(formattedString)
+                                if (result != null) {
+                                    price.set(result)
+                                    return
+                                } else {
+                                    try {
+                                        price.set(doubleToStringPrice(formattedString.toDouble()))
+                                    } catch (e: NumberFormatException) {}
+                                }
+                            } catch (e: NumberFormatException) {
+                                priceErrorText.set(getString(R.string.price_error_msg))
+                            }
+                        } else {
+                            price.set(formattedString.dropLast(1)+"\n")
+                            return
+                        }
+
+                        price.set(formattedString)
+                    } else {
+
+                        try {
+                            calculatedPrice = checkPriceForCalculation(priceStr)
+                        } catch (e: NumberFormatException) {
+                            priceErrorText.set(getString(R.string.wrong_format))
+                            return
+                        } catch (e: IllegalStateException) {
+                            price.set(priceStr.dropLast(1))
+                            return
+                        }
+
+                        if (calculatedPrice != null) {
+                            price.set(calculatedPrice)
+                        } else {
+
+                            if (!priceStr.last().isDigit()) {
+
+                                if (priceStr.length > 1 && !priceStr.substring(priceStr.length - 2).toCharArray()[0].isDigit()) {
+                                    price.set(priceStr.dropLast(1))
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    priceErrorText.set(getString(R.string.wrong_format))
+                    additionalSettingsError.set(getString(R.string.fill_price_error))
                 }
             }
         })
 
-        selectableMembers.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+        selectedMembers.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 if (!selectableMembersErrorText.get().isNullOrEmpty()) {
                     selectableMembersErrorText.set("")
                 }
 
-                if (selectableMembers.get()?.isNotEmpty() == true) {
-                    spinnerSelectedMembers.set(selectableMembers.get()!!.mapNotNull {
-                        if (it.second) {
-                            it.first
-                        } else {
-                            null
-                        }
-                    })
+                if (selectedMembers.get()?.isNotEmpty() == true) {
+                    spinnerSelectedMembers.set(selectedMembers.get()!!)
 
-                    percentHint.set(getHumanReadablePercents(calculatePercentHint()))
+                    val calculatedPercent = calculatePercentHint()
+
+
+                    percentHint.set(getHumanReadablePercents(calculatedPercent))
+
+
+                    if (isPriceValid(price.get())) {
+                        memberPriceHint.set(doubleToStringPrice(convertPercentToPrice(calculatedPercent, convertPriceToDouble(price.get()!!))))
+                    }
                 } else {
                     spinnerSelectedMembers.set(null)
                 }
@@ -131,27 +189,158 @@ class AddItemViewModel(
         percent.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 if (spinnerSelectedMember.get() != null) {
-                    var percentStr = percent.get()
+                    val percentStr = percent.get()
+                    val totalPrice = price.get()
 
                     if (percentStr != null) {
 
-                        if (percentStr.isEmpty()) {
-                            percentStr = "0"
+                        if (percentStr == "0") {
+                            percent.set("")
+                            return
+                        }
+
+                        if (percentStr == ".") {
+                            percent.set("0.")
+                            return
                         }
 
                         if (!isPercentValid(percentStr)) {
-                            if (getHumanReadablePercents(spinnerSelectedMember.get()!!.percent) != percentStr) {
-                                percent.set(getHumanReadablePercents(spinnerSelectedMember.get()!!.percent))
+                            if (percentStr.isEmpty()) {
+                                spinnerSelectedMember.get()!!.percent = 0f
+                                memberPrice.set("")
+                            } else {
+
+                                val humanReadablePercent =
+                                    getHumanReadablePercents(spinnerSelectedMember.get()!!.percent)
+                                if (humanReadablePercent != percentStr) {
+                                    percent.set(humanReadablePercent)
+                                }
                             }
                         } else {
-                            if (convertPercentToInt(percentStr) == 0) {
-                                percent.set("")
+                            if (isPriceValid(totalPrice)) {
+
+                                spinnerSelectedMember.get()!!.percent = convertPercentToFloat(percentStr)
+
+                                if (memberPrice.get().isNullOrEmpty() || isPercentsAreDifferent(convertPercentToFloat(percentStr), convertPriceToPercent(
+                                        convertPriceToDouble(memberPrice.get()!!), convertPriceToDouble(totalPrice!!)))) {
+                                    memberPrice.set(
+                                        doubleToStringPrice(
+                                            convertPercentToPrice(
+                                                spinnerSelectedMember.get()!!.percent,
+                                                convertPriceToDouble(totalPrice!!)
+                                            )
+                                        )
+                                    )
+                                }
+                                return
                             }
-                            spinnerSelectedMember.get()!!.percent =
-                                getInternalPercents(percentStr)
                         }
 
-                        percentHint.set(getHumanReadablePercents(calculatePercentHint()))
+                        val percent = calculatePercentHint()
+                        percentHint.set(getHumanReadablePercents(percent))
+
+                        if (isPriceValid(totalPrice)) {
+                            val pr = doubleToStringPrice(
+                                convertPercentToPrice(
+                                    percent,
+                                    convertPriceToDouble(price.get()!!)
+                                )
+                            )
+                            memberPriceHint.set(pr)
+                        }
+                    }
+                }
+            }
+        })
+
+        memberPrice.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+
+                if (spinnerSelectedMember.get() != null) {
+
+                    val memberPriceStr = memberPrice.get()
+
+                    var percentString = percent.get()
+                    val totalPrice = price.get()
+
+                    if (percentString.isNullOrEmpty()) {
+                        percentString = "0"
+                    }
+
+                    if (!isPriceValid(memberPriceStr)) {
+
+                        if (memberPriceStr.isNullOrEmpty()) {
+                            if (percentString.isNotEmpty()) {
+                                percent.set("")
+                            }
+
+                            return
+                        }
+
+                    } else {
+                        if (convertPriceToDoubleWithFormat(memberPriceStr!!) != convertPriceToDouble(memberPriceStr)) {
+                            memberPrice.set(doubleToStringPrice(convertPriceToDouble(memberPriceStr)))
+                            return
+                        }
+
+                        if (!isMemberPriceValid(
+                                memberPriceStr,
+                                convertPriceToDouble(totalPrice!!)
+                            )
+                        ) {
+                            if (memberPriceValue != null) {
+                                memberPrice.set(memberPriceValue)
+                            } else {
+                                memberPrice.set(
+                                    doubleToStringPrice(
+                                        convertPercentToPrice(
+                                            convertPercentToFloat(percentString),
+                                            convertPriceToDouble(totalPrice)
+                                        )
+                                    )
+                                )
+                            }
+                        } else {
+
+                            if (isPriceValid(totalPrice)) {
+                                try {
+
+                                    memberPriceValue = memberPriceStr
+
+                                    val calculatedPercent = convertPriceToPercent(
+                                        convertPriceToDouble(memberPriceStr),
+                                        convertPriceToDouble(totalPrice)
+                                    )
+
+                                    var humanReadablePercent =
+                                        getHumanReadablePercents(calculatedPercent)
+
+                                    if (humanReadablePercent == "0") humanReadablePercent = ""
+
+                                    if (isPercentsAreDifferent(
+                                            calculatedPercent, convertPriceToPercent(
+                                                convertPriceToDouble(percentString),
+                                                convertPriceToDouble(totalPrice)
+                                            )
+                                        )
+                                    ) {
+                                        percent.set(humanReadablePercent)
+                                    }
+                                } catch (e: IllegalArgumentException) {
+                                    e.printStackTrace()
+
+                                    val validValue = doubleToStringPrice(
+                                        convertPercentToPrice(
+                                            convertPercentToFloat(percentString),
+                                            convertPriceToDouble(totalPrice)
+                                        )
+                                    )
+                                    if (validValue != memberPriceStr) {
+                                        memberPrice.set(validValue)
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -171,13 +360,16 @@ class AddItemViewModel(
                 }
             }
 
-            return hundred / equalCount
+            return if (equalCount == 0) {
+                hundred
+            } else {
+                hundred / equalCount
+            }
         } else {
             return 0f
         }
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     override fun readFrom(bundle: Bundle) {
         bundle.apply {
             event = getString(EVENT_KEY)!!.deserialize()
@@ -188,12 +380,11 @@ class AddItemViewModel(
             description.set(getString(DESCRIPTION_KEY)!!)
             price.set(getString(PRICE_KEY)!!)
 
-            selectableMembers.set(getString(SELECTED_MEMBERS_KEY)!!.deserialize(kSerializer))
+            selectableMembers.set(getString(SELECTED_MEMBERS_KEY)!!.deserialize(ListSerializer(MemberInfo.serializer())))
             payMember.set(getString(PAY_MEMBER_KEY)!!.deserialize())
         }
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     override fun writeTo(bundle: Bundle) {
         bundle.apply {
             putString(EVENT_KEY, event.serialize())
@@ -208,7 +399,7 @@ class AddItemViewModel(
             putString(PAY_MEMBER_KEY, (payMember.get() ?: event.members.first()).serialize())
 
             if (selectableMembers.get() != null) {
-                putString(SELECTED_MEMBERS_KEY, selectableMembers.get()!!.serialize(kSerializer))
+                putString(SELECTED_MEMBERS_KEY, selectableMembers.get()!!.serialize(ListSerializer(MemberInfo.serializer())))
             }
         }
     }
@@ -217,23 +408,26 @@ class AddItemViewModel(
         this.event = event
         this.item = item
 
+        currency.set(prefsHelper.getCurrency())
         membersContainer.set(event.members)
 
         if (item != null) {
 
             name.set(item.name)
-            price.set(item.price.toString())
+            price.set(doubleToStringPrice(item.price))
             description.set(item.description)
 
             selectableMembers.set(event.members.map { member ->
                 item.membersInfo.forEach { info ->
                     if (info.id == member.id) {
-                        return@map Pair(info, true)
+                        return@map info
                     }
                 }
 
-                return@map Pair(MemberInfo(member.id, member.name, 0f), false)
+                return@map MemberInfo(member.id, member.name, member.avatarUrl, member.phone, 0f)
             })
+
+            Handler(Looper.getMainLooper()).postDelayed({selectedMembers.set(item.membersInfo) }, 50)
 
             Handler(Looper.getMainLooper()).postDelayed({
                 setPayMember(item.payMember)
@@ -242,7 +436,7 @@ class AddItemViewModel(
         } else {
             setPayMember()
 
-            selectableMembers.set(event.members.map { Pair(MemberInfo(it.id, it.name, 0f), false) })
+            selectableMembers.set(event.members.map { MemberInfo(it.id, it.name, it.avatarUrl, it.phone, 0f)}.also { Log.d(TAG, it.toString()) })
         }
     }
 
@@ -261,9 +455,35 @@ class AddItemViewModel(
             return
         }
 
-        if (selectableMembers.get()?.filter { it.second }.isNullOrEmpty()) {
+        Log.d(TAG, "${spinnerSelectedMembers.get()}")
+        if (spinnerSelectedMembers.get() == null || spinnerSelectedMembers.get()!!.isEmpty()) {
             selectableMembersErrorText.set(getString(R.string.members_error_msg))
             return
+        }
+
+        var totalPercent = 0f
+        var containsZeroPercentMember = false
+        selectableMembers.get()!!.forEach {
+                if (it.percent.isZero()) {
+                    containsZeroPercentMember = true
+                } else {
+                    totalPercent += it.percent
+                }
+            }
+
+        if (containsZeroPercentMember) {
+            if (totalPercent > 1f) {
+                showErrorMsg(getString(R.string.members_price_too_much_error), getString(R.string.reset)) { resetMembersPercents() }
+                return
+            }
+        } else {
+            if (totalPercent < 0.95f) {
+                showErrorMsg(getString(R.string.members_price_too_few_error), getString(R.string.reset)) { resetMembersPercents() }
+                return
+            } else if (totalPercent > 1f) {
+                showErrorMsg(getString(R.string.members_price_too_much_error), getString(R.string.reset)) { resetMembersPercents() }
+                return
+            }
         }
 
         addItemUseCase.execute(
@@ -273,22 +493,53 @@ class AddItemViewModel(
                 name = name.get()!!,
                 description = description.get() ?: "",
                 price = convertPriceToDouble(price.get()!!),
-                payMember = Member(payMember.get()!!.id, payMember.get()!!.name),
+                payMember = payMember.get()?.let {Member(it.id, it.name, it.avatarUrl, it.phone) } ?: throw IllegalStateException("Pay member is null!"),
                 membersInfo = spinnerSelectedMembers.get()!!
             ),
             onComplete = {
+                logItemEvent(item?.id)
+
+                if (randomBool(0.25f)) showInterstitial()
+
                 goBack()
             },
             onError = {showErrorMsg(errorMsgCreator.createErrorMsg(it))}
         )
     }
 
+    private fun resetMembersPercents() {
+        selectableMembers.get()?.forEach {
+            it.percent = 0f
+        }
+
+        if (price.get()?.isNotEmpty() == true) {
+            percent.set("")
+            memberPrice.set("")
+        }
+    }
+
     private fun setPayMember(member: Member? = null) {
         payMember.set(member)
     }
 
+    private fun logItemEvent(id: Long?) {
+        val eventName = if (id != null) {
+            "edit_item"
+        } else {
+            "add_item"
+        }
+
+        logEvent(eventName, Bundle().apply {
+            putString("event_name", event.name)
+        })
+    }
+
     fun onSaveClick() {
         saveItem()
+    }
+
+    fun onSelectAllClick() {
+        selectedMembers.set(selectableMembers.get())
     }
 
     companion object {

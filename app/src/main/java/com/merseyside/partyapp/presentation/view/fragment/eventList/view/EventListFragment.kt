@@ -7,6 +7,8 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.lifecycle.ViewModelProviders
+import com.merseyside.adapters.base.OnItemClickListener
+import com.merseyside.adapters.base.BaseAdapter
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -17,8 +19,6 @@ import com.merseyside.partyapp.presentation.di.module.EventListModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.eventList.adapter.EventAdapter
 import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventListViewModel
-import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
-import java.lang.IllegalStateException
 
 class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListViewModel>() {
 
@@ -30,7 +30,7 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
 
     private val adapter = EventAdapter()
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
@@ -45,7 +45,7 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
         return EventListModule(this, bundle)
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.fragment_event_list
     }
 
@@ -69,7 +69,7 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
     }
 
     private fun init() {
-        sharedViewModel = ViewModelProviders.of(baseActivityView).get(SharedViewModel::class.java)
+        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
     }
 
     private fun doLayout() {
@@ -85,12 +85,17 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
                 viewModel.onDeleteClick(event)
             }
 
+            override fun onStatisticClick(event: Event) {
+                sharedViewModel.eventContainer = event
+                viewModel.navigateToStatistic()
+            }
+
         })
 
         viewModel.showEvents()
     }
 
-    private val onItemClickListener = object: BaseAdapter.OnItemClickListener<Event> {
+    private val onItemClickListener = object: OnItemClickListener<Event> {
         override fun onItemClicked(obj: Event) {
             sharedViewModel.eventContainer = obj
             viewModel.onEventClick()
@@ -104,7 +109,7 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        baseActivityView.menuInflater.inflate(R.menu.menu_main,  menu)
+        baseActivity.menuInflater.inflate(R.menu.menu_main,  menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

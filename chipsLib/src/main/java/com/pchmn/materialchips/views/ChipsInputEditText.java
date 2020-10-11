@@ -3,13 +3,13 @@ package com.pchmn.materialchips.views;
 
 import android.content.Context;
 import android.util.AttributeSet;
-import android.util.Log;
 
-import com.google.android.material.textfield.TextInputEditText;
+import androidx.appcompat.widget.AppCompatEditText;
 
-public class ChipsInputEditText extends TextInputEditText {
+public class ChipsInputEditText extends AppCompatEditText {
 
     private FilterableListView filterableListView;
+    private String TAG = ChipsInputEditText.class.getCanonicalName();
 
     public ChipsInputEditText(Context context) {
         super(context);
@@ -18,7 +18,6 @@ public class ChipsInputEditText extends TextInputEditText {
     public ChipsInputEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
-
     public boolean isFilterableListVisible() {
         return filterableListView != null && filterableListView.getVisibility() == VISIBLE;
     }
@@ -30,4 +29,6 @@ public class ChipsInputEditText extends TextInputEditText {
     public void setFilterableListView(FilterableListView filterableListView) {
         this.filterableListView = filterableListView;
     }
+
+
 }

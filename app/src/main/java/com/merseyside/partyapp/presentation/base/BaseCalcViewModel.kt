@@ -1,24 +1,34 @@
 package com.merseyside.partyapp.presentation.base
 
 import android.content.Context
-import androidx.annotation.StringRes
+import android.os.Bundle
+import com.merseyside.archy.presentation.model.ParcelableViewModel
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.presentation.exception.ErrorMessageFactory
-import com.upstream.basemvvmimpl.presentation.model.ParcelableViewModel
+import com.merseyside.utils.mvvm.SingleLiveEvent
 import ru.terrakok.cicerone.Router
 
 abstract class BaseCalcViewModel(private val router: Router? = null) : ParcelableViewModel() {
 
-    protected val context = CalcApplication.getInstance()
-    protected val errorMsgCreator = ErrorMessageFactory(context)
+    val application = CalcApplication.getInstance()
 
-    protected fun getString(@StringRes id: Int, vararg args: String): String {
-        return context.getActualString(id, *args)
-    }
+    protected val errorMsgCreator = ErrorMessageFactory(application)
 
-    fun goBack() {
+    val interstitialLiveEvent = SingleLiveEvent<Boolean>()
+
+    open fun goBack() {
         router?.exit()
     }
 
-    override fun updateLanguage(context: Context) {}
+    fun showInterstitial() {
+        interstitialLiveEvent.value = true
+    }
+
+    fun logEvent(event: String, bundle: Bundle) {
+        application.logFirebaseEvent(event, bundle)
+    }
+
+    override fun getLocaleContext(): Context {
+        return application
+    }
 }

@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:bind="http://schemas.android.com/apk/res-auto"
     tools:context="com.merseyside.partyapp.presentation.view.fragment.addItem.view.AddItemFragment">
     <data>
         <variable
@@ -40,13 +41,15 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content">
 
-                        <com.google.android.material.textfield.TextInputLayout
+                        <com.merseyside.archy.presentation.view.localeViews.LocaleTextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/OutlinedTextInputLayout"
+                            app:counterEnabled="true"
+                            app:counterMaxLength="32"
                             app:errorEnabled="@{!viewModel.nameErrorText.empty}"
                             app:errorText="@{viewModel.nameErrorText}"
-                            android:hint="@{viewModel.itemNameHint}">
+                            android:hint="@string/item_title">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
@@ -54,15 +57,15 @@
                                 android:text="@={viewModel.name}"
                                 style="@style/TextInputEditText" />
 
-                        </com.google.android.material.textfield.TextInputLayout>
+                        </com.merseyside.archy.presentation.view.localeViews.LocaleTextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputLayout
+                        <com.merseyside.archy.presentation.view.localeViews.LocaleTextInputLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             style="@style/OutlinedTextInputLayout"
                             android:gravity="top|start"
                             android:layout_marginTop="@dimen/small_spacing"
-                            android:hint="@{viewModel.itemDescriptionHint}">
+                            android:hint="@string/item_description">
 
                             <com.google.android.material.textfield.TextInputEditText
                                 android:layout_width="match_parent"
@@ -72,25 +75,41 @@
                                 android:maxLines="2"
                                 android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
 
-                        </com.google.android.material.textfield.TextInputLayout>
+                        </com.merseyside.archy.presentation.view.localeViews.LocaleTextInputLayout>
 
-                        <com.google.android.material.textfield.TextInputLayout
+                        <LinearLayout
+                            android:orientation="vertical"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            style="@style/OutlinedTextInputLayout"
-                            android:layout_marginTop="@dimen/small_spacing"
-                            app:errorEnabled="@{!viewModel.priceErrorText.empty}"
-                            app:errorText="@{viewModel.priceErrorText}"
-                            android:hint="@{viewModel.priceHint}">
+                            android:layout_height="wrap_content">
 
-                            <com.google.android.material.textfield.TextInputEditText
+                            <com.merseyside.archy.presentation.view.localeViews.LocaleTextInputLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="@={viewModel.price}"
-                                android:inputType="numberDecimal"
-                                style="@style/TextInputEditText" />
+                                style="@style/OutlinedTextInputLayout"
+                                android:layout_marginTop="@dimen/small_spacing"
+                                app:errorEnabled="@{!viewModel.priceErrorText.empty}"
+                                app:errorText="@{viewModel.priceErrorText}"
+                                android:hint="@{viewModel.priceHint}">
 
-                        </com.google.android.material.textfield.TextInputLayout>
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/price"
+                                    style="@style/TextInputEditText"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:digits="0123456789.+-*/\n"
+                                    android:maxLines="1"
+                                    android:inputType="phone"
+                                    bind:text="@={viewModel.price}" />
+
+                            </com.merseyside.archy.presentation.view.localeViews.LocaleTextInputLayout>
+
+                            <com.merseyside.archy.presentation.view.localeViews.LocaleTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="?attr/calcTextColor"
+                                android:text="@string/operators_hint" />
+
+                        </LinearLayout>
 
                     </LinearLayout>
 
@@ -114,10 +133,11 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
-                            <TextView
+                            <com.merseyside.archy.presentation.view.localeViews.LocaleTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.whoPaysTitle}"
+                                android:text="@string/choose_pays_member"
+                                tools:text="@string/choose_pays_member"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
                             <androidx.recyclerview.widget.RecyclerView
@@ -140,11 +160,34 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
-                            <TextView
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <com.merseyside.archy.presentation.view.localeViews.LocaleTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.forWhomTitle}"
+                                android:text="@string/with_whom_share"
+                                android:layout_centerVertical="true"
+                                android:layout_toStartOf="@+id/select_all"
+                                android:layout_alignParentStart="true"
+                                android:ellipsize="marquee"
+                                tools:text="@string/with_whom_share"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+                            <com.merseyside.archy.presentation.view.localeViews.LocaleButton
+                                android:id="@+id/select_all"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_centerVertical="true"
+                                android:layout_alignParentEnd="true"
+                                android:minHeight="0dp"
+                                style="@style/Widget.MaterialComponents.Button.TextButton"
+                                android:text="@string/select_all"
+                                tools:text="@string/select_all"
+                                android:onClick="@{view -> viewModel.onSelectAllClick()}"/>
+
+                        </RelativeLayout>
 
                             <com.pchmn.materialchips.ChipsInput
                                 android:id="@+id/chips"
@@ -157,7 +200,8 @@
                                 app:chip_selectable="true"
                                 app:chip_selectedColor="?attr/colorPrimary"
                                 app:chip_selectedLabelColor="?attr/colorOnBackground"
-                                app:selectableMembers="@={viewModel.selectableMembers}"
+                                app:selectableMembers="@{viewModel.selectableMembers}"
+                                app:selectedMembers="@={viewModel.selectedMembers}"
                                 app:showChipDetailed="false" />
 
                             <TextView
@@ -165,7 +209,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="@{viewModel.selectableMembersErrorText}"
                                 android:textColor="?attr/colorError"
-                                app:isVisibleOrGone="@{viewModel.selectableMembersErrorText.empty}" />
+                                app:isVisibleOrGone="@{!viewModel.selectableMembersErrorText.empty}" />
 
                         </LinearLayout>
 
@@ -184,7 +228,8 @@
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:orientation="vertical"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content">
+                        android:layout_height="wrap_content"
+                        android:paddingBottom="@dimen/very_small_spacing">
 
                         <RelativeLayout
                             android:id="@+id/additional_container"
@@ -195,10 +240,10 @@
                             android:focusable="true"
                             android:gravity="center">
 
-                            <TextView
+                            <com.merseyside.archy.presentation.view.localeViews.LocaleTextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@{viewModel.additionalSettingsTitle}"
+                                android:text="@string/additional_settings"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
 
                             <ImageView
@@ -219,19 +264,20 @@
                             app:layout_constraintTop_toBottomOf="@+id/additional_container"
                             android:padding="@dimen/small_spacing">
 
-                            <TextView
+                            <com.merseyside.archy.presentation.view.localeViews.LocaleTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                                android:text="@{viewModel.percentSettingsTitle}"/>
+                                android:text="@string/percent_setting"/>
 
-                            <RelativeLayout
+                            <LinearLayout
+                                android:orientation="vertical"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content">
 
                                 <androidx.appcompat.widget.AppCompatSpinner
                                     android:id="@+id/member_spinner"
-                                    android:layout_width="wrap_content"
+                                    android:layout_width="match_parent"
                                     android:layout_height="@dimen/spinner_size"
                                     android:layout_alignParentStart="true"
                                     android:layout_toStartOf="@+id/percent_field"
@@ -243,33 +289,76 @@
                                     app:spinnerSelectedMember="@={viewModel.spinnerSelectedMember}"/>
 
                                 <LinearLayout
-                                    android:id="@+id/percent_field"
                                     android:orientation="horizontal"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="match_parent"
-                                    android:layout_centerVertical="true"
-                                    android:layout_alignParentEnd="true">
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center">
 
-                                    <com.google.android.material.textfield.TextInputEditText
-                                        android:layout_width="@dimen/percent_field_width"
-                                        android:layout_height="wrap_content"
-                                        android:text="@={viewModel.percent}"
-                                        style="@style/TextInputEditText"
-                                        android:singleLine="true"
-                                        android:hint="@{viewModel.percentHint}"
-                                        android:backgroundTint="?attr/colorPrimary"
-                                        android:inputType="numberDecimal"
-                                        android:textAlignment="viewEnd"/>
-
-                                    <TextView
+                                    <LinearLayout
+                                        android:id="@+id/percent_field"
+                                        android:orientation="horizontal"
                                         android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:text="%"
-                                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+                                        android:layout_height="match_parent">
+
+                                        <com.merseyside.archy.presentation.view.localeViews.LocaleTextInputEditText
+                                            android:layout_width="@dimen/percent_field_width"
+                                            android:layout_height="wrap_content"
+                                            bind:text="@={viewModel.percent}"
+                                            style="@style/TextInputEditText"
+                                            android:enabled="@{!viewModel.spinnerSelectedMembers.empty}"
+                                            android:singleLine="true"
+                                            android:hint="@{viewModel.percentHint}"
+                                            android:backgroundTint="?attr/colorPrimary"
+                                            android:inputType="numberDecimal"
+                                            android:textAlignment="viewEnd"/>
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="% = "
+                                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                                    </LinearLayout>
+
+                                    <LinearLayout
+                                        android:id="@+id/price_field"
+                                        android:orientation="horizontal"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="match_parent">
+
+                                        <com.google.android.material.textfield.TextInputEditText
+                                            android:layout_width="@dimen/price_field_width"
+                                            android:layout_height="wrap_content"
+                                            bind:text="@={viewModel.memberPrice}"
+                                            style="@style/TextInputEditText"
+                                            android:singleLine="true"
+                                            android:enabled="@{!viewModel.price.empty &amp;&amp; !viewModel.spinnerSelectedMembers.empty &amp;&amp; viewModel.isPriceValid()}"
+                                            android:hint="@{viewModel.memberPriceHint}"
+                                            android:backgroundTint="?attr/colorPrimary"
+                                            android:inputType="numberDecimal"
+                                            android:textAlignment="viewEnd"/>
+
+                                        <TextView
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:text="@{viewModel.currency}"
+                                            android:maxLength="10"
+                                            android:ellipsize="marquee"
+                                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                                    </LinearLayout>
 
                                 </LinearLayout>
 
-                            </RelativeLayout>
+                                <TextView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                                    android:textColor="?attr/colorError"
+                                    android:text="@{viewModel.additionalSettingsError}"
+                                    app:isVisibleOrGone="@{!viewModel.additionalSettingsError.empty}"/>
+
+                            </LinearLayout>
 
                         </LinearLayout>
 
@@ -293,9 +382,10 @@
             android:id="@+id/save"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@{viewModel.save}"
+            android:text="@string/save"
             android:layout_alignParentBottom="true"
-            android:onClick="@{view -> viewModel.onSaveClick()}"/>
+            android:onClick="@{view -> viewModel.onSaveClick()}"
+            android:backgroundTint="?attr/colorPrimary" />
 
     </RelativeLayout>
 </layout>

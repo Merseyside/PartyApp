@@ -1,12 +1,12 @@
 package com.merseyside.partyapp.presentation.view.fragment.eventList.adapter
 
 import androidx.appcompat.widget.PopupMenu
+import com.merseyside.adapters.base.BaseSortedAdapter
+import com.merseyside.adapters.view.TypedBindingHolder
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventItemViewModel
-import com.upstream.basemvvmimpl.presentation.adapter.BaseSortedAdapter
-import com.upstream.basemvvmimpl.presentation.view.BaseViewHolder
 
 class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
 
@@ -14,6 +14,8 @@ class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
         fun onEditClick(event: Event)
 
         fun onDeleteClick(event: Event)
+
+        fun onStatisticClick(event: Event)
     }
 
     private var optionsListener: OnEventOptionsClickListener? = null
@@ -34,10 +36,10 @@ class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
         this.optionsListener = listener
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TypedBindingHolder<EventItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
         
-        val item = getObjByPosition(position)
+        val item = getItemByPosition(position)
 
         holder.itemView.rootView.setOnLongClickListener {
             val popup = PopupMenu(holder.itemView.context, holder.itemView.findViewById(R.id.status_container))
@@ -51,6 +53,10 @@ class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
 
                     R.id.action_delete -> {
                         optionsListener?.onDeleteClick(item)
+                    }
+
+                    R.id.action_statistic -> {
+                        optionsListener?.onStatisticClick(item)
                     }
 
                     else -> {

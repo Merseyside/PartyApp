@@ -32,8 +32,6 @@
 
         <item name="calcIconColor">@color/black</item>
 
-<!--        <item name="buttonStyle">@style/ButtonStyle</item>-->
-
         <item name="dividerHorizontal">@style/DividerStyle</item>
 
         <!--<item groupName="inputLayoutStrokeColor">@color/text_input_box_stroke</item>-->

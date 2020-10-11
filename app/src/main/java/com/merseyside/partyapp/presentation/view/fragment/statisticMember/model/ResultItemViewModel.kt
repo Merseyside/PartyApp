@@ -1,20 +1,20 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMember.model
 
-import android.util.Log
+import android.content.Context
 import androidx.annotation.AttrRes
 import androidx.databinding.Bindable
+import com.merseyside.adapters.model.BaseAdapterViewModel
+import com.merseyside.archy.presentation.interfaces.IStringHelper
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
-import com.merseyside.partyapp.data.entity.Order
-import com.upstream.basemvvmimpl.presentation.model.BaseAdapterViewModel
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.utils.doubleToStringPrice
 
 class ResultItemViewModel(
     override var obj: Result,
     private val currency: String
-) : BaseAdapterViewModel<Result>(obj) {
+) : BaseAdapterViewModel<Result>(obj), IStringHelper {
 
     var isVisible: Boolean = true
     set(value) {
@@ -38,11 +38,11 @@ class ResultItemViewModel(
     fun getPrice(): String {
         return when (obj) {
             is Result.ResultDebtor -> {
-                CalcApplication.getInstance().getActualString(R.string.debt, doubleToStringPrice(obj.price), currency)
+                getString(R.string.debt, doubleToStringPrice(obj.price), currency)
             }
 
             is Result.ResultLender -> {
-                CalcApplication.getInstance().getActualString(R.string.debit, doubleToStringPrice(obj.price), currency)
+                getString(R.string.debit, doubleToStringPrice(obj.price), currency)
             }
         }
     }
@@ -65,7 +65,7 @@ class ResultItemViewModel(
         return isVisible
     }
 
-    companion object{
-        private const val TAG = "Result"
+    override fun getLocaleContext(): Context {
+        return CalcApplication.getInstance()
     }
 }

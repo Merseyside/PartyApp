@@ -11,6 +11,8 @@ import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.data.entity.Statistic
 import com.merseyside.partyapp.domain.interactor.GetStatisticInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
+import com.merseyside.partyapp.utils.doubleToStringPrice
+import com.merseyside.utils.randomBool
 import kotlinx.coroutines.cancel
 import ru.terrakok.cicerone.Router
 
@@ -30,6 +32,13 @@ class StatisticMainViewModel(
 
     var totalSpend = ObservableField<String>()
 
+    var event: Event? = null
+
+    override fun goBack() {
+        if (randomBool(0.2f)) showInterstitial()
+        super.goBack()
+    }
+
     override fun updateLanguage(context: Context) {
         super.updateLanguage(context)
 
@@ -37,25 +46,30 @@ class StatisticMainViewModel(
         memberVisibilityHint.set(context.getString(R.string.no_activity))
     }
 
-
     override fun dispose() {
         getStatisticUseCase.cancel()
     }
 
-    override fun readFrom(bundle: Bundle) {
+    override fun readFrom(bundle: Bundle) {}
+
+    override fun writeTo(bundle: Bundle) {}
+
+    fun initWithEvent(event: Event?) {
+        if (this.event == null) {
+            this.event = event
+
+            getStatistic(event)
+        }
     }
 
-    override fun writeTo(bundle: Bundle) {
-
-    }
-
-    fun getStatistic(event: Event?) {
+    private fun getStatistic(event: Event?) {
 
         if (event != null) {
             getStatisticUseCase.execute(
                 params = GetStatisticInteractor.Params(eventId = event.id),
                 onComplete = {
                     statistic = it
+                    logStatisticEvent(it)
 
                     membersVisibility.set(it.membersStatistic.isNotEmpty())
 
@@ -68,6 +82,14 @@ class StatisticMainViewModel(
                 hideProgress = { hideProgress() }
             )
         }
+    }
+
+    private fun logStatisticEvent(stats: Statistic) {
+        logEvent("statistic", Bundle().apply {
+            putString("total_spend", doubleToStringPrice(stats.totalSpend))
+            putString("total_debt", doubleToStringPrice(stats.totalDebt))
+            putString("currency", stats.currency)
+        })
     }
 
     private fun showStats(stats: Statistic) {

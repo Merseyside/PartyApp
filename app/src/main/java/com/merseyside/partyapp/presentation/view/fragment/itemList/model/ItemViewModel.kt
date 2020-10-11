@@ -1,10 +1,10 @@
 package com.merseyside.partyapp.presentation.view.fragment.itemList.model
 
 import androidx.databinding.Bindable
+import com.merseyside.adapters.model.BaseComparableAdapterViewModel
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.utils.getHoursDateTime
-import com.upstream.basemvvmimpl.presentation.model.BaseComparableAdapterViewModel
 
 class ItemViewModel(
     override var obj: Item
@@ -40,8 +40,13 @@ class ItemViewModel(
     }
 
     @Bindable
-    fun isLast(): Boolean {
+    fun isLastItem(): Boolean {
         return isLastItem
+    }
+
+    @Bindable
+    fun getTime(): String {
+        return getHoursDateTime(obj.timestamp)!!
     }
 
     fun setLast(isLast: Boolean) {
@@ -50,10 +55,16 @@ class ItemViewModel(
         notifyUpdate()
     }
 
+    override fun onPositionChanged(position: Int) {
+        super.onPositionChanged(position)
+
+        setLast(isLast())
+    }
+
     override fun notifyUpdate() {
         notifyPropertyChanged(BR.title)
         notifyPropertyChanged(BR.date)
         notifyPropertyChanged(BR.price)
-        notifyPropertyChanged(BR.last)
+        notifyPropertyChanged(BR.lastItem)
     }
 }

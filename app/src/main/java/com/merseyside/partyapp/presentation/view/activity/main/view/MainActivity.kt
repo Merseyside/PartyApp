@@ -3,9 +3,10 @@ package com.merseyside.partyapp.presentation.view.activity.main.view
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.widget.Toolbar
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import android.view.View
 import androidx.fragment.app.FragmentTransaction
+import com.google.android.gms.ads.*
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.databinding.ActivityMainBinding
@@ -20,7 +21,7 @@ import ru.terrakok.cicerone.android.support.SupportAppNavigator
 import ru.terrakok.cicerone.commands.Command
 import javax.inject.Inject
 
-class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
+class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>(), HasAd {
 
     @Inject
     lateinit var navigatorHolder: NavigatorHolder
@@ -30,11 +31,13 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
 
     private lateinit var navigator : Navigator
 
-    override fun setBindingVariable(): Int {
+    private val interstitialAd: InterstitialAd by lazy { InterstitialAd(this) }
+
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.activity_main
     }
 
@@ -53,6 +56,7 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
         super.onCreate(savedInstanceState)
 
         initNavigation()
+        initAdMob()
 
         if (savedInstanceState == null) {
             init()
@@ -101,7 +105,7 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     }
 
     override fun getFragmentContainer(): Int? {
-        return R.id.container
+        return binding.container.id
     }
 
     override fun onResumeFragments() {
@@ -112,6 +116,47 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>() {
     override fun onPause() {
         navigatorHolder.removeNavigator()
         super.onPause()
+    }
+
+    private fun initAdMob() {
+        MobileAds.initialize(this)
+
+        binding.adView.apply {
+            loadAd(AdRequest.Builder().build())
+        }
+
+        interstitialAd.apply {
+            adUnitId = getString(R.string.interstitialId)
+            loadAd(AdRequest.Builder().build())
+        }
+
+        interstitialAd.adListener = object : AdListener() {
+            override fun onAdClosed() {
+                interstitialAd.loadAd(AdRequest.Builder().build())
+            }
+        }
+    }
+
+    override fun showRewardedAd() {
+        throw NotImplementedError()
+    }
+
+    override fun showInterstitialAd() {
+        if (interstitialAd.isLoaded) {
+            interstitialAd.show()
+        }
+    }
+
+    override fun onRewardClosed() {
+        throw NotImplementedError()
+    }
+
+    override fun setShowAdBanner(isShow: Boolean) {
+        if (isShow) {
+            binding.adView.visibility = View.VISIBLE
+        } else {
+            binding.adView.visibility = View.GONE
+        }
     }
 
     companion object {

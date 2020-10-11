@@ -1,6 +1,8 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 
-import android.util.Log
+import android.net.Uri
+import android.text.Editable
+import android.text.TextWatcher
 import android.widget.AdapterView
 import androidx.appcompat.widget.AppCompatSpinner
 import androidx.databinding.BindingAdapter
@@ -12,35 +14,24 @@ import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberAdapter
 import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberSpinnerAdapter
 import com.pchmn.materialchips.ChipsInput
-import com.pchmn.materialchips.model.Chip
-import com.upstream.basemvvmimpl.presentation.adapter.BaseSelectableAdapter
 import android.view.View
+import android.widget.EditText
 import android.widget.Spinner
+import androidx.annotation.AttrRes
+import com.merseyside.adapters.base.BaseSelectableAdapter
 import com.merseyside.partyapp.data.db.item.MemberInfo
-
-@BindingAdapter(value = ["selectableMembersAttrChanged"]) // AttrChanged required postfix
-fun setSelectableMembersListener(view: ChipsInput, listener: InverseBindingListener?) {
-    if (listener != null) {
-        view.setOnChipSelectedListener { _, _ ->
-            listener.onChange()
-        }
-    }
-}
+import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.ContactChip
+import com.merseyside.partyapp.utils.setTextWithCursor
+import com.merseyside.utils.ext.getColorFromAttr
+import de.hdodenhof.circleimageview.CircleImageView
 
 @BindingAdapter("app:selectableMembers")
-fun setSelectableMembers(chipView: ChipsInput, members: List<Pair<MemberInfo, Boolean>>?) {
-    members?.forEach {
-        chipView.addChip(Chip(it.first.id as Any, it.first.name, it.first).apply {
-            isSelected = it.second
-        })
+fun setSelectableMembers(chipView: ChipsInput, members: List<MemberInfo>?) {
+    members?.forEach { member ->
+        chipView.addChip(ContactChip(member.id, member.avatarUrl?.let {Uri.parse(it)}, member.name, member.phone, member))
     }
 }
 
-
-@InverseBindingAdapter(attribute = "app:selectableMembers")
-fun getSelectableMembers(view: ChipsInput): List<Pair<MemberInfo, Boolean>> {
-    return view.selectedChips.map { Pair(it.`object` as MemberInfo, true)}
-}
 
 ///
 
@@ -53,6 +44,27 @@ fun setPayMembers(recyclerView: RecyclerView, members: List<Member>?) {
             membersAdapter.add(members)
         }
     }
+}
+
+@BindingAdapter("app:selectedMembers")
+fun setSelectedMembers(view: ChipsInput, pairList: List<MemberInfo>?) {
+    pairList?.forEach {
+        view.setSelectedChipById(it.id, true)
+    }
+}
+
+@BindingAdapter(value = ["selectedMembersAttrChanged"]) // AttrChanged required postfix
+fun setSelectedMembersListener(view: ChipsInput, listener: InverseBindingListener?) {
+    if (listener != null) {
+        view.setOnChipSelectedListener { _, _ ->
+            listener.onChange()
+        }
+    }
+}
+
+@InverseBindingAdapter(attribute = "app:selectedMembers")
+fun getSelectedMembers(view: ChipsInput): List<MemberInfo> {
+    return view.selectedChips.map { it.`object` as MemberInfo }
 }
 
 ///
@@ -79,7 +91,8 @@ fun setPayMemberListener(recyclerView: RecyclerView, listener: InverseBindingLis
     recyclerView.adapter = adapter
 
     adapter.setOnItemSelectedListener(object: BaseSelectableAdapter.OnItemSelectedListener<Member> {
-        override fun onSelected(isSelected: Boolean, item: Member) {
+
+        override fun onSelected(item: Member, isSelected: Boolean, isSelectedByUser: Boolean) {
             if (isSelected) {
                 listener?.onChange()
             }
@@ -135,3 +148,44 @@ fun getSpinnerSelectedMember(spinner: AppCompatSpinner): MemberInfo? {
 
 @BindingAdapter("app:spinnerSelectedMember")
 fun setSpinnerSelectedMember(spinner: Spinner, member: MemberInfo?) {}
+
+//
+
+@BindingAdapter("bind:text")
+fun setText(editText: EditText, text: String?) {
+    editText.setTextWithCursor(text)
+}
+
+@BindingAdapter(value = ["textAttrChanged"]) // AttrChanged required postfix
+fun setTextListener(editText: EditText, listener: InverseBindingListener?) {
+    editText.addTextChangedListener(object: TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            listener?.onChange()
+        }
+    })
+}
+
+@InverseBindingAdapter(attribute = "bind:text")
+fun getText(editText: EditText): String? {
+    return editText.text.toString()
+}
+
+@BindingAdapter("bind:imageUrl")
+fun setImageUrl(circleImageView: CircleImageView, uri: String?) {
+    if (uri != null) {
+        circleImageView.setImageURI(Uri.parse(uri))
+    }
+}
+
+@BindingAdapter("bind:customBorderColor")
+fun setBorderColor(circleImageView: CircleImageView, @AttrRes attrColor: Int?) {
+    if (attrColor != null) {
+        circleImageView.borderColor = circleImageView.context.getColorFromAttr(attrColor)
+    }
+}
+
+private const val TAG = "AddItemBinding"

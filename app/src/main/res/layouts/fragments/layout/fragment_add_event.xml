@@ -9,17 +9,15 @@
             type="com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel" />
     </data>
 
-    <ScrollView
+    <RelativeLayout
+        android:id="@+id/main_container"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never">
+        android:layout_height="match_parent">
 
         <LinearLayout
-            android:id="@+id/main_container"
             android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:padding="@dimen/normal_spacing">
 
             <androidx.cardview.widget.CardView
@@ -42,7 +40,7 @@
                         style="@style/OutlinedTextInputLayout"
                         android:hint="@{viewModel.eventNameHint}"
                         app:counterEnabled="true"
-                        app:counterMaxLength="24"
+                        app:counterMaxLength="32"
                         app:errorEnabled="@{!viewModel.eventNameErrorText.empty}"
                         app:errorText="@{viewModel.eventNameErrorText}"
                         app:boxBackgroundColor="?attr/colorOnBackground">
@@ -50,6 +48,7 @@
                         <com.google.android.material.textfield.TextInputEditText
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:singleLine="true"
                             android:text="@={viewModel.eventName}"
                             style="@style/TextInputEditText" />
 
@@ -61,9 +60,7 @@
                         style="@style/OutlinedTextInputLayout"
                         android:layout_marginTop="@dimen/normal_spacing"
                         android:hint="@{viewModel.notesHint}"
-                        app:errorEnabled="true"
-                        app:counterEnabled="true"
-                        app:counterMaxLength="512"
+                        app:errorEnabled="@{!viewModel.notesErrorText.empty}"
                         app:boxBackgroundColor="?attr/colorOnBackground">
 
                         <com.google.android.material.textfield.TextInputEditText
@@ -71,7 +68,8 @@
                             android:layout_height="wrap_content"
                             android:imeOptions="actionGo"
                             android:text="@={viewModel.notes}"
-                            android:minLines="5"
+                            android:minLines="2"
+                            android:maxLines="2"
                             style="@style/TextInputEditText"
                             android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
 
@@ -81,100 +79,109 @@
 
             </androidx.cardview.widget.CardView>
 
-
-            <androidx.cardview.widget.CardView
-                android:id="@+id/chips_container"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:contentPadding="@dimen/small_spacing"
-                app:cardCornerRadius="@dimen/small_spacing"
-                android:layout_marginTop="@dimen/small_spacing"
-                android:layout_marginBottom="@dimen/very_small_spacing"
-                style="@style/MyCardView"
-                app:isVisibleOrGone="@{viewModel.addMembersVisibility}">
-
-                <LinearLayout
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/transparent">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:background="@color/transparent"
-                        android:paddingStart="@dimen/small_spacing"
-                        android:paddingEnd="@dimen/small_spacing"
-                        android:paddingTop="@dimen/small_spacing">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@{viewModel.addItemsTitle}"
-                            android:layout_marginTop="@dimen/small_spacing"
-                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
-
-                        <com.pchmn.materialchips.ChipsInput
-                            android:id="@+id/chips"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            app:showChipDetailed="false"
-                            app:chip_backgroundColor="?attr/colorPrimary"
-                            app:chip_hasAvatarIcon="true"
-                            app:chip_deletable="true"
-                            app:chip_labelColor="@color/white"
-                            app:chip_deleteIconColor="?attr/colorOnError"
-                            app:textColor="?attr/calcTextColor"
-                            android:layout_marginTop="@dimen/very_small_spacing"
-                            app:memberNames="@={viewModel.members}" />
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="?attr/colorError"
-                            android:text="@{viewModel.membersErrorText}"
-                            app:isVisibleOrGone="@{viewModel.membersErrorText.empty}"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:textColor="?attr/calcTextColor"
-                            android:text="@{viewModel.useCommaHint}" />
-
-                    </LinearLayout>
-
-                </LinearLayout>
-
-            </androidx.cardview.widget.CardView>
-
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="@dimen/small_spacing">
+                android:layout_height="wrap_content">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/close_event"
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/chips_container"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-                    android:text="@{viewModel.closeEvent}"
-                    app:strokeWidth="1dp"
-                    app:strokeColor="?attr/colorPrimary"
-                    app:isVisibleOrGone="@{viewModel.closeEventVisibility}"/>
+                    android:layout_height="match_parent"
+                    app:contentPadding="@dimen/small_spacing"
+                    app:cardCornerRadius="@dimen/small_spacing"
+                    android:layout_marginTop="@dimen/small_spacing"
+                    android:layout_marginBottom="@dimen/very_small_spacing"
+                    style="@style/MyCardView"
+                    app:isVisibleOrGone="@{viewModel.addMembersVisibility}">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/save"
+                    <LinearLayout
+                        android:orientation="vertical"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/transparent">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:background="@color/transparent"
+                            android:paddingStart="@dimen/small_spacing"
+                            android:paddingEnd="@dimen/small_spacing"
+                            android:paddingTop="@dimen/small_spacing">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@{viewModel.addItemsTitle}"
+                                android:layout_marginTop="@dimen/small_spacing"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+
+                            <com.pchmn.materialchips.ChipsInput
+                                android:id="@+id/chips"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                app:maxRows="2"
+                                app:chip_backgroundColor="?attr/colorPrimary"
+                                app:chip_hasAvatarIcon="true"
+                                app:chip_deletable="true"
+                                app:chip_labelColor="@color/white"
+                                app:chip_deleteIconColor="?attr/colorOnError"
+                                app:textColor="?attr/calcTextColor"
+                                android:layout_marginTop="@dimen/very_small_spacing"
+                                app:contacts="@{viewModel.contacts}"
+                                app:chip_filterable_container="@id/main_container"
+                                app:memberNames="@={viewModel.members}" />
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="?attr/colorError"
+                                android:text="@{viewModel.membersErrorText}"
+                                app:isVisibleOrGone="@{!viewModel.membersErrorText.empty}"/>
+
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textColor="?attr/calcTextColor"
+                                android:text="@{viewModel.useCommaHint}" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <LinearLayout
+                    android:id="@+id/button_container"
+                    android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@{viewModel.save}"
-                    android:onClick="@{view -> viewModel.onSaveClick()}"/>
+                    android:layout_height="wrap_content">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/save"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@{viewModel.save}"
+                        android:onClick="@{view -> viewModel.onSaveClick()}"/>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/close_event"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                        android:text="@{viewModel.closeEvent}"
+                        app:strokeWidth="1dp"
+                        app:strokeColor="?attr/colorPrimary"
+                        app:isVisibleOrGone="@{viewModel.closeEventVisibility}"/>
+
+                </LinearLayout>
 
             </LinearLayout>
 
         </LinearLayout>
 
-    </ScrollView>
+    </RelativeLayout>
+
 
 </layout>

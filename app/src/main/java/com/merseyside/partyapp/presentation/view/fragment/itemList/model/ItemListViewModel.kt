@@ -1,10 +1,13 @@
 package com.merseyside.partyapp.presentation.view.fragment.itemList.model
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.databinding.ObservableField
 import com.merseyside.partyapp.R
+import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.item.Item
+import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.domain.interactor.DeleteItemInteractor
 import com.merseyside.partyapp.domain.interactor.GetItemsByEventIdInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
@@ -19,16 +22,26 @@ class ItemListViewModel(
 
 ) : BaseCalcViewModel(router) {
 
-    private var eventId: Long? = null
+    private var event: Event? = null
 
     val itemsContainer = ObservableField<List<Item>>()
-
     val itemsVisibility = ObservableField<Boolean>()
 
-    fun init(eventId: Long) {
-        this.eventId = eventId
+    val eventStatus = ObservableField<Boolean>()
 
-        getItemsById(eventId)
+    val noItemsHint = ObservableField<String>()
+
+    fun init(event: Event) {
+        this.event = event
+        eventStatus.set(event.status == Status.IN_PROCESS)
+
+        getItemsById(event.id)
+    }
+
+    override fun updateLanguage(context: Context) {
+        super.updateLanguage(context)
+
+        noItemsHint.set(context.getString(R.string.no_items))
     }
 
     override fun readFrom(bundle: Bundle) {}
@@ -77,13 +90,15 @@ class ItemListViewModel(
                 deleteItemUseCase.execute(
                     params = DeleteItemInteractor.Params(item.id),
                     onComplete = {
-                        getItemsById(eventId!!)
+                        getItemsById(event!!.id)
                     },
                     onError = {
                         showErrorMsg(errorMsgCreator.createErrorMsg(it))
                     }
                 )
-            }
+            },
+            positiveButtonText = getString(R.string.delete),
+            negativeButtonText = getString(R.string.cancel)
         )
     }
 

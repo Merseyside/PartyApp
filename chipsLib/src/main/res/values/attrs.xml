@@ -34,6 +34,7 @@
         <attr name="chip_selectable" format="boolean"/>
         <attr name="chip_selectedColor" format="color" />
         <attr name="chip_selectedLabelColor" format="color" />
+        <attr name="chip_filterable_container" format="integer"/>
     </declare-styleable>
 
     <declare-styleable name="ScrollViewMaxHeight">

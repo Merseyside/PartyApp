@@ -4,12 +4,15 @@ import android.content.Context
 import android.os.Bundle
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.item.Item
-import com.upstream.basemvvmimpl.data.deserialize
-import com.upstream.basemvvmimpl.data.serialize
-import com.upstream.basemvvmimpl.presentation.model.ParcelableViewModel
-import kotlinx.serialization.list
+import com.merseyside.archy.presentation.model.ParcelableViewModel
+import com.merseyside.partyapp.CalcApplication
+import com.merseyside.utils.serialization.deserialize
+import com.merseyside.utils.serialization.serialize
 
 class SharedViewModel : ParcelableViewModel() {
+
+    val application = CalcApplication.getInstance()
+
     override fun readFrom(bundle: Bundle) {
 
         bundle.apply {
@@ -42,6 +45,10 @@ class SharedViewModel : ParcelableViewModel() {
     override fun dispose() {}
 
     override fun updateLanguage(context: Context) {}
+
+    override fun getLocaleContext(): Context {
+        return application
+    }
 
     var eventContainer: Event? = null
 

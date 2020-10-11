@@ -1,10 +1,9 @@
 package com.merseyside.partyapp.data.db.event
 
+import com.merseyside.kmpMerseyLib.utils.time.getCurrentTimeMillis
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.data.entity.mapper.EventDataMapper
-import com.merseyside.partyapp.utils.generateId
-import com.merseyside.partyapp.utils.getTimestamp
 
 class EventDao(database: CalcDatabase) {
 
@@ -12,15 +11,11 @@ class EventDao(database: CalcDatabase) {
 
     private val eventDataMapper = EventDataMapper()
 
-    internal fun insert(name: String, memberNames: List<String>, notes: String): Event {
-
-        val members = memberNames.map {
-            Member(generateId(), it)
-        }
+    internal fun insert(name: String, members: List<Member>, notes: String): Event {
 
         val membersModel = MembersModel(members)
 
-        db.insertItem(name, membersModel, notes, Status.IN_PROCESS.toString(), getTimestamp())
+        db.insertItem(name, membersModel, notes, Status.IN_PROCESS.toString(), getCurrentTimeMillis())
 
         return getEventById(db.lastInsertRowId().executeAsOne())
     }
@@ -28,7 +23,7 @@ class EventDao(database: CalcDatabase) {
     internal fun change(
         id: Long,
         name: String? = null,
-        memberNames: List<String>? = null,
+        members: List<Member>? = null,
         notes: String? = null,
         status: Status? = null
     ): Event {
@@ -36,7 +31,7 @@ class EventDao(database: CalcDatabase) {
         val event = getEventById(id)
 
         name?.let {event.name = name}
-        memberNames?.let { memberNames.map { event.members.add( Member(generateId(), it) )}}
+        members?.let { members.map { member -> event.members.add(member)}}
         notes?.let {event.notes = notes}
         status?.let { event.status = status }
 

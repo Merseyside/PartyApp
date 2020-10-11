@@ -7,44 +7,51 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
-import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.domain.interactor.AddEventInteractor
 import com.merseyside.partyapp.domain.interactor.CloseEventInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventByIdInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.isNameValid
-import com.upstream.basemvvmimpl.data.deserialize
-import com.upstream.basemvvmimpl.data.serialize
+import com.merseyside.partyapp.data.db.event.Member
+import com.merseyside.partyapp.data.entity.Contact
+import com.merseyside.partyapp.domain.interactor.GetContactsInteractor
+import com.merseyside.utils.mvvm.SingleLiveEvent
+import com.merseyside.utils.serialization.deserialize
+import com.merseyside.utils.serialization.serialize
 import kotlinx.coroutines.cancel
-import kotlinx.serialization.internal.StringSerializer
-import kotlinx.serialization.list
+import kotlinx.serialization.builtins.ListSerializer
 import ru.terrakok.cicerone.Router
 
 class AddEventViewModel(
     router: Router,
     private val addEventUseCase: AddEventInteractor,
     private val getEventByIdUseCase: GetEventByIdInteractor,
-    private val closeEventUseCase: CloseEventInteractor
+    private val closeEventUseCase: CloseEventInteractor,
+    private val getContactsUseCase: GetContactsInteractor
 ) : BaseCalcViewModel(router) {
 
     val eventName = ObservableField<String>()
     val eventNameErrorText = ObservableField("")
-    val eventNameHint = ObservableField<String>()
+    val eventNameHint = ObservableField<String>(getString(R.string.event_title))
 
     val notes = ObservableField<String>()
     val notesErrorText = ObservableField("")
-    val notesHint = ObservableField<String>("")
+    val notesHint = ObservableField<String>(getString(R.string.notes_hint))
 
-    val members = ObservableField<List<String>>()
+    val members = ObservableField<List<Member>>()
     val membersErrorText = ObservableField("")
 
-    val addItemsTitle = ObservableField<String>()
-    val useCommaHint = ObservableField<String>()
-    val save = ObservableField<String>()
-    val closeEvent = ObservableField<String>()
+    val addItemsTitle = ObservableField<String>(getString(R.string.add_members))
+    val useCommaHint = ObservableField<String>(getString(R.string.use_comma))
+    val save = ObservableField<String>(getString(R.string.save))
+    val closeEvent = ObservableField<String>(getString(R.string.close_event))
 
     val eventLiveData = MutableLiveData<Event>()
+
+    val contacts = ObservableField<List<Contact>>()
+
+    val contactsLoadedSingleEvent = SingleLiveEvent<Any>()
 
     private var modeField = MODE_ADD
 
@@ -98,7 +105,7 @@ class AddEventViewModel(
 
                 eventName.set(bundle.getString(NAME_KEY))
                 notes.set(bundle.getString(NOTES_KEY))
-                members.set(getString(MEMBERS_KEY)!!.deserialize(StringSerializer.list))
+                members.set(getString(MEMBERS_KEY)!!.deserialize(ListSerializer(Member.serializer())))
             }
         }
     }
@@ -109,7 +116,7 @@ class AddEventViewModel(
             putString(NOTES_KEY, notes.get() ?: "")
             putString(
                 MEMBERS_KEY,
-                members.get()?.serialize(StringSerializer.list) ?: ""
+                members.get()?.serialize(ListSerializer(Member.serializer())) ?: ""
             )
 
             if (modeField == MODE_EDIT) {
@@ -149,6 +156,16 @@ class AddEventViewModel(
         closeEventUseCase.cancel()
     }
 
+    fun getContacts() {
+        getContactsUseCase.execute(
+            onComplete = {
+                contacts.set(it)
+                contactsLoadedSingleEvent.call()
+            },
+            onError = { contactsLoadedSingleEvent.call() }
+        )
+    }
+
     fun onSaveClick() {
         save()
     }
@@ -179,8 +196,10 @@ class AddEventViewModel(
                 notes.get() ?: ""
             ),
             onComplete = {
-                eventLiveData.value = it
+                logEventChanges(it)
+                showInterstitial()
 
+                eventLiveData.value = it
                 goBack()
             },
 
@@ -191,10 +210,26 @@ class AddEventViewModel(
 
     }
 
+    private fun logEventChanges(event: Event) {
+        val eventName = if (modeField == MODE_ADD) {
+            "add_event"
+        } else {
+            "edit_event"
+        }
+
+        logEvent(eventName, Bundle().apply {
+            putString("event_name", event.name)
+            putInt("member_count", event.members.size)
+            putString("event_notes", event.notes)
+        })
+    }
+
     fun closeEvent() {
         closeEventUseCase.execute(
             params = CloseEventInteractor.Params(event!!.id),
             onComplete = {
+                event!!.status = Status.COMPLETE
+                eventLiveData.value = event
                 showMsg(getString(R.string.complete))
             },
             onError = {

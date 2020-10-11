@@ -13,8 +13,6 @@ class MainViewModel(private val router: Router) : BaseCalcViewModel(router) {
 
     override fun dispose() {}
 
-    override fun updateLanguage(context: Context) {}
-
     fun navigateToEventList() {
         router.newRootScreen(Screens.EventListScreen())
     }

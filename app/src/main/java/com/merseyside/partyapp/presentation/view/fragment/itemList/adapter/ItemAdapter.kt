@@ -5,8 +5,8 @@ import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemViewModel
-import com.upstream.basemvvmimpl.presentation.adapter.BaseSortedAdapter
-import com.upstream.basemvvmimpl.presentation.view.BaseViewHolder
+import com.merseyside.adapters.base.BaseSortedAdapter
+import com.merseyside.adapters.view.TypedBindingHolder
 
 class ItemAdapter : BaseSortedAdapter<Item, ItemViewModel>() {
 
@@ -33,14 +33,14 @@ class ItemAdapter : BaseSortedAdapter<Item, ItemViewModel>() {
         this.optionsListener = listener
     }
 
-    override fun onBindViewHolder(holder: BaseViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: TypedBindingHolder<ItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
 
         getModelByPosition(position).apply {
             setLast(position == itemCount - 1)
         }
 
-        val item = getObjByPosition(position)
+        val item = getItemByPosition(position)
 
         holder.itemView.rootView.setOnLongClickListener {
             val popup = PopupMenu(holder.itemView.context, holder.itemView.findViewById(R.id.title))

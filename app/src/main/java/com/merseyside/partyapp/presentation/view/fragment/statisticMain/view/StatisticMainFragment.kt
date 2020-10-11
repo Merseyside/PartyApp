@@ -1,21 +1,17 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMain.view
 
 import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.appcompat.widget.Toolbar
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
-import androidx.fragment.app.FragmentTransaction
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import com.merseyside.adapters.base.BaseAdapter
+import com.merseyside.adapters.base.OnItemClickListener
 import com.merseyside.partyapp.BR
-import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.MemberStatistic
@@ -27,11 +23,7 @@ import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewM
 import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.adapter.MemberStatisticPagerAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.model.StatisticMainViewModel
-import com.merseyside.partyapp.presentation.view.fragment.statisticMember.view.StatisticMemberFragment
-import com.merseyside.partyapp.utils.getMemberStatistic
 import com.merseyside.partyapp.utils.getShareableStatistic
-import com.merseyside.partyapp.utils.shareStatistic
-import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
 
 class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, StatisticMainViewModel>() {
 
@@ -53,7 +45,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         return true
     }
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
@@ -68,7 +60,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         return StatisticMainModule(this, bundle)
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.fragment_statistic_main
     }
 
@@ -79,9 +71,9 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedViewModel = ViewModelProviders.of(baseActivityView).get(SharedViewModel::class.java)
+        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
 
-        init()
+        retainInstance = true
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -90,19 +82,16 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         doLayout()
     }
 
-    private fun init() {
-        viewModel.memberStatisticLiveData.observe(this, memberStatisticObserver)
-    }
-
     private fun doLayout() {
+        viewModel.memberStatisticLiveData.observe(viewLifecycleOwner, memberStatisticObserver)
         binding.memberList.adapter = adapter
 
         adapter.setOnItemClickListener(onMemberClickListener)
 
-        viewModel.getStatistic(sharedViewModel.eventContainer)
+        viewModel.initWithEvent(sharedViewModel.eventContainer)
     }
 
-    private val onMemberClickListener = object: BaseAdapter.OnItemClickListener<Member> {
+    private val onMemberClickListener = object: OnItemClickListener<Member> {
         override fun onItemClicked(obj: Member) {
             val position = adapter.getPositionOfObj(obj)
 
@@ -112,12 +101,13 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
 
     override fun onDestroyView() {
         super.onDestroyView()
+        viewModel.memberStatisticLiveData.removeObserver(memberStatisticObserver)
 
         adapter.removeOnItemClickListener(onMemberClickListener)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        baseActivityView.menuInflater.inflate(R.menu.menu_statistic, menu)
+        baseActivity.menuInflater.inflate(R.menu.menu_statistic, menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -125,10 +115,13 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         viewModel.statistic?.let { statistic ->
             when (item.itemId) {
                 R.id.action_share -> {
-                    shareStatistic(baseActivityView, getShareableStatistic(
-                        CalcApplication.getInstance().getContext(),
+                    shareStatistic(getShareableStatistic(
                         statistic
                     ))
+
+                    if (!prefsHelper.isRated()) showRateUsDialog()
+
+                    logEvent("share_all", Bundle())
                 }
             }
         }

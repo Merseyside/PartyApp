@@ -1,4 +1,5 @@
 <resources>
+    <string name="app_name">Вечеринка</string>
     <string name="action_settings">Настройки</string>
 
     <string name="unknown_error">Неизвестная ошибка</string>
@@ -21,22 +22,22 @@
     <string name="not_chosen">Не выбран</string>
 
     <string name="event_title">Название события</string>
-    <string name="choose_members">Для кого?</string>
+    <string name="with_whom_share">С кем делим?</string>
     <string name="choose_pays_member">Кто платит?</string>
     <string name="all_orders">Все заказы участника</string>
     <string name="result">Результат</string>
     <string name="add_members">Добавить участников</string>
-    <string name="notes_hint">Описание</string>
+    <string name="notes_hint">Описание(необяз.)</string>
 
     <string name="item_title">Название покупки</string>
-    <string name="item_description">Описание покупки</string>
+    <string name="item_description">Описание покупки(необяз.)</string>
     <string name="item_total_price">Полная стоимость</string>
 
     <string name="empty_title_error">Пожалуйста, заполните название события правильно</string>
     <string name="members_error">Добавьте как минимум двух участников</string>
-    <string name="name_error_msg">Имя не может быть пустым</string>
+    <string name="name_error_msg">Имя должно быть от 3 до 32 знаков</string>
     <string name="price_error_msg">Пожалуйста, заполните стоимость правильно</string>
-    <string name="members_error_msg">Пожалуйста, выберите как минимум одного учатсника</string>
+    <string name="members_error_msg">Пожалуйста, выберите как минимум одного участника</string>
 
     <string name="statistic">Статистика</string>
 
@@ -50,12 +51,13 @@
     <string name="action_edit">Изменить</string>
     <string name="action_delete">Удалить</string>
     <string name="action_share">Поделиться</string>
+    <string name="action_statistic">Статистика</string>
 
     <string name="delete_event_title">Удалить %1$s?</string>
     <string name="delete_event_message">Вы действительно хотите удалить это событие?</string>
     <string name="complete">Успешно</string>
-    <string name="event_name_error_msg">Название события должно быть от 3 до 24 символов</string>
-    <string name="notes_error_msg">Описание должно быт ьне больше 512 символов</string>
+    <string name="event_name_error_msg">Название события должно быть от 3 до 32 символов</string>
+    <string name="notes_error_msg">Описание должно быть не больше 512 символов</string>
 
     <string name="delete_item_title">Удалить %1$s?</string>
     <string name="delete_item_message">Вы действительно хотите удалить эту покупку?</string>
@@ -64,8 +66,10 @@
     <string name="owed">Занято</string>
     <string name="lend">Одолжено</string>
 
-    <string name="use_comma">Примечание: используйте запятую для разделения участников. Имена должны быть уникальны.</string>
-    <string name="enter_currency">Введите свою валюту</string>
+    <string name="use_comma">Примечание: используйте перевод на новую строку или точку для разделения участников. Имена должны быть уникальны.</string>
+    <string name="enter_currency">Укажите свою валюту</string>
+    <string name="fill_price_error">Для того, чтобы ввести долю участника, заполните полную смоимость правильно.</string>
+    <string name="currency_error">Валюта должна быть меньше 12 символов</string>
 
     <string name="for_member">для %1$s</string>
     <string name="from_member">от %1$s</string>
@@ -77,7 +81,28 @@
     <string name="total_spend">Всего потрачено</string>
     <string name="total_debt">Всего занято</string>
 
+    <string name="settings_interface">Интерфейс</string>
     <string name="language">Язык</string>
 
+    <string name="wrong_format">Неправильный формат ввода</string>
+    <string name="operators_hint">Примечание: используйте +-*/ при необходимости</string>
+
+    <string name="members_price_too_much_error">Установленные для участников цены больше общей стоимости</string>
+    <string name="members_price_too_few_error">Установленные для участников цены меньше общей общей стоимости</string>
+    <string name="reset">Сбросить</string>
+
+    <string name="delete">Удалить</string>
+    <string name="cancel">Отмена</string>
+    <string name="select_all">Выбрать всех</string>
+
     <string name="share_member">Поделиться статистикой участника</string>
+
+    <string name="powered">Статистика предоставлена приложением Калькулятор Вечеринки</string>
+
+    <string name="rate_title">Спасибо, что вы с нами!</string>
+    <string name="rate_description">Наша команда надеется, что Вам нравится приложение Калькулятор Вечеринки! Пожалуйста, оцените нашу работу на Google Play, так же Вы можете написать свои пожелания.</string>
+    <string name="rate_yes">Google play</string>
+    <string name="rate_no">Не сейчас</string>
+
+    <string name="version">Версия приложения: %1$s</string>
 </resources>

@@ -2,6 +2,7 @@
 package com.merseyside.partyapp.utils
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Build
@@ -15,20 +16,19 @@ import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.data.entity.Statistic
-import com.upstream.basemvvmimpl.utils.isNotZero
-import com.upstream.basemvvmimpl.utils.isZero
-import kotlinx.android.synthetic.main.fragment_member_statistic.view.*
-import java.lang.NumberFormatException
-import java.text.SimpleDateFormat
-import java.util.*
+import com.merseyside.utils.ext.isNotZero
+import java.lang.IllegalStateException
 import java.math.BigDecimal
 import java.math.RoundingMode
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.math.abs
 
 
 @SuppressLint("SimpleDateFormat")
 fun getDateTime(timestamp: Long): String? {
     return try {
-        val sdf = SimpleDateFormat("dd MMM", getCurrentLocale(CalcApplication.getInstance().getContext()))
+        val sdf = SimpleDateFormat("dd MMM EEEE", CalcApplication.getInstance().getLocale())
         val netDate = Date(timestamp)
         sdf.format(netDate)
     } catch (e: Exception) {
@@ -38,7 +38,7 @@ fun getDateTime(timestamp: Long): String? {
 
 fun getHoursDateTime(timestamp: Long): String? {
     return try {
-        val sdf = SimpleDateFormat("HH:mm", getCurrentLocale(CalcApplication.getInstance().getContext()))
+        val sdf = SimpleDateFormat("HH:mm", CalcApplication.getInstance().getLocale())
         val netDate = Date(timestamp)
         sdf.format(netDate)
     } catch (e: Exception) {
@@ -61,9 +61,20 @@ fun isPriceValid(price: String?): Boolean {
 }
 
 fun isPercentValid(percentStr: String): Boolean {
+    if (percentStr.isNotEmpty()) {
+        val percentFloat = percentStr.toFloat() / 100f
+
+        return percentFloat > 0f && percentFloat <= 1f
+    }
+
+    return false
+}
+
+@Throws(IllegalArgumentException::class)
+fun isMemberPriceValid(memberPrice: String, totalPrice: Double): Boolean {
     return try {
-        val percent = convertPercentToInt(percentStr)
-        return (!percentStr.contains(".") && percentStr.length < 3 && percent in 0 .. 100)
+        val price = convertPriceToDouble(memberPrice)
+        return price <= totalPrice
     } catch (e: NumberFormatException) {
         false
     }
@@ -71,7 +82,7 @@ fun isPercentValid(percentStr: String): Boolean {
 
 @Throws(NumberFormatException::class)
 fun convertPercentToFloat(percentStr: String): Float {
-    return percentStr.toFloat()
+    return percentStr.toFloat() / 100
 }
 
 @Throws(NumberFormatException::class)
@@ -79,17 +90,15 @@ fun convertPercentToInt(percentStr: String): Int {
     return percentStr.toInt()
 }
 
-@Throws(NumberFormatException::class)
-fun convertPercentToString(percentFloat: Float): String {
-    return percentFloat.toString().split(".")[0]
-}
-
 fun getHumanReadablePercents(percentFloat: Float): String {
-    return (percentFloat * 100).toInt().toString()
+
+    val bigInteger = BigDecimal((percentFloat * 100).toDouble())
+
+    return doubleToStringPrice(bigInteger.setScale(2, RoundingMode.HALF_UP).toDouble())
 }
 
-fun getInternalPercents(percentStr: String): Float {
-    return convertPercentToFloat(percentStr) / 100
+fun isPercentsAreDifferent(percentOne: Float, percentTwo: Float): Boolean {
+    return abs(percentOne - percentTwo) > 0.005f
 }
 
 fun isNameValid(name: String?): Boolean {
@@ -99,7 +108,7 @@ fun isNameValid(name: String?): Boolean {
         isNameValid(name.drop(1))
     }
 
-    return name.length in 3..24
+    return name.length in 3..32
 }
 
 @Throws(NumberFormatException::class)
@@ -108,16 +117,32 @@ fun convertPriceToDouble(price: String): Double {
     return price.toDouble()
 }
 
-fun doubleToStringPrice(double: Double): String {
-    val bigInteger = BigDecimal(double)
+@Throws(NumberFormatException::class)
+fun convertPriceToDoubleWithFormat(price: String): Double {
 
-    val doubleString = bigInteger.setScale(2, RoundingMode.HALF_UP).toString()
+    val bigDecimal = BigDecimal(price)
+
+    return bigDecimal.setScale(2, RoundingMode.HALF_UP).toDouble()
+}
+
+fun doubleToStringPrice(double: Double): String {
+    val bigDecimal = BigDecimal(double)
+
+    val doubleString = bigDecimal.setScale(2, RoundingMode.HALF_UP).toString()
 
     return if (doubleString.endsWith(".00")) {
         doubleString.replace(".00", "")
+    } else if (doubleString.contains(".") && doubleString.endsWith("0")) {
+        doubleString.dropLast(1)
     } else {
         doubleString
     }
+}
+
+fun doubleToFloatPercent(double: Double, scale: Int = 2): Float {
+    val bigInteger = BigDecimal(double)
+
+    return bigInteger.setScale(scale, RoundingMode.HALF_UP).toFloat()
 }
 
 fun RecyclerView.attachSnapHelperWithListener(
@@ -151,16 +176,26 @@ fun getCircleText(str: String): String {
 
     if (words.size >= 2) {
         (0..1).forEach { index ->
-            text.append(words[index][0])
+            if (words[index].isNotEmpty()) {
+                val char = words[index][0]
+                if (char.isLetter()) {
+                    text.append(char)
+                }
+            }
         }
     } else {
-        text.append(words[0][0])
+        val char = str.first()
+
+        if (char.isLetter()) {
+            text.append(char)
+        }
     }
 
-    return text.toString().toUpperCase(getCurrentLocale(CalcApplication.getInstance().getContext()))
+    return text.toString().toUpperCase(getCurrentLocale(CalcApplication.getInstance().context))
 }
 
-fun getShareableStatistic(context: Context, statistic: Statistic): String {
+fun getShareableStatistic(statistic: Statistic): String {
+    val context = CalcApplication.getInstance().context
     val builder = StringBuilder()
 
     fun getString(@StringRes resId: Int, vararg args: String): String {
@@ -176,10 +211,16 @@ fun getShareableStatistic(context: Context, statistic: Statistic): String {
         }
     }
 
+    builder.append(getString(R.string.powered))
+
     return builder.toString()
 }
 
-fun getMemberStatistic(context: Context, member: MemberStatistic, index: Int? = null): String {
+fun getMemberStatistic(
+    context: Context = CalcApplication.getInstance().context,
+    member: MemberStatistic,
+    index: Int? = null
+): String {
     fun getString(@StringRes resId: Int, vararg args: String): String {
         return context.getString(resId, *args)
     }
@@ -225,10 +266,10 @@ fun getMemberStatistic(context: Context, member: MemberStatistic, index: Int? = 
 
         val opponent = when (result) {
             is Result.ResultLender -> {
-                getString(R.string.debit, result.price.toString(), member.currency)
+                getString(R.string.debit, doubleToStringPrice(result.price), member.currency)
             }
             else -> {
-                getString(R.string.debt, result.price.toString(), member.currency)
+                getString(R.string.debt, doubleToStringPrice(result.price), member.currency)
             }
         }
 
@@ -241,16 +282,94 @@ fun getMemberStatistic(context: Context, member: MemberStatistic, index: Int? = 
     return memberBuilder.toString()
 }
 
-fun shareStatistic(context: Context, text: String) {
-    val sendIntent: Intent = Intent().apply {
-        action = Intent.ACTION_SEND
-        putExtra(
-            Intent.EXTRA_TEXT,
-            text
-        )
-        type = "text/plain"
+@Throws(IllegalArgumentException::class)
+fun convertPriceToPercent(price: Double, total: Double): Float {
+    if (price <= total) {
+        return doubleToFloatPercent(price / total, 4)
+    } else {
+        throw IllegalArgumentException("Price can not be bigger then total price. Price = $price total = $total")
+    }
+}
+
+fun convertPercentToPrice(percent: Float, total: Double): Double {
+    val bigInteger = BigDecimal(percent * total)
+
+    return bigInteger.setScale(2, RoundingMode.HALF_UP).toDouble()
+}
+
+@Throws(NumberFormatException::class, IllegalStateException::class)
+fun checkPriceForCalculation(expression: String): String? {
+    var formattedExpression = expression
+
+    if (formattedExpression.endsWith("+") ||
+        formattedExpression.endsWith("-") ||
+        formattedExpression.endsWith("*") ||
+        formattedExpression.endsWith("/")
+    ) {
+
+        val endingOperator = formattedExpression.last()
+        formattedExpression = formattedExpression.dropLast(1)
+
+        calculate(formattedExpression)?.let {
+            if (convertPriceToDouble(it) < 0) throw IllegalStateException("Price can not be negative")
+            return it + endingOperator
+        }
     }
 
-    val shareIntent = Intent.createChooser(sendIntent, null)
-    context.startActivity(shareIntent)
+    return null
 }
+
+@Throws(NumberFormatException::class)
+fun calculate(expr: String): String? {
+    return if (expr.contains("[*+\\-/]".toRegex())) {
+
+        var isFirstNegative = false
+        val splits = expr.split("[*+\\-/]".toRegex()).mapNotNull {
+            if (it.isNotEmpty()) {
+                it
+            } else {
+                isFirstNegative = true
+                null
+            }
+        }.toMutableList()
+
+        if (splits.size == 2) {
+            if (isFirstNegative) splits[0] = "-${splits[0]}"
+
+            Log.d(TAG, "here1")
+            val result: Double = when {
+                expr.contains("*") -> {
+                    splits[0].toDouble() * splits[1].toDouble()
+                }
+                expr.contains("+") -> {
+                    splits[0].toDouble() + splits[1].toDouble()
+                }
+                expr.contains("-") -> {
+                    splits[0].toDouble() - splits[1].toDouble()
+                }
+                else -> {
+                    splits[0].toDouble() / splits[1].toDouble()
+                }
+            }
+
+            return doubleToStringPrice(result)
+        } else {
+            Log.d(TAG, "here")
+            throw NumberFormatException()
+        }
+    } else {
+        null
+    }
+}
+
+
+fun generateId(): String {
+    val charPool : List<Char> = ('0'..'9').toList()
+
+    return (1..10)
+        .map { kotlin.random.Random.nextInt(0, charPool.size) }
+        .map(charPool::get)
+        .joinToString("")
+}
+
+private const val TAG = "Utils"

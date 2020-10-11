@@ -9,8 +9,8 @@ import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.doubleToStringPrice
-import com.upstream.basemvvmimpl.data.deserialize
-import com.upstream.basemvvmimpl.data.serialize
+import com.merseyside.utils.serialization.deserialize
+import com.merseyside.utils.serialization.serialize
 
 class StatisticMemberViewModel : BaseCalcViewModel() {
 
@@ -18,21 +18,21 @@ class StatisticMemberViewModel : BaseCalcViewModel() {
 
     val ordersVisibility = ObservableField(false)
     val ordersContainer = ObservableField<List<Order>>()
-    val ordersTitle = ObservableField<String>()
+    val ordersTitle = ObservableField<String>(getString(R.string.all_orders))
 
     val resultsVisibility = ObservableField(false)
     val resultsContainer = ObservableField<List<Result>>()
 
     val totalSpend = ObservableField<String>()
-    val spendTitle = ObservableField<String>()
+    val spendTitle = ObservableField<String>(getString(R.string.spend))
 
     val totalDebt = ObservableField<String>()
-    val debtTitle = ObservableField<String>()
+    val debtTitle = ObservableField<String>(getString(R.string.owed))
 
     val totalLend = ObservableField<String>()
-    val lendTitle = ObservableField<String>()
+    val lendTitle = ObservableField<String>(getString(R.string.lend))
 
-    val shareMemberTitle = ObservableField<String>()
+    val shareMemberTitle = ObservableField<String>(getString(R.string.share_member))
 
     override fun updateLanguage(context: Context) {
         super.updateLanguage(context)
@@ -44,7 +44,9 @@ class StatisticMemberViewModel : BaseCalcViewModel() {
         shareMemberTitle.set(context.getString(R.string.share_member))
     }
 
-    override fun dispose() {}
+    override fun dispose() {
+        ordersTitle.notifyChange()
+    }
 
     override fun readFrom(bundle: Bundle) {
         if (bundle.containsKey(STATISTIC_KEY)) {
@@ -66,16 +68,15 @@ class StatisticMemberViewModel : BaseCalcViewModel() {
             ordersContainer.set(statistic.orders)
         }
 
-        if (!statistic.priceResult.isNullOrEmpty()) {
-
+        if (statistic.priceResult.isNullOrEmpty()) {
+            resultsVisibility.set(false)
+        } else {
             resultsVisibility.set(true)
             resultsContainer.set(statistic.priceResult)
 
             totalSpend.set("${doubleToStringPrice(statistic.totalSpend)} ${statistic.currency}")
             totalDebt.set("${doubleToStringPrice(statistic.totalDebt)} ${statistic.currency}")
             totalLend.set("${doubleToStringPrice(statistic.totalLend)} ${statistic.currency}")
-        } else {
-            resultsVisibility.set(false)
         }
     }
 

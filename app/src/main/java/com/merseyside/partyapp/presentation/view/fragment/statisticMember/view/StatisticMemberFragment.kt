@@ -2,33 +2,38 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMember.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.appcompat.app.ActionBar
+import com.merseyside.animators.AnimatorList
+import com.merseyside.animators.Approach
+import com.merseyside.animators.Axis
+import com.merseyside.animators.MainPoint
+import com.merseyside.animators.animator.AlphaAnimator
+import com.merseyside.animators.animator.TransitionAnimator
 import com.merseyside.partyapp.BR
-import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.databinding.FragmentMemberStatisticBinding
 import com.merseyside.partyapp.presentation.base.BaseCalcFragment
 import com.merseyside.partyapp.presentation.di.component.DaggerStatisticMemberComponent
 import com.merseyside.partyapp.presentation.di.module.StatisticMemberModule
-import com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter.OrderAdapter
-import com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter.ResultAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.StatisticMemberViewModel
 import com.merseyside.partyapp.utils.getMemberStatistic
-import com.merseyside.partyapp.utils.getShareableStatistic
-import com.merseyside.partyapp.utils.shareStatistic
+import com.merseyside.utils.Logger
+import com.merseyside.utils.delayedMainThread
+import com.merseyside.utils.randomBool
+import com.merseyside.utils.time.Millis
 
 class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding, StatisticMemberViewModel>() {
 
     private var statistic: MemberStatistic? = null
 
+    private var animatorList: AnimatorList? = null
+
     override fun hasTitleBackButton(): Boolean {
         return true
     }
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
@@ -43,18 +48,12 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
         return StatisticMemberModule(this, bundle)
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.fragment_member_statistic
     }
 
     override fun getTitle(context: Context): String? {
         return null
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        init()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -63,30 +62,98 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
         doLayout()
     }
 
-    private fun init() {
-
-    }
-
     private fun doLayout() {
         if (statistic != null) {
             viewModel.initWithMemberStatistic(statistic!!)
         }
 
         binding.shareMember.setOnClickListener {
-            shareStatistic(baseActivityView, getMemberStatistic(
-                CalcApplication.getInstance().getContext(),
-                viewModel.statistic
+            shareStatistic(getMemberStatistic(
+                member = viewModel.statistic
             ))
+
+            if (!prefsHelper.isRated() && randomBool(0.2f)) showRateUsDialog()
+
+            logEvent("share_member", Bundle())
+        }
+
+        startAnimation()
+    }
+
+    private fun startAnimation() {
+        if (animatorList == null) {
+            animatorList = AnimatorList(Approach.TOGETHER).apply {
+                addAnimator(
+                    TransitionAnimator(
+                        TransitionAnimator.Builder(
+                        view = binding.orders,
+                        duration = duration
+                    ).apply {
+                        setInPercents(
+                            0f to MainPoint.TOP_RIGHT,
+                            0f to MainPoint.TOP_LEFT,
+                            axis = Axis.X
+                        )
+                    })
+                )
+
+                addAnimator(
+                    AlphaAnimator(AlphaAnimator.Builder(
+                        view = binding.orders,
+                        duration = duration
+                    ).apply {
+                        values(0f, 1f)
+                    })
+                )
+
+                addAnimator(
+                    AlphaAnimator(
+                        AlphaAnimator.Builder(
+                        view = binding.stats,
+                        duration = duration
+                    ).apply {
+                        values(0f, 1f)
+                    })
+                )
+
+                addAnimator(
+                    TransitionAnimator(TransitionAnimator.Builder(
+                        view = binding.results,
+                        duration = duration
+                    ).apply {
+                        setInPercents(
+                            1f to MainPoint.TOP_LEFT,
+                            0f to MainPoint.TOP_LEFT,
+                            axis = Axis.Y
+                        )
+                    })
+                )
+
+                addAnimator(
+                    AlphaAnimator(AlphaAnimator.Builder(
+                        view = binding.results,
+                        duration = duration
+                    ).apply {
+                        values(0f, 1f)
+                    })
+                )
+            }
+        }
+
+        delayedMainThread(Millis(300)) {
+            animatorList!!.start()
+            animatorList = null
         }
     }
 
     companion object {
-        private const val TAG = "StatisticMemberFragment"
 
         fun newInstance(statistic: MemberStatistic): StatisticMemberFragment {
             return StatisticMemberFragment().apply {
                 this.statistic = statistic
             }
         }
+
+        val duration = Millis(700)
     }
 }

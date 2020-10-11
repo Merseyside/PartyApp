@@ -8,10 +8,12 @@
 
     <attr name="calcIconColor" format="reference"/>
 
-    <declare-styleable name="CircleView">
-        <attr name="сolor" format="color"/>
-        <attr name="text" format="string"/>
-        <attr name="textColor" format="color"/>
+    <declare-styleable name="MaxHeightRecyclerView">
+        <attr name="maxHeight" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="NonSwipeableViewPager">
+        <attr name="duration" format="integer" />
     </declare-styleable>
 
 </resources>

@@ -2,17 +2,25 @@ package com.merseyside.partyapp.data.repository
 
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.EventDao
+import com.merseyside.partyapp.data.db.event.Member
+import com.merseyside.partyapp.data.entity.Contact
 import com.merseyside.partyapp.data.entity.Status
-import com.merseyside.partyapp.di.eventComponent
 import com.merseyside.partyapp.domain.repository.EventRepository
-import org.kodein.di.erased.instance
+import com.merseyside.partyapp.utils.ContentResolver
 
-class EventRepositoryImpl(private val eventDao: EventDao) : EventRepository {
+class EventRepositoryImpl(
+    private val eventDao: EventDao,
+    private val contentResolver: ContentResolver
+) : EventRepository {
 
     override suspend fun deleteEvent(id: Long): Boolean {
         eventDao.deleteEvent(id)
 
         return true
+    }
+
+    override suspend fun getContacts(): List<Contact> {
+        return contentResolver.getContacts()
     }
 
     override suspend fun closeEvent(id: Long): Boolean {
@@ -21,11 +29,11 @@ class EventRepositoryImpl(private val eventDao: EventDao) : EventRepository {
         return true
     }
 
-    override suspend fun addEvent(id: Long?, name: String, memberNames: List<String>?, notes: String): Event {
+    override suspend fun addEvent(id: Long?, name: String, members: List<Member>?, notes: String): Event {
         return if (id == null) {
-            eventDao.insert(name, memberNames!!, notes)
+            eventDao.insert(name, members!!, notes)
         } else {
-            eventDao.change(id, name, memberNames, notes)
+            eventDao.change(id, name, members, notes)
         }
     }
 
@@ -42,6 +50,4 @@ class EventRepositoryImpl(private val eventDao: EventDao) : EventRepository {
     override suspend fun getEvent(id: Long): Event {
         return eventDao.getEventById(id)
     }
-
-
 }

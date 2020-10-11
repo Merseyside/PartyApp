@@ -17,8 +17,7 @@ class EventListViewModel(
     private val deleteEventUseCase: DeleteEventInteractor
 ) : BaseCalcViewModel(router) {
 
-    val eventsVisibility = ObservableField<Boolean>()
-
+    val eventsVisibility = ObservableField(true)
     val eventsContainer = ObservableField<List<Event>>()
 
     override fun readFrom(bundle: Bundle) {}
@@ -58,10 +57,12 @@ class EventListViewModel(
         showAlertDialog(
             title = getString(R.string.delete_event_title, event.name),
             message = getString(R.string.delete_event_message),
+            positiveButtonText = getString(R.string.delete),
+            negativeButtonText = getString(R.string.cancel),
             onPositiveClick = {
                 deleteEventUseCase.execute(
                     params = DeleteEventInteractor.Params(id = event.id),
-                    onComplete = {showEvents()},
+                    onComplete = { showEvents() },
                     onError = {
                         showErrorMsg(errorMsgCreator.createErrorMsg(it))
                     }
@@ -74,7 +75,7 @@ class EventListViewModel(
         router.navigateTo(Screens.SettingsScreen())
     }
 
-    companion object {
-        private const val TAG = "EventListViewModel"
+    fun navigateToStatistic() {
+        router.navigateTo(Screens.StatisticScreen())
     }
 }

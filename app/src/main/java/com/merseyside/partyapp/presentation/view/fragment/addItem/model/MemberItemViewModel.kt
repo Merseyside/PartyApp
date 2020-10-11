@@ -1,21 +1,12 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 import androidx.annotation.AttrRes
 import androidx.databinding.Bindable
+import com.merseyside.adapters.model.BaseSelectableAdapterViewModel
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member
-import com.upstream.basemvvmimpl.presentation.adapter.SelectableItemInterface
-import com.upstream.basemvvmimpl.presentation.model.BaseComparableAdapterViewModel
 
-class MemberItemViewModel(override var obj: Member) : BaseComparableAdapterViewModel<Member>(obj),
-    SelectableItemInterface {
-
-    override var isSelected: Boolean = false
-    set(value) {
-        field = value
-
-        notifyUpdate()
-    }
+class MemberItemViewModel(override var obj: Member) : BaseSelectableAdapterViewModel<Member>(obj) {
 
     override fun areContentsTheSame(obj: Member): Boolean {
         return this.obj == obj
@@ -47,7 +38,7 @@ class MemberItemViewModel(override var obj: Member) : BaseComparableAdapterViewM
     @Bindable
     @AttrRes
     fun getCircleTextColor(): Int {
-        return if (isSelected) {
+        return if (isSelected()) {
             R.attr.colorOnBackground
         } else {
             R.attr.colorOnSurface
@@ -57,14 +48,25 @@ class MemberItemViewModel(override var obj: Member) : BaseComparableAdapterViewM
     @Bindable
     @AttrRes
     fun getCircleColor(): Int {
-        return if (isSelected) {
+        return if (isSelected()) {
             R.attr.colorPrimary
         } else {
             R.attr.colorSecondaryVariant
         }
     }
 
+    @Bindable
+    fun getImageUrl(): String? {
+        return obj.avatarUrl
+    }
+
     companion object {
         private const val TAG = "StatisticMemberItem"
+    }
+
+    override fun notifySelectEnabled(isEnabled: Boolean) {}
+
+    override fun onSelectedChanged(isSelected: Boolean) {
+        notifyUpdate()
     }
 }

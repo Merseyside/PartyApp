@@ -2,22 +2,18 @@ package com.merseyside.partyapp.presentation.view.fragment.addItem.view
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.ViewModelProviders
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
-import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.databinding.FragmentAddItemBinding
 import com.merseyside.partyapp.presentation.base.BaseCalcFragment
 import com.merseyside.partyapp.presentation.di.component.DaggerAddItemComponent
 import com.merseyside.partyapp.presentation.di.module.AddItemModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
-import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberAdapter
 import com.merseyside.partyapp.presentation.view.fragment.addItem.model.AddItemViewModel
-import com.upstream.basemvvmimpl.presentation.adapter.BaseAdapter
 
 class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewModel>() {
 
@@ -27,7 +23,7 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
         return true
     }
 
-    override fun setBindingVariable(): Int {
+    override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
@@ -42,7 +38,7 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
         return AddItemModule(this, bundle)
     }
 
-    override fun setLayoutId(): Int {
+    override fun getLayoutId(): Int {
         return R.layout.fragment_add_item
     }
 
@@ -53,9 +49,7 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedViewModel = ViewModelProviders.of(baseActivityView).get(SharedViewModel::class.java)
-
-        init()
+        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -64,19 +58,15 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
         doLayout()
     }
 
-    private fun init() {
-
-    }
-
     private fun doLayout() {
 
         binding.additionalContainer.setOnClickListener {
             if (binding.expandedGroup.visibility == View.VISIBLE) {
                 binding.expandedGroup.visibility = View.GONE
-                binding.expandableIcon.setImageDrawable(ContextCompat.getDrawable(baseActivityView, R.drawable.ic_arrow_down))
+                binding.expandableIcon.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_arrow_down))
             } else {
                 binding.expandedGroup.visibility = View.VISIBLE
-                binding.expandableIcon.setImageDrawable(ContextCompat.getDrawable(baseActivityView, R.drawable.ic_arrow_up))
+                binding.expandableIcon.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_arrow_up))
                 binding.scrollView.post { binding.scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
             }
         }
@@ -87,6 +77,10 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
             }
         } else {
             viewModel.init(sharedViewModel.eventContainer!!)
+        }
+
+        binding.price.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) binding.price.setText("${binding.price.text}\n")
         }
     }
 
@@ -101,4 +95,6 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
             return AddItemFragment()
         }
     }
+
+
 }

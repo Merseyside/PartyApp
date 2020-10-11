@@ -1,14 +1,12 @@
 package com.merseyside.partyapp.presentation.view.fragment.eventList.model
 
 import android.widget.ImageView
-import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.presentation.view.fragment.eventList.adapter.EventAdapter
-import com.upstream.basemvvmimpl.presentation.adapter.UpdateRequest
-import com.upstream.basemvvmimpl.utils.getColorFromAttr
+import com.merseyside.adapters.base.UpdateRequest
 
 @BindingAdapter("app:events")
 fun setEvents(recyclerView: RecyclerView, events: List<Event>?) {
@@ -18,10 +16,9 @@ fun setEvents(recyclerView: RecyclerView, events: List<Event>?) {
         val eventsAdapter = recyclerView.adapter as EventAdapter
         if (!events!!.isNullOrEmpty()) {
             if (eventsAdapter.isNotEmpty()) {
-                val request = UpdateRequest.Builder<Event>()
+                val request = UpdateRequest.Builder(events)
                     .isAddNew(true)
                     .isDeleteOld(true)
-                    .setList(events)
                     .build()
 
                 eventsAdapter.update(request)
@@ -29,7 +26,7 @@ fun setEvents(recyclerView: RecyclerView, events: List<Event>?) {
                 eventsAdapter.add(events)
             }
         } else {
-            eventsAdapter.removeAll()
+            eventsAdapter.clear()
         }
     }
 }

@@ -5,14 +5,15 @@ import android.net.Uri
 import com.pchmn.materialchips.model.ChipInterface
 
 data class ContactChip(
-    private val id: String,
+    val id: String,
     private val avatarUri: Uri?,
-    private val name: String,
-    private val phoneNumber: String?
+    val name: String,
+    val phoneNumber: String?,
+    val obj: Any? = null
 ): ChipInterface {
 
-    override fun getObject(): Any {
-        throw NotImplementedError()
+    override fun getObject(): Any? {
+        return obj
     }
 
     override fun setSelected(isSelected: Boolean) {}

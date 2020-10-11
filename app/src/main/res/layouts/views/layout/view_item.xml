@@ -7,7 +7,7 @@
             type="com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemViewModel" />
     </data>
 
-    <RelativeLayout
+    <LinearLayout
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -19,23 +19,41 @@
         android:paddingEnd="@dimen/normal_spacing"
         android:foreground="@drawable/card_view_ripple">
 
-        <TextView
-            android:id="@+id/title"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
-            android:text="@{obj.title}"
-            android:textSize="@dimen/large_text_size"
-            android:ellipsize="marquee"
-            android:layout_marginBottom="@dimen/small_spacing"/>
+            android:layout_marginBottom="@dimen/small_spacing">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2"
+                android:text="@{obj.title}"
+                android:textSize="@dimen/large_text_size"
+                android:ellipsize="marquee"
+                android:layout_centerVertical="true"
+                android:layout_toStartOf="@+id/time"
+                android:layout_marginEnd="@dimen/normal_spacing"/>
+
+            <TextView
+                android:id="@+id/time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                android:text="@{obj.time}"
+                android:layout_centerVertical="true"/>
+
+        </RelativeLayout>
 
         <View
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
             android:background="@color/transparent_grey"
             android:layout_below="@id/title"
-            app:isVisibleOrGone="@{!obj.last}"/>
+            app:isVisibleOrGone="@{!obj.lastItem}"/>
 
-    </RelativeLayout>
+    </LinearLayout>
 
 </layout>

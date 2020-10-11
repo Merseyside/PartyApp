@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import com.merseyside.archy.presentation.view.circleView.CircleTextView
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.MemberInfo
-import com.merseyside.partyapp.presentation.view.view.circleView.CircleView
 import com.merseyside.partyapp.utils.getCircleText
 
 class MemberSpinnerAdapter (
@@ -29,7 +29,7 @@ class MemberSpinnerAdapter (
          val view: View = convertView ?: inflater.inflate(resourceId, parent, false)
 
          val name: TextView = view.findViewById(R.id.name)
-         val circle: CircleView = view.findViewById(R.id.circle)
+         val circle: CircleTextView = view.findViewById(R.id.circle)
 
          name.text = member.name
          circle.setText(getCircleText(member.name))
