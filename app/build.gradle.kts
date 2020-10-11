@@ -27,7 +27,7 @@ android {
         }
 
         getByName("release") {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
             consumerProguardFiles("proguard-rules.pro")
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
@@ -56,9 +56,7 @@ android {
         }
     }
 
-    dataBinding {
-        isEnabled = true
-    }
+    buildFeatures.dataBinding = true
 
     sourceSets.getByName("main") {
 

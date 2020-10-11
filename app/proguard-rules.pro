@@ -22,6 +22,14 @@
 
 -keepattributes *Annotation*, InnerClasses
 -dontnote kotlinx.serialization.SerializationKt
+
+-keepclassmembers class kotlinx.serialization.json.** {
+    *** Companion;
+}
+-keepclasseswithmembers class kotlinx.serialization.json.** {
+    kotlinx.serialization.KSerializer serializer(...);
+}
+
 -keep,includedescriptorclasses class com.merseyside.partyapp.**$$serializer { *; }
 -keepclassmembers class com.merseyside.partyapp.** {
     *** Companion;
@@ -29,6 +37,14 @@
 -keepclasseswithmembers class com.merseyside.partyapp.** {
     kotlinx.serialization.KSerializer serializer(...);
 }
+
+#-keep,includedescriptorclasses class com.merseyside.archy.**$$serializer { *; }
+#-keepclassmembers class com.merseyside.archy.** {
+#    *** Companion;
+#}
+#-keepclasseswithmembers class com.merseyside.archy.** {
+#    kotlinx.serialization.KSerializer serializer(...);
+#}
 
 -keep class org.apache.http.** {
     *;

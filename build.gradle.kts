@@ -3,19 +3,6 @@
  */
 
 allprojects {
-//    buildscript {
-//        repositories {
-//            mavenLocal()
-//
-//            jcenter()
-//            google()
-//
-//            maven { url = uri("https://dl.bintray.com/kotlin/kotlin") }
-//            maven { url = uri("https://kotlin.bintray.com/kotlinx") }
-//            maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
-//        }
-//    }
-
     repositories {
         mavenLocal()
 
@@ -32,7 +19,6 @@ allprojects {
         maven { url = uri("https://dl.bintray.com/kodein-framework/Kodein-DI") }
         maven { url = uri("https://dl.bintray.com/korlibs/korlibs") }
         maven { url = uri("https://dl.bintray.com/florent37/maven") }
-        maven { url = uri("https://merseysoftware.bintray.com/mersey-library1")}
     }
 }
 
