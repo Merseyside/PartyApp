@@ -4,7 +4,7 @@ import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.di.itemComponent
 import com.merseyside.partyapp.domain.base.CoroutineUseCase
 import com.merseyside.partyapp.domain.repository.ItemRepository
-import org.kodein.di.erased.instance
+import org.kodein.di.instance
 
 class GetItemsByEventIdInteractor : CoroutineUseCase<List<Item>, GetItemsByEventIdInteractor.Params>() {
 

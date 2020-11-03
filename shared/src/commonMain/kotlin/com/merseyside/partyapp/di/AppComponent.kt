@@ -9,19 +9,20 @@ import com.squareup.sqldelight.db.SqlDriver
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.kodein.di.DI
 import org.kodein.di.bind
+import org.kodein.di.instance
 import org.kodein.di.singleton
 
 expect var sqlDriver: SqlDriver?
 expect var baseContentResolver: ContentResolver?
 
-internal val databaseModule = DI("database") {
+internal val databaseModule = DI.Module("database") {
 
     bind<CalcDatabase>() with singleton {
         createDatabase(sqlDriver!!)
     }
 }
 
-internal val appModule = Kodein.Module("app") {
+internal val appModule = DI.Module("app") {
     bind<Preferences>() with singleton {
         Preferences("calcPrefs")
     }
@@ -36,7 +37,7 @@ internal val appModule = Kodein.Module("app") {
 }
 
 @ExperimentalCoroutinesApi
-internal val appComponent = Kodein {
+internal val appComponent = DI {
     import(appModule)
     import(databaseModule)
 }
