@@ -11,20 +11,13 @@ pluginManagement {
         maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
         maven { url = uri("https://plugins.gradle.org/m2/") }
     }
-
-//    resolutionStrategy.eachPlugin {
-//        // part of plugins defined in Deps.Plugins, part in buildSrc/build.gradle.kts
-//        val module = Deps.plugins[requested.id.id] ?: return@eachPlugin
-//
-//        useModule(module)
-//    }
 }
 
 include(":app")
 include(":shared")
 include(":chipsLib")
 
-private val isLocalDependencies = true
+private val isLocalDependencies = false
 
 if (isLocalDependencies) {
     include(":kmp-clean-mvvm-arch")

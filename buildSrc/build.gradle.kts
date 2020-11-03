@@ -4,6 +4,8 @@
 
 plugins {
     `kotlin-dsl`
+    kotlin("jvm") version "1.4.10"
+    kotlin("plugin.serialization") version "1.4.10"
 }
 
 repositories {
@@ -12,16 +14,18 @@ repositories {
 
     maven { url = uri("https://dl.bintray.com/icerockdev/plugins") }
     maven { url = uri("https://maven.fabric.io/public") }
+
 }
 
-val multiplatform = "0.6.1"
-val kotlin = "1.3.72"
-val gradle = "4.0.0"
-val sqldelight_version = "1.3.0"
+val multiplatform = "0.8.0"
+val kotlin = "1.4.10"
+val gradle = "4.0.1"
+val sqldelight_version = "1.4.4"
 val butterknife = "10.2.1"
 val maven_version = "2.1"
 val google_services = "4.3.3"
 val fabric = "1.31.2"
+val sqldelight = "1.4.3"
 
 dependencies {
     implementation("dev.icerock:mobile-multiplatform:$multiplatform")

@@ -5,12 +5,19 @@ import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.db.event.MembersModel
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.db.model.EventModel
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.parse
-import kotlinx.serialization.stringify
 
 class EventDataMapper {
+
+    val json: Json by lazy {
+        Json {
+            isLenient = true
+            allowStructuredMapKeys = true
+            ignoreUnknownKeys = true
+        }
+    }
 
     fun transform(eventModels: List<EventModel>): List<Event> {
         return eventModels.map {
@@ -31,24 +38,20 @@ class EventDataMapper {
         }
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     fun membersToStr(membersModel: MembersModel): String {
-        return Json.nonstrict.stringify(membersModel)
+        return json.encodeToString(membersModel)
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     fun strToMembers(str: String): MembersModel {
-        return Json.nonstrict.parse(str)
+        return json.decodeFromString(str)
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     fun memberToStr(membersModel: Member): String {
-        return Json.nonstrict.stringify(membersModel)
+        return json.encodeToString(membersModel)
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     fun strToMember(str: String): Member {
-        return Json.nonstrict.parse(str)
+        return json.decodeFromString(str)
     }
 
 

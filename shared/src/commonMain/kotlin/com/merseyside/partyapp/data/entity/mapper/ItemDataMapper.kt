@@ -4,31 +4,34 @@ import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.data.db.item.MembersModel
 import com.merseyside.partyapp.db.model.ItemModel
-import kotlinx.serialization.ImplicitReflectionSerializer
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.parse
-import kotlinx.serialization.stringify
 
 class ItemDataMapper {
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
+    val json: Json by lazy {
+        Json {
+            isLenient = true
+            allowStructuredMapKeys = true
+            ignoreUnknownKeys = true
+        }
+    }
+
     fun membersToStr(membersModel: MembersModel): String {
-        return Json.nonstrict.stringify(membersModel)
+        return json.encodeToString(membersModel)
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     fun strToMembers(str: String): MembersModel {
-        return Json.nonstrict.parse(str)
+        return json.decodeFromString(str)
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     fun MemberInfoToStr(itemInfo: MemberInfo): String {
-        return Json.nonstrict.stringify(itemInfo)
+        return json.encodeToString(itemInfo)
     }
 
-    @UseExperimental(ImplicitReflectionSerializer::class)
     fun strToMemberInfo(str: String): MemberInfo {
-        return Json.nonstrict.parse(str)
+        return json.decodeFromString(str)
     }
 
 

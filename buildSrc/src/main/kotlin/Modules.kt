@@ -18,7 +18,7 @@ object Modules {
 
     object Android {
 
-        const val cleanMvvmArch = ":clean-mvvm-arch"
+        const val cleanMvvmArch = ":archy"
         const val adapters = ":adapters"
         const val animators = ":animators"
         const val utils = ":utils"
