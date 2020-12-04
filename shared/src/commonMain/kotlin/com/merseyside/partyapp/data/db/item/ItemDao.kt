@@ -1,10 +1,10 @@
 package com.merseyside.partyapp.data.db.item
 
+import com.merseyside.kmpMerseyLib.utils.Logger
 import com.merseyside.kmpMerseyLib.utils.time.getCurrentTimeMillis
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.mapper.ItemDataMapper
-import com.merseyside.partyapp.utils.Logger
 
 class ItemDao(database: CalcDatabase) {
 
@@ -17,7 +17,7 @@ class ItemDao(database: CalcDatabase) {
     }
 
     fun changeItem(id: Long, name: String, description: String, price: Double, payMember: Member, membersInfo: List<MemberInfo>) {
-        Logger.logMsg(TAG, "$id")
+        Logger.log(TAG, "$id")
         db.changeItem(name, description, price, payMember, MembersModel(membersInfo), getCurrentTimeMillis(), id)
     }
 

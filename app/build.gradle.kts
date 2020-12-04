@@ -94,6 +94,13 @@ val androidLibs = listOf(
     Deps.Libs.Android.cicerone.name
 )
 
+val merseyLibs = listOf(
+    Deps.Libs.Android.MerseyLibs.archy.name,
+    Deps.Libs.Android.MerseyLibs.adapters.name,
+    Deps.Libs.Android.MerseyLibs.animators.name,
+    Deps.Libs.Android.MerseyLibs.utils.name
+)
+
 val modulez = listOf(
     ":shared",
     ":chipsLib",
@@ -104,8 +111,11 @@ val modulez = listOf(
 )
 
 dependencies {
-
-    modulez.forEach { module -> implementation(project(module))}
+    if (isLocalDependencies()) {
+        modulez.forEach { module -> implementation(project(module)) }
+    } else {
+        merseyLibs.forEach { lib -> implementation(lib) }
+    }
 
     androidLibs.forEach { lib -> implementation(lib)}
 

@@ -4,13 +4,10 @@ import com.merseyside.partyapp.data.db.event.EventDao
 import com.merseyside.partyapp.data.repository.EventRepositoryImpl
 import com.merseyside.partyapp.domain.repository.EventRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import org.kodein.di.Kodein
-import org.kodein.di.erased.bind
-import org.kodein.di.erased.instance
-import org.kodein.di.erased.singleton
+import org.kodein.di.*
 
 @ExperimentalCoroutinesApi
-internal val eventModule = Kodein.Module("event") {
+internal val eventModule = DI.Module("event") {
 
     bind<EventDao>() with singleton { EventDao(instance()) }
 
@@ -20,7 +17,7 @@ internal val eventModule = Kodein.Module("event") {
 }
 
 @ExperimentalCoroutinesApi
-internal val eventComponent = Kodein {
+internal val eventComponent = DI {
     extend(appComponent)
     import(eventModule)
 }

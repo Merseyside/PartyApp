@@ -3,7 +3,7 @@ package com.merseyside.partyapp.domain.interactor
 import com.merseyside.partyapp.di.itemComponent
 import com.merseyside.partyapp.domain.base.CoroutineUseCase
 import com.merseyside.partyapp.domain.repository.ItemRepository
-import org.kodein.di.erased.instance
+import org.kodein.di.instance
 
 class DeleteItemInteractor : CoroutineUseCase<Boolean, DeleteItemInteractor.Params>() {
 

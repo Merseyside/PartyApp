@@ -39,7 +39,6 @@ val mppLibs = listOf(
     Deps.Libs.MultiPlatform.coroutines,
     Deps.Libs.MultiPlatform.serialization,
     Deps.Libs.MultiPlatform.kodein,
-    Deps.Libs.MultiPlatform.kodeinErased,
     Deps.Libs.MultiPlatform.sqlDelight,
     Deps.Libs.MultiPlatform.preferences
 )
@@ -48,16 +47,19 @@ val merseyModules = listOf(
     LibraryModules.MultiPlatform.utils
 )
 
-setupFramework(
-    exports = mppLibs
+val merseyLibs = listOf(
+    Deps.Libs.MultiPlatform.MerseyLibs.cleanMvvmArch,
+    Deps.Libs.MultiPlatform.MerseyLibs.utils
 )
 
 dependencies {
     mppLibs.forEach { mppLibrary(it) }
 
-    merseyModules.forEach { module -> mppModule(module) }
-
-    //implementation("com.merseyside.merseyLib:kmp-clean-mvvm-arch:1.2.3")
+    if (isLocalDependencies()) {
+        merseyModules.forEach { module -> mppModule(module) }
+    } else {
+        merseyLibs.forEach { lib -> mppLibrary(lib) }
+    }
 
     kaptLibrary(Deps.Libs.Android.daggerCompiler)
     compileOnly("javax.annotation:jsr250-api:1.0")

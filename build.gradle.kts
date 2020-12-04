@@ -19,6 +19,7 @@ allprojects {
         maven { url = uri("https://dl.bintray.com/kodein-framework/Kodein-DI") }
         maven { url = uri("https://dl.bintray.com/korlibs/korlibs") }
         maven { url = uri("https://dl.bintray.com/florent37/maven") }
+        maven { url = uri("https://dl.bintray.com/merseysoft/mersey-library")}
     }
 }
 

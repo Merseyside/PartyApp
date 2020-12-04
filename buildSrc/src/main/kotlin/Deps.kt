@@ -11,13 +11,13 @@ object Deps {
     object Libs {
         object Android {
             val kotlinStdLib = AndroidLibrary(
-                name = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.Libs.Android.kotlinStdLib}"
+                name = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.Common.kotlinStdLib}"
             )
             val coroutinesCore = AndroidLibrary(
-                name = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Libs.Android.coroutines}"
+                name = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Common.coroutines}"
             )
             val coroutines = AndroidLibrary(
-                name = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Libs.Android.coroutines}"
+                name = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Common.coroutines}"
             )
             val appCompat = AndroidLibrary(
                 name = "androidx.appcompat:appcompat:${Versions.Libs.Android.appCompat}"
@@ -41,13 +41,13 @@ object Deps {
                 name = "androidx.cardview:cardview:${Versions.Libs.Android.cardView}"
             )
             val annotation = AndroidLibrary(
-                name = "androidx.annotation:annotation:${Versions.Libs.Android.appCompat}"
+                name = "androidx.annotation:annotation:${Versions.Libs.Android.annotation}"
             )
             val paging = AndroidLibrary(
                 name = "android.arch.paging:runtime:${Versions.Libs.Android.paging}"
             )
             val reflect = AndroidLibrary(
-                name = "org.jetbrains.kotlin:kotlin-reflect:${Versions.Libs.Android.kotlinStdLib}"
+                name = "org.jetbrains.kotlin:kotlin-reflect:${Versions.Common.kotlinStdLib}"
             )
             val playCore = AndroidLibrary(
                 name = "com.google.android.play:core:${Versions.Libs.Android.playCore}"
@@ -73,14 +73,12 @@ object Deps {
             val roomCompiler = KaptLibrary(
                 name = "android.arch.persistence.room:compiler:${Versions.Libs.Android.room}"
             )
-
             val dagger = AndroidLibrary(
                 name = "com.google.dagger:dagger:${Versions.Libs.Android.dagger}"
             )
             val daggerCompiler = KaptLibrary(
                 name = "com.google.dagger:dagger-compiler:${Versions.Libs.Android.dagger}"
             )
-
             val navigation = AndroidLibrary(
                 name = "androidx.navigation:navigation-fragment-ktx:${Versions.Libs.Android.navigation}"
             )
@@ -100,16 +98,16 @@ object Deps {
                 name = "com.github.Merseyside.horizontal-selector-view:HorizontalSelectorView:${Versions.Libs.Android.horizontalSelector}"
             )
             val cicerone = AndroidLibrary(
-                name = "ru.terrakok.cicerone:cicerone:${Versions.Libs.Android.cicerone}"
+                name = "com.github.terrakok:cicerone:${Versions.Libs.Android.cicerone}"
             )
             val playServicesAds = AndroidLibrary(
                 name = "com.google.android.gms:play-services-ads:${Versions.Libs.Android.playServicesAds}"
             )
             val firebaseCore = AndroidLibrary(
-                name = "com.google.firebase:firebase-core:${Versions.Libs.Android.firebase}"
+                name = "com.google.firebase:firebase-core:${Versions.Libs.Android.firebaseCore}"
             )
             val firebaseAnalytics = AndroidLibrary(
-                name = "com.google.firebase:firebase-analytics:${Versions.Libs.Android.firebase}"
+                name = "com.google.firebase:firebase-analytics:${Versions.Libs.Android.firebaseAnalytic}"
             )
             val crashlytics = AndroidLibrary(
                 name = "com.crashlytics.sdk.android:crashlytics:${Versions.Libs.Android.crashlytics}"
@@ -121,20 +119,20 @@ object Deps {
             object MerseyLibs {
                 private val base = "com.github.Merseyside.mersey-android-library"
 
-                val cleanMvvmArch = AndroidLibrary(
-                    name = "$base:clean-mvvm-arch:${Versions.Libs.MerseyLibs.version}:navigation@aar"
+                val archy = AndroidLibrary(
+                    name = "$base:archy:${Versions.Common.merseyLib}"
                 )
 
                 val adapters = AndroidLibrary(
-                    name = "$base:adapters:${Versions.Libs.MerseyLibs.version}"
+                    name = "$base:adapters:${Versions.Common.merseyLib}"
                 )
 
                 val animators = AndroidLibrary(
-                    name = "$base:animators:${Versions.Libs.MerseyLibs.version}"
+                    name = "$base:animators:${Versions.Common.merseyLib}"
                 )
 
                 val utils = AndroidLibrary(
-                    name = "$base:utils:${Versions.Libs.MerseyLibs.version}"
+                    name = "$base:utils:${Versions.Common.merseyLib}"
                 )
             }
         }
@@ -142,19 +140,18 @@ object Deps {
         object MultiPlatform {
             val kotlinStdLib = MultiPlatformLibrary(
                 android = Android.kotlinStdLib.name,
-                common = "org.jetbrains.kotlin:kotlin-stdlib-common:${Versions.Libs.MultiPlatform.kotlinStdLib}"
+                common = "org.jetbrains.kotlin:kotlin-stdlib-common:${Versions.Common.kotlinStdLib}"
             )
             val coroutines = MultiPlatformLibrary(
-                android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Libs.MultiPlatform.coroutines}",
-                common = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.Libs.MultiPlatform.coroutines}",
-                ios = "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:${Versions.Libs.MultiPlatform.coroutines}"
+                android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Common.coroutines}",
+                common = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.Common.coroutines}",
+                ios = "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:${Versions.Common.coroutines}"
             )
             val serialization = MultiPlatformLibrary(
-                android = "org.jetbrains.kotlinx:kotlinx-serialization-runtime:${Versions.Libs.MultiPlatform.serialization}",
-                common = "org.jetbrains.kotlinx:kotlinx-serialization-runtime-common:${Versions.Libs.MultiPlatform.serialization}",
-                ios = "org.jetbrains.kotlinx:kotlinx-serialization-runtime-native:${Versions.Libs.MultiPlatform.serialization}"
+                android = "org.jetbrains.kotlinx:kotlinx-serialization-json:${LibraryVersions.Common.serialization}",
+                common = "org.jetbrains.kotlinx:kotlinx-serialization-json:${LibraryVersions.Common.serialization}",
+                ios = "org.jetbrains.kotlinx:kotlinx-serialization-json:${LibraryVersions.Common.serialization}"
             )
-
             val mokoMvvm = MultiPlatformLibrary(
                 common = "dev.icerock.moko:mvvm:${Versions.Libs.MultiPlatform.mokoMvvm}",
                 iosX64 = "dev.icerock.moko:mvvm-iosx64:${Versions.Libs.MultiPlatform.mokoMvvm}",
@@ -166,12 +163,8 @@ object Deps {
                 iosArm64 = "dev.icerock.moko:resources-iosarm64:${Versions.Libs.MultiPlatform.mokoResources}"
             )
             val kodein = MultiPlatformLibrary(
-                    common = "org.kodein.di:kodein-di-core:${Versions.Libs.MultiPlatform.kodein}"
+                common = "org.kodein.di:kodein-di:${LibraryVersions.Libs.MultiPlatform.kodein}"
             )
-            val kodeinErased = MultiPlatformLibrary(
-                    common = "org.kodein.di:kodein-di-erased:${Versions.Libs.MultiPlatform.kodein}"
-            )
-
             val sqlDelight = MultiPlatformLibrary(
                     common = "com.squareup.sqldelight:runtime:${Versions.Libs.MultiPlatform.sqlDelight}",
                     android = "com.squareup.sqldelight:android-driver:${Versions.Libs.MultiPlatform.sqlDelight}"
@@ -185,21 +178,15 @@ object Deps {
                 private val base = "com.merseyside.merseyLib"
 
                 val cleanMvvmArch = MultiPlatformLibrary(
-                    common = "$base:kmp-clean-mvvm-arch:${Versions.Libs.MerseyLibs.version}",
-                    android = "$base:kmp-clean-mvvm-arch-android:${Versions.Libs.MerseyLibs.version}"
+                    common = "$base:kmp-clean-mvvm-arch:${Versions.Common.merseyLib}",
+                    android = "$base:kmp-clean-mvvm-arch-android:${Versions.Common.merseyLib}"
                 )
 
                 val utils = MultiPlatformLibrary(
-                    common = "$base:kmp-utils:${Versions.Libs.MerseyLibs.version}",
-                    android = "$base:kmp-utils-android:${Versions.Libs.MerseyLibs.version}"
+                    common = "$base:kmp-utils:${Versions.Common.merseyLib}",
+                    android = "$base:kmp-utils-android:${Versions.Common.merseyLib}"
                 )
             }
         }
     }
-
-    val plugins: Map<String, String> = mapOf(
-        "kotlin-android-extensions" to Plugins.androidExtensions,
-        "kotlinx-serialization" to Plugins.kotlinSerialization,
-        "dev.icerock.mobile.multiplatform-resources" to Plugins.mokoResources
-    )
 }
