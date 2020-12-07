@@ -1,9 +1,10 @@
 package com.merseyside.partyapp.presentation.view.fragment.itemList.model
 
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.databinding.ObservableField
+import com.github.terrakok.cicerone.Router
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.item.Item
@@ -13,14 +14,13 @@ import com.merseyside.partyapp.domain.interactor.GetItemsByEventIdInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.presentation.navigation.Screens
 import kotlinx.coroutines.cancel
-import ru.terrakok.cicerone.Router
 
 class ItemListViewModel(
+    application: Application,
     private val router: Router,
     private val getItemsByEventIdUseCase: GetItemsByEventIdInteractor,
     private val deleteItemUseCase: DeleteItemInteractor
-
-) : BaseCalcViewModel(router) {
+) : BaseCalcViewModel(application, router) {
 
     private var event: Event? = null
 

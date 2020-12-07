@@ -17,7 +17,6 @@ class ItemDao(database: CalcDatabase) {
     }
 
     fun changeItem(id: Long, name: String, description: String, price: Double, payMember: Member, membersInfo: List<MemberInfo>) {
-        Logger.log(TAG, "$id")
         db.changeItem(name, description, price, payMember, MembersModel(membersInfo), getCurrentTimeMillis(), id)
     }
 

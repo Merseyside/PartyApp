@@ -1,16 +1,15 @@
 package com.merseyside.partyapp.presentation.di.module
 
+import android.app.Application
 import android.os.Bundle
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
+import com.github.terrakok.cicerone.Router
 import com.merseyside.partyapp.domain.interactor.GetStatisticInteractor
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.model.StatisticMainViewModel
 import com.merseyside.archy.presentation.fragment.BaseFragment
 import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
-import ru.terrakok.cicerone.Router
 
 @Module
 class StatisticMainModule(
@@ -21,14 +20,15 @@ class StatisticMainModule(
     @Provides
     internal fun itemListViewModelProvider(
         router: Router,
+        application: Application,
         getStatisticUseCase: GetStatisticInteractor
     ): ViewModelProvider.Factory {
-        return StatisticMainViewModelProviderFactory(bundle, router, getStatisticUseCase)
+        return StatisticMainViewModelProviderFactory(bundle, application, router, getStatisticUseCase)
     }
 
     @Provides
     internal fun provideStatisticMainViewModel(factory: ViewModelProvider.Factory): StatisticMainViewModel {
-        return ViewModelProviders.of(fragment, factory).get(StatisticMainViewModel::class.java)
+        return ViewModelProvider(fragment, factory)[StatisticMainViewModel::class.java]
     }
 
     @Provides
@@ -38,11 +38,12 @@ class StatisticMainModule(
 
     class StatisticMainViewModelProviderFactory(
         bundle: Bundle?,
+        private val application: Application,
         private val router: Router,
         private val getStatisticUseCase: GetStatisticInteractor
     ) : BundleAwareViewModelFactory<StatisticMainViewModel>(bundle) {
         override fun getViewModel(): StatisticMainViewModel {
-            return StatisticMainViewModel(router, getStatisticUseCase)
+            return StatisticMainViewModel(application, router, getStatisticUseCase)
         }
     }
 }

@@ -6,8 +6,8 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
 import com.merseyside.animators.AnimatorList
 import com.merseyside.animators.Approach
 import com.merseyside.animators.Axis
@@ -24,9 +24,9 @@ import com.merseyside.partyapp.presentation.di.component.DaggerAddEventComponent
 import com.merseyside.partyapp.presentation.di.module.AddEventModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
+import com.merseyside.utils.Logger
 import com.merseyside.utils.PermissionManager
 import com.merseyside.utils.time.Millis
-
 
 class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewModel>(), OnBackPressedListener {
 
@@ -35,7 +35,6 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     private val eventObserver = Observer<Event?> {
         if (it != null) {
             sharedViewModel.eventContainer = it
-            
         }
     }
 
@@ -43,7 +42,7 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
         binding.chips.editText.isEnabled = true
     }
 
-    private lateinit var sharedViewModel: SharedViewModel
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun isShowAdBanner(): Boolean {
         return false
@@ -73,7 +72,7 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     }
 
     override fun getTitle(context: Context): String? {
-        return if (arguments != null && arguments!!.containsKey(KEY_EDIT_ID)) {
+        return if (arguments != null && requireArguments().containsKey(KEY_EDIT_ID)) {
             context.getString(R.string.edit_event_title)
         } else {
             context.getString(R.string.new_event_title)
@@ -82,8 +81,6 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
 
         init()
     }
@@ -99,8 +96,8 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     }
 
     private fun doLayout() {
-        if (arguments != null && arguments!!.containsKey(KEY_EDIT_ID)) {
-            val id = arguments!!.getLong(KEY_EDIT_ID)
+        if (arguments != null && requireArguments().containsKey(KEY_EDIT_ID)) {
+            val id = requireArguments().getLong(KEY_EDIT_ID)
 
             viewModel.initWithEventId(id)
         }
@@ -227,8 +224,14 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
 
         val duration = Millis(500)
 
-        fun newInstance(): AddEventFragment {
-            return AddEventFragment()
+        fun newInstance(id: Long? = null): AddEventFragment {
+            return AddEventFragment().apply {
+                id?.let {
+                    arguments = Bundle().apply {
+                        putLong(KEY_EDIT_ID, id)
+                    }
+                }
+            }
         }
     }
 }

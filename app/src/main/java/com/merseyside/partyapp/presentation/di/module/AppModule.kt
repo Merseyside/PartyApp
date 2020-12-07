@@ -9,7 +9,7 @@ import dagger.Module
 import dagger.Provides
 
 @Module
-class AppModule(private val application: Application) {
+class AppModule(@get:Provides val application: Application) {
 
     @Provides
     @ApplicationContext
@@ -33,5 +33,4 @@ class AppModule(private val application: Application) {
     internal fun providePrefsHelper(preferenceManager: PreferenceManager): PrefsHelper {
         return PrefsHelper(preferenceManager)
     }
-
 }

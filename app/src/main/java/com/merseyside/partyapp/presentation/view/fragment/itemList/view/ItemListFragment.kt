@@ -6,7 +6,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.activityViewModels
 import com.merseyside.adapters.base.OnItemClickListener
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
@@ -22,7 +22,7 @@ import java.lang.IllegalStateException
 
 class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewModel>() {
 
-    private lateinit var sharedViewModel: SharedViewModel
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     private val adapter = ItemAdapter()
 
@@ -56,10 +56,7 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
-
         setHasOptionsMenu(true)
-
         init()
     }
 

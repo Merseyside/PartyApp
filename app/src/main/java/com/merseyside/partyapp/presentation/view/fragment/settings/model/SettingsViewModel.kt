@@ -1,29 +1,29 @@
 package com.merseyside.partyapp.presentation.view.fragment.settings.model
 
+import android.app.Application
 import android.content.Context
 import android.content.pm.PackageInfo
 import android.os.Bundle
-import androidx.browser.customtabs.CustomTabsClient.getPackageName
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
+import com.github.terrakok.cicerone.Router
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.PrefsHelper
-import ru.terrakok.cicerone.Router
-
 
 class SettingsViewModel(
+    application: Application,
     router: Router,
     private val prefsHelper: PrefsHelper
-) : BaseCalcViewModel(router) {
+) : BaseCalcViewModel(application, router) {
 
-    val interfaceTitle = ObservableField<String>(getString(R.string.settings_interface))
+    val interfaceTitle = ObservableField(getString(R.string.settings_interface))
 
-    val currency = ObservableField<String>(prefsHelper.getCurrency())
-    val currencyTitle = ObservableField<String>(getString(R.string.enter_currency))
+    val currency = ObservableField(prefsHelper.getCurrency())
+    val currencyTitle = ObservableField(getString(R.string.enter_currency))
     val currencyError = ObservableField<String>()
 
-    val version = ObservableField<String>(getString(R.string.version, getAppVersion()))
+    val version = ObservableField(getString(R.string.version, getAppVersion()))
 
     init {
         currency.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
@@ -63,9 +63,4 @@ class SettingsViewModel(
         val pInfo: PackageInfo = application.packageManager.getPackageInfo(application.packageName, 0)
         return pInfo.versionName
     }
-
-    companion object {
-        private const val TAG = "SettingsViewModel"
-    }
-
 }

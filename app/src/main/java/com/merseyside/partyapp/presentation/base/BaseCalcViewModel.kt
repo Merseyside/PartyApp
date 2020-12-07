@@ -1,16 +1,16 @@
 package com.merseyside.partyapp.presentation.base
 
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import com.github.terrakok.cicerone.Router
 import com.merseyside.archy.presentation.model.ParcelableViewModel
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.presentation.exception.ErrorMessageFactory
 import com.merseyside.utils.mvvm.SingleLiveEvent
-import ru.terrakok.cicerone.Router
 
-abstract class BaseCalcViewModel(private val router: Router? = null) : ParcelableViewModel() {
-
-    val application = CalcApplication.getInstance()
+abstract class BaseCalcViewModel(application: Application, private val router: Router? = null)
+    : ParcelableViewModel(application) {
 
     protected val errorMsgCreator = ErrorMessageFactory(application)
 
@@ -25,7 +25,7 @@ abstract class BaseCalcViewModel(private val router: Router? = null) : Parcelabl
     }
 
     fun logEvent(event: String, bundle: Bundle) {
-        application.logFirebaseEvent(event, bundle)
+        (application as CalcApplication).logFirebaseEvent(event, bundle)
     }
 
     override fun getLocaleContext(): Context {

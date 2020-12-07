@@ -1,10 +1,12 @@
 package com.merseyside.partyapp.presentation.view.fragment.addEvent.model
 
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import com.github.terrakok.cicerone.Router
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.entity.Status
@@ -16,36 +18,37 @@ import com.merseyside.partyapp.utils.isNameValid
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.Contact
 import com.merseyside.partyapp.domain.interactor.GetContactsInteractor
+import com.merseyside.utils.Logger
 import com.merseyside.utils.mvvm.SingleLiveEvent
 import com.merseyside.utils.serialization.deserialize
 import com.merseyside.utils.serialization.serialize
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.builtins.ListSerializer
-import ru.terrakok.cicerone.Router
 
 class AddEventViewModel(
+    application: Application,
     router: Router,
     private val addEventUseCase: AddEventInteractor,
     private val getEventByIdUseCase: GetEventByIdInteractor,
     private val closeEventUseCase: CloseEventInteractor,
     private val getContactsUseCase: GetContactsInteractor
-) : BaseCalcViewModel(router) {
+) : BaseCalcViewModel(application, router) {
 
     val eventName = ObservableField<String>()
     val eventNameErrorText = ObservableField("")
-    val eventNameHint = ObservableField<String>(getString(R.string.event_title))
+    val eventNameHint = ObservableField(getString(R.string.event_title))
 
     val notes = ObservableField<String>()
     val notesErrorText = ObservableField("")
-    val notesHint = ObservableField<String>(getString(R.string.notes_hint))
+    val notesHint = ObservableField(getString(R.string.notes_hint))
 
     val members = ObservableField<List<Member>>()
     val membersErrorText = ObservableField("")
 
-    val addItemsTitle = ObservableField<String>(getString(R.string.add_members))
-    val useCommaHint = ObservableField<String>(getString(R.string.use_comma))
-    val save = ObservableField<String>(getString(R.string.save))
-    val closeEvent = ObservableField<String>(getString(R.string.close_event))
+    val addItemsTitle = ObservableField(getString(R.string.add_members))
+    val useCommaHint = ObservableField(getString(R.string.use_comma))
+    val save = ObservableField(getString(R.string.save))
+    val closeEvent = ObservableField(getString(R.string.close_event))
 
     val eventLiveData = MutableLiveData<Event>()
 
@@ -160,9 +163,8 @@ class AddEventViewModel(
         getContactsUseCase.execute(
             onComplete = {
                 contacts.set(it)
-                contactsLoadedSingleEvent.call()
             },
-            onError = { contactsLoadedSingleEvent.call() }
+            onPostExecute = { contactsLoadedSingleEvent.call() }
         )
     }
 

@@ -1,10 +1,10 @@
 object Versions {
 
-    const val kotlin = "1.4.20-M1"
+    const val kotlin = "1.4.20"
 
     object Application {
-        const val packageName = "com.merseyside.merseyLib"
-        const val applicationId = "com.merseyside.merseyLib"
+        const val packageName = "com.merseyside.partyapp"
+        const val applicationId = "com.merseyside.partyapp"
     }
 
     object Android {
@@ -12,33 +12,32 @@ object Versions {
         const val targetSdk = 29
         const val minSdk = 17
 
-        const val version = "1.2.6"
-        const val versionCode = 126
+        const val version = "1.15"
+        const val versionCode = 115
     }
 
     object Common {
         const val kotlinStdLib = kotlin
-        const val coroutines = "1.3.8"
-        const val serialization = "1.0.0"
+        const val serialization = "1.0.1"
         const val merseyLib = "1.2.6"
         const val mokoResources = "0.13.1"
     }
 
     object Plugins {
-        const val android = "4.0.0"
-
+        const val android = "4.1.1"
         const val kotlin = Versions.kotlin
         const val serialization = Versions.kotlin
         const val androidExtensions = Versions.kotlin
         const val mokoResources = Common.mokoResources
         const val maven = "2.1"
-        const val sqlDelight = "1.4.3"
+        const val sqlDelight = "1.4.4"
     }
 
     object Libs {
         object Android {
             const val appCompat = "1.2.0"
             const val annotation = "1.2.0-alpha01"
+            const val coroutines = "1.4.2"
             const val material = "1.2.1"
             const val fragment = "1.2.5"
             const val constraintLayout = "2.0.4"
@@ -60,17 +59,19 @@ object Versions {
             const val rxjava2 = "2.2.20"
             const val coil = "1.0.0"
 
-            const val cicerone = "6.3"
+            const val cicerone = "6.6"
             const val playServicesAds = "19.5.0"
             const val firebaseCore = "17.5.1"
             const val firebaseAnalytic = "18.0.0"
             const val crashlytics = "2.10.1"
             const val circleImage = "3.1.0"
             const val horizontalSelector = "1.13"
+            const val firestore_coroutines = "1.0.1"
         }
 
         object MultiPlatform {
             const val mokoMvvm = "0.8.0"
+            const val coroutines = "1.3.8"
             const val mokoResources = Common.mokoResources
             const val ktor = "1.4.1"
             const val kodein = "7.1.0"

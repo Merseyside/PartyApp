@@ -94,7 +94,7 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
     }
 
     override fun getRootView(): View {
-        return view!!
+        return requireView()
     }
 
     fun shareStatistic(text: String) {

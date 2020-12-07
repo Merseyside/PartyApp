@@ -3,9 +3,6 @@ package com.merseyside.partyapp
 import android.os.Bundle
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
-import androidx.sqlite.db.framework.FrameworkSQLiteOpenHelperFactory
-import com.crashlytics.android.Crashlytics
-import com.crashlytics.android.core.CrashlyticsCore
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.merseyside.archy.BaseApplication
 import com.merseyside.partyapp.data.db.CalcDatabase
@@ -17,15 +14,12 @@ import com.merseyside.partyapp.presentation.di.module.AppModule
 import com.merseyside.partyapp.utils.ContentResolverImpl
 import com.merseyside.partyapp.utils.PrefsHelper
 import com.squareup.sqldelight.android.AndroidSqliteDriver
-import io.fabric.sdk.android.Fabric
 import javax.inject.Inject
 
 class CalcApplication : BaseApplication() {
 
     companion object {
-
         private lateinit var instance: CalcApplication
-
         fun getInstance() : CalcApplication {
             return instance
         }
@@ -53,7 +47,7 @@ class CalcApplication : BaseApplication() {
         initDB()
         initContentResolver()
 
-        initCrashlytics()
+        //initCrashlytics()
     }
 
     private fun buildComponent() : AppComponent {
@@ -63,26 +57,23 @@ class CalcApplication : BaseApplication() {
     }
 
     private fun initDB() {
-        val config = SupportSQLiteOpenHelper.Configuration.builder(this)
-            .name(databaseName)
-            .callback(object : SupportSQLiteOpenHelper.Callback(1) {
-                override fun onCreate(db: SupportSQLiteDatabase) {
-                    val driver = AndroidSqliteDriver(db)
-                    CalcDatabase.Schema.create(driver)
-                }
+        val schema = CalcDatabase.Schema
 
-                override fun onUpgrade(
-                    db: SupportSQLiteDatabase,
-                    oldVersion: Int,
-                    newVersion: Int
-                ) {}
+        val callback = object : SupportSQLiteOpenHelper.Callback(1) {
+            override fun onCreate(db: SupportSQLiteDatabase) {
+                val driver = AndroidSqliteDriver(db)
+                CalcDatabase.Schema.create(driver)
+            }
 
-            })
-            .build()
+            override fun onUpgrade(db: SupportSQLiteDatabase, oldVersion: Int, newVersion: Int) {}
+        }
 
-        val sqlHelper = FrameworkSQLiteOpenHelperFactory().create(config)
-
-        sqlDriver = AndroidSqliteDriver(sqlHelper)
+        sqlDriver = AndroidSqliteDriver(
+            schema = schema,
+            context = context,
+            name = databaseName,
+            callback = callback
+        )
     }
 
     private fun initContentResolver() {
@@ -94,7 +85,6 @@ class CalcApplication : BaseApplication() {
     }
 
     private fun initCrashlytics() {
-        val core = CrashlyticsCore.Builder().disabled(BuildConfig.DEBUG).build()
-        Fabric.with(this, Crashlytics.Builder().core(core).build())
+
     }
 }

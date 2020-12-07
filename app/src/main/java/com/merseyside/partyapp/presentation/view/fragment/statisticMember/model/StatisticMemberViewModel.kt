@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMember.model
 
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.databinding.ObservableField
@@ -12,27 +13,29 @@ import com.merseyside.partyapp.utils.doubleToStringPrice
 import com.merseyside.utils.serialization.deserialize
 import com.merseyside.utils.serialization.serialize
 
-class StatisticMemberViewModel : BaseCalcViewModel() {
+class StatisticMemberViewModel(
+    application: Application
+) : BaseCalcViewModel(application) {
 
     lateinit var statistic: MemberStatistic
 
     val ordersVisibility = ObservableField(false)
     val ordersContainer = ObservableField<List<Order>>()
-    val ordersTitle = ObservableField<String>(getString(R.string.all_orders))
+    val ordersTitle = ObservableField(getString(R.string.all_orders))
 
     val resultsVisibility = ObservableField(false)
     val resultsContainer = ObservableField<List<Result>>()
 
     val totalSpend = ObservableField<String>()
-    val spendTitle = ObservableField<String>(getString(R.string.spend))
+    val spendTitle = ObservableField(getString(R.string.spend))
 
     val totalDebt = ObservableField<String>()
-    val debtTitle = ObservableField<String>(getString(R.string.owed))
+    val debtTitle = ObservableField(getString(R.string.owed))
 
     val totalLend = ObservableField<String>()
-    val lendTitle = ObservableField<String>(getString(R.string.lend))
+    val lendTitle = ObservableField(getString(R.string.lend))
 
-    val shareMemberTitle = ObservableField<String>(getString(R.string.share_member))
+    val shareMemberTitle = ObservableField(getString(R.string.share_member))
 
     override fun updateLanguage(context: Context) {
         super.updateLanguage(context)

@@ -16,7 +16,7 @@ class ContentResolverImpl(private val contentResolver: android.content.ContentRe
                 var phoneNumber: String? = null
                 val id = phones.getString(phones.getColumnIndex(ContactsContract.Contacts._ID))
                 val name =
-                    phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME))
+                    phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME)) ?: "No name"
                 val avatarUriString =
                     phones.getString(phones.getColumnIndex(ContactsContract.Contacts.PHOTO_THUMBNAIL_URI))
 
@@ -42,8 +42,6 @@ class ContentResolverImpl(private val contentResolver: android.content.ContentRe
                 contactList.add(contact)
             }
             phones.close()
-
-
         }
 
         return contactList

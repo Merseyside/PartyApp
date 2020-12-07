@@ -1,7 +1,6 @@
 plugins {
     id("com.android.library")
     kotlin("multiplatform")
-    id("kotlin-android-extensions")
     kotlin("kapt")
     id("kotlinx-serialization")
     id("com.squareup.sqldelight")
@@ -44,6 +43,7 @@ val mppLibs = listOf(
 )
 
 val merseyModules = listOf(
+    LibraryModules.MultiPlatform.cleanMvvmArch,
     LibraryModules.MultiPlatform.utils
 )
 

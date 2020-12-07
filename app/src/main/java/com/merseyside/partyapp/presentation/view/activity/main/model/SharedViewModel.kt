@@ -1,5 +1,6 @@
 package com.merseyside.partyapp.presentation.view.activity.main.model
 
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import com.merseyside.partyapp.data.db.event.Event
@@ -9,9 +10,7 @@ import com.merseyside.partyapp.CalcApplication
 import com.merseyside.utils.serialization.deserialize
 import com.merseyside.utils.serialization.serialize
 
-class SharedViewModel : ParcelableViewModel() {
-
-    val application = CalcApplication.getInstance()
+class SharedViewModel(application: Application) : ParcelableViewModel(application) {
 
     override fun readFrom(bundle: Bundle) {
 

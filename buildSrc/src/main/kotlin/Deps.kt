@@ -13,11 +13,8 @@ object Deps {
             val kotlinStdLib = AndroidLibrary(
                 name = "org.jetbrains.kotlin:kotlin-stdlib:${Versions.Common.kotlinStdLib}"
             )
-            val coroutinesCore = AndroidLibrary(
-                name = "org.jetbrains.kotlinx:kotlinx-coroutines-core:${Versions.Common.coroutines}"
-            )
             val coroutines = AndroidLibrary(
-                name = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Common.coroutines}"
+                name = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Libs.Android.coroutines}"
             )
             val appCompat = AndroidLibrary(
                 name = "androidx.appcompat:appcompat:${Versions.Libs.Android.appCompat}"
@@ -25,8 +22,14 @@ object Deps {
             val material = AndroidLibrary(
                 name = "com.google.android.material:material:${Versions.Libs.Android.material}"
             )
+            val lifecycleViewModel = AndroidLibrary(
+                name = "androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.Libs.Android.lifecycle}"
+            )
             val fragment = AndroidLibrary(
                 name = "androidx.fragment:fragment:${Versions.Libs.Android.fragment}"
+            )
+            val fragmentKtx = AndroidLibrary(
+                name = "androidx.fragment:fragment-ktx:${Versions.Libs.Android.fragment}"
             )
             val recyclerView = AndroidLibrary(
                 name = "androidx.recyclerview:recyclerview:${Versions.Libs.Android.recyclerView}"
@@ -134,6 +137,10 @@ object Deps {
                 val utils = AndroidLibrary(
                     name = "$base:utils:${Versions.Common.merseyLib}"
                 )
+
+                val firestore_coroutines = AndroidLibrary(
+                    name = "com.github.Merseyside:firestore-coroutines:${Versions.Libs.Android.firestore_coroutines}"
+                )
             }
         }
 
@@ -143,9 +150,9 @@ object Deps {
                 common = "org.jetbrains.kotlin:kotlin-stdlib-common:${Versions.Common.kotlinStdLib}"
             )
             val coroutines = MultiPlatformLibrary(
-                android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Common.coroutines}",
-                common = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.Common.coroutines}",
-                ios = "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:${Versions.Common.coroutines}"
+                android = "org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.Libs.MultiPlatform.coroutines}",
+                common = "org.jetbrains.kotlinx:kotlinx-coroutines-core-common:${Versions.Libs.MultiPlatform.coroutines}",
+                ios = "org.jetbrains.kotlinx:kotlinx-coroutines-core-native:${Versions.Libs.MultiPlatform.coroutines}"
             )
             val serialization = MultiPlatformLibrary(
                 android = "org.jetbrains.kotlinx:kotlinx-serialization-json:${LibraryVersions.Common.serialization}",

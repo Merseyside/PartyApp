@@ -1,11 +1,13 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
 
+import android.app.Application
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
+import com.github.terrakok.cicerone.Router
 import com.merseyside.kmpMerseyLib.utils.serialization.deserialize
 import com.merseyside.kmpMerseyLib.utils.serialization.serialize
 import com.merseyside.partyapp.R
@@ -20,13 +22,13 @@ import com.merseyside.utils.ext.isZero
 import com.merseyside.utils.randomBool
 import kotlinx.coroutines.cancel
 import kotlinx.serialization.builtins.ListSerializer
-import ru.terrakok.cicerone.Router
 
 class AddItemViewModel(
+    application: Application,
     router: Router,
     private val prefsHelper: PrefsHelper,
     private val addItemUseCase: AddItemInteractor
-) : BaseCalcViewModel(router) {
+) : BaseCalcViewModel(application, router) {
 
     private lateinit var event: Event
     private var item: Item? = null
@@ -34,10 +36,10 @@ class AddItemViewModel(
     val name = ObservableField<String>()
     val nameErrorText = ObservableField("")
 
-    val price = ObservableField<String>("")
+    val price = ObservableField("")
     val priceErrorText = ObservableField("")
-    val isPriceValid = ObservableField<Boolean>(true)
-    val priceHint = ObservableField<String>(getString(R.string.item_total_price))
+    val isPriceValid = ObservableField(true)
+    val priceHint = ObservableField(getString(R.string.item_total_price))
 
     val description = ObservableField<String>()
 
@@ -56,7 +58,7 @@ class AddItemViewModel(
     val spinnerSelectedMember = ObservableField<MemberInfo>()
 
     val payMember = ObservableField<Member>()
-    val additionalSettingsError = ObservableField<String>(getString(R.string.fill_price_error))
+    val additionalSettingsError = ObservableField(getString(R.string.fill_price_error))
     val currency = ObservableField<String>()
 
     init {

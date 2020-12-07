@@ -2,8 +2,6 @@ plugins {
     id ("com.android.application")
     kotlin("android")
     kotlin("kapt")
-    kotlin("android.extensions")
-    id("io.fabric")
 }
 
 android {
@@ -59,7 +57,6 @@ android {
     buildFeatures.dataBinding = true
 
     sourceSets.getByName("main") {
-
         res.srcDir("src/main/res/")
         res.srcDir("src/main/res/layouts/fragments")
         res.srcDir("src/main/res/layouts/activity")
@@ -75,10 +72,11 @@ val androidLibs = listOf(
     Deps.Libs.Android.recyclerView.name,
     Deps.Libs.MultiPlatform.serialization.android!!,
     Deps.Libs.Android.coroutines.name,
-    Deps.Libs.Android.coroutinesCore.name,
     Deps.Libs.Android.constraintLayout.name,
     Deps.Libs.Android.appCompat.name,
     Deps.Libs.Android.material.name,
+    Deps.Libs.Android.fragmentKtx.name,
+    Deps.Libs.Android.lifecycleViewModel.name,
     Deps.Libs.Android.lifecycle.name,
     Deps.Libs.Android.cardView.name,
     Deps.Libs.Android.annotation.name,
@@ -89,9 +87,10 @@ val androidLibs = listOf(
     Deps.Libs.Android.playServicesAds.name,
     Deps.Libs.Android.firebaseFirestore.name,
     Deps.Libs.Android.firebaseAnalytics.name,
-    Deps.Libs.Android.crashlytics.name,
+//    Deps.Libs.Android.crashlytics.name,
     Deps.Libs.Android.circleImage.name,
     Deps.Libs.Android.cicerone.name
+    //Deps.Libs.Android.MerseyLibs.firestore_coroutines.name
 )
 
 val merseyLibs = listOf(
@@ -102,8 +101,6 @@ val merseyLibs = listOf(
 )
 
 val modulez = listOf(
-    ":shared",
-    ":chipsLib",
     LibraryModules.Android.archy,
     LibraryModules.Android.adapters,
     LibraryModules.Android.animators,
@@ -111,6 +108,9 @@ val modulez = listOf(
 )
 
 dependencies {
+    implementation(project(":shared"))
+    implementation(project(":chipsLib"))
+
     if (isLocalDependencies()) {
         modulez.forEach { module -> implementation(project(module)) }
     } else {
@@ -118,9 +118,7 @@ dependencies {
     }
 
     androidLibs.forEach { lib -> implementation(lib)}
-
     kaptLibrary(Deps.Libs.Android.daggerCompiler)
-
     compileOnly("javax.annotation:jsr250-api:1.0")
 }
 

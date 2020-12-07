@@ -6,13 +6,17 @@ import androidx.databinding.BindingAdapter
 import androidx.databinding.InverseBindingAdapter
 import androidx.databinding.InverseBindingListener
 import com.google.android.material.textfield.TextInputLayout
+import com.merseyside.kmpMerseyLib.utils.Logger
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.Contact
 import com.merseyside.partyapp.presentation.view.fragment.addItem.model.setText
 import com.merseyside.partyapp.utils.generateId
 import com.merseyside.partyapp.utils.setTextWithCursor
+import com.merseyside.utils.ext.isNotNullAndEmpty
+import com.merseyside.utils.ext.log
 import com.pchmn.materialchips.ChipsInput
 import com.pchmn.materialchips.model.ChipInterface
+import kotlin.contracts.ExperimentalContracts
 
 @BindingAdapter(value = ["memberNamesAttrChanged"]) // AttrChanged required postfix
 fun setUnlockedListener(view: ChipsInput, listener: InverseBindingListener?) {
@@ -103,9 +107,9 @@ fun setErrorMessage(view: TextInputLayout, errorMessage: String?) {
 
 @BindingAdapter("app:contacts")
 fun setContacts(view: ChipsInput, contacts: List<Contact>?) {
-    if (!contacts.isNullOrEmpty()) {
+    if (contacts.isNotNullAndEmpty()) {
         val chipContacts =
-            contacts.map { contact -> ContactChip(contact.id, contact.avatarUriPath?.let { url -> Uri.parse(url)}, contact.name, contact.number) }
+            contacts.map { contact -> ContactChip(contact.id, contact.avatarUriPath?.let { url -> Uri.parse(url)}, contact.name, contact.number) }.log()
 
         view.filterableList = chipContacts
     }

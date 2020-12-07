@@ -1,9 +1,12 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMain.model
 
+import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.viewModelScope
+import com.github.terrakok.cicerone.Router
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
@@ -13,17 +16,16 @@ import com.merseyside.partyapp.domain.interactor.GetStatisticInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.doubleToStringPrice
 import com.merseyside.utils.randomBool
-import kotlinx.coroutines.cancel
-import ru.terrakok.cicerone.Router
 
 class StatisticMainViewModel(
+    application: Application,
     router: Router,
     private val getStatisticUseCase: GetStatisticInteractor
-) : BaseCalcViewModel(router) {
+) : BaseCalcViewModel(application, router) {
 
     var statistic: Statistic? = null
 
-    val membersVisibility = ObservableField<Boolean>(true)
+    val membersVisibility = ObservableField(true)
     val memberContainer = ObservableField<List<Member>>()
     val memberStatisticLiveData = MutableLiveData<List<MemberStatistic>>()
 
@@ -46,9 +48,7 @@ class StatisticMainViewModel(
         memberVisibilityHint.set(context.getString(R.string.no_activity))
     }
 
-    override fun dispose() {
-        getStatisticUseCase.cancel()
-    }
+    override fun dispose() {}
 
     override fun readFrom(bundle: Bundle) {}
 
@@ -66,6 +66,7 @@ class StatisticMainViewModel(
 
         if (event != null) {
             getStatisticUseCase.execute(
+                coroutineScope = viewModelScope,
                 params = GetStatisticInteractor.Params(eventId = event.id),
                 onComplete = {
                     statistic = it
@@ -78,8 +79,8 @@ class StatisticMainViewModel(
                 onError = {
                     showErrorMsg(errorMsgCreator.createErrorMsg(it))
                 },
-                showProgress = { showProgress() },
-                hideProgress = { hideProgress() }
+                onPreExecute = { showProgress() },
+                onPostExecute = { hideProgress() }
             )
         }
     }

@@ -1,8 +1,8 @@
 package com.merseyside.partyapp.domain.interactor
 
+import com.merseyside.kmpMerseyLib.domain.coroutines.CoroutineUseCase
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.di.itemComponent
-import com.merseyside.partyapp.domain.base.CoroutineUseCase
 import com.merseyside.partyapp.domain.repository.ItemRepository
 import org.kodein.di.instance
 

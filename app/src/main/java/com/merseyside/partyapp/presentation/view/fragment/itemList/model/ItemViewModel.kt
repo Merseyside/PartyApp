@@ -17,7 +17,8 @@ class ItemViewModel(
     }
 
     override fun compareTo(obj: Item): Int {
-        return 0
+        return if (obj.timestamp < obj.timestamp) -1
+        else 1
     }
 
     override fun areItemsTheSame(obj: Item): Boolean {

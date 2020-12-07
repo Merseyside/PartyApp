@@ -1,11 +1,14 @@
 package com.merseyside.partyapp.presentation.view.activity.main.view
 
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import androidx.appcompat.widget.Toolbar
 import androidx.fragment.app.Fragment
-import android.view.View
 import androidx.fragment.app.FragmentTransaction
+import com.github.terrakok.cicerone.Command
+import com.github.terrakok.cicerone.Navigator
+import com.github.terrakok.cicerone.NavigatorHolder
+import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.google.android.gms.ads.*
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
@@ -15,10 +18,6 @@ import com.merseyside.partyapp.presentation.di.component.DaggerMainComponent
 import com.merseyside.partyapp.presentation.di.module.MainModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.MainViewModel
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
-import ru.terrakok.cicerone.Navigator
-import ru.terrakok.cicerone.NavigatorHolder
-import ru.terrakok.cicerone.android.support.SupportAppNavigator
-import ru.terrakok.cicerone.commands.Command
 import javax.inject.Inject
 
 class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>(), HasAd {
@@ -29,7 +28,7 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>(), Has
     @Inject
     lateinit var sharedViewModel: SharedViewModel
 
-    private lateinit var navigator : Navigator
+    private lateinit var navigator: Navigator
 
     private val interstitialAd: InterstitialAd by lazy { InterstitialAd(this) }
 
@@ -64,28 +63,23 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>(), Has
     }
 
     private fun initNavigation() {
-        if (binding.container != null) {
-            navigator = object : SupportAppNavigator(this, binding.container.id) {
+        navigator = object : AppNavigator(this, binding.container.id) {
+            override fun applyCommands(commands: Array<out Command>) {
+                super.applyCommands(commands)
+                supportFragmentManager.executePendingTransactions()
+            }
 
-                override fun applyCommand(command: Command?) {
-                    super.applyCommand(command)
-                    supportFragmentManager.executePendingTransactions()
-                }
-
-                override fun setupFragmentTransaction(
-                    command: Command?,
-                    currentFragment: Fragment?,
-                    nextFragment: Fragment?,
-                    fragmentTransaction: FragmentTransaction?
-                ) {
-                    super.setupFragmentTransaction(
-                        command,
-                        currentFragment,
-                        nextFragment,
-                        fragmentTransaction
-                    )
-                    fragmentTransaction!!.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
-                }
+            override fun setupFragmentTransaction(
+                fragmentTransaction: FragmentTransaction,
+                currentFragment: Fragment?,
+                nextFragment: Fragment?
+            ) {
+                super.setupFragmentTransaction(
+                    fragmentTransaction,
+                    currentFragment,
+                    nextFragment
+                )
+                fragmentTransaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN)
             }
         }
     }

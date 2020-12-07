@@ -5,7 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ScrollView
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.ViewModelProviders
+import androidx.fragment.app.activityViewModels
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.databinding.FragmentAddItemBinding
@@ -17,7 +17,7 @@ import com.merseyside.partyapp.presentation.view.fragment.addItem.model.AddItemV
 
 class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewModel>() {
 
-    private lateinit var sharedViewModel: SharedViewModel
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
     override fun hasTitleBackButton(): Boolean {
         return true
@@ -46,12 +46,6 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
         return context.getString(R.string.add_items_title)
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -59,22 +53,29 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
     }
 
     private fun doLayout() {
-
         binding.additionalContainer.setOnClickListener {
             if (binding.expandedGroup.visibility == View.VISIBLE) {
                 binding.expandedGroup.visibility = View.GONE
-                binding.expandableIcon.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_arrow_down))
+                binding.expandableIcon.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        baseActivity,
+                        R.drawable.ic_arrow_down
+                    )
+                )
             } else {
                 binding.expandedGroup.visibility = View.VISIBLE
-                binding.expandableIcon.setImageDrawable(ContextCompat.getDrawable(baseActivity, R.drawable.ic_arrow_up))
+                binding.expandableIcon.setImageDrawable(
+                    ContextCompat.getDrawable(
+                        baseActivity,
+                        R.drawable.ic_arrow_up
+                    )
+                )
                 binding.scrollView.post { binding.scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
             }
         }
 
-        if (arguments != null && arguments!!.containsKey(MODE_KEY)) {
-            if (arguments!!.getInt(MODE_KEY) == EDIT_VALUE) {
-                viewModel.init(sharedViewModel.eventContainer!!, sharedViewModel.itemContainer)
-            }
+        if (requireArguments().getInt(MODE_KEY) == EDIT_VALUE) {
+            viewModel.init(sharedViewModel.eventContainer!!, sharedViewModel.itemContainer)
         } else {
             viewModel.init(sharedViewModel.eventContainer!!)
         }
@@ -89,10 +90,15 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
         private const val TAG = "AddItemFragment"
 
         const val MODE_KEY = "mode"
+        const val ADD_VALUE = 0
         const val EDIT_VALUE = 1
 
-        fun newInstance(): AddItemFragment {
-            return AddItemFragment()
+        fun newInstance(mode: Int): AddItemFragment {
+            return AddItemFragment().apply {
+                arguments = Bundle().apply {
+                    putInt(MODE_KEY, mode)
+                }
+            }
         }
     }
 

@@ -1,7 +1,9 @@
 package com.merseyside.partyapp.presentation.view.fragment.eventList.model
 
+import android.app.Application
 import android.os.Bundle
 import androidx.databinding.ObservableField
+import com.github.terrakok.cicerone.Router
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.domain.interactor.DeleteEventInteractor
@@ -9,13 +11,13 @@ import com.merseyside.partyapp.domain.interactor.GetEventsInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.presentation.navigation.Screens
 import kotlinx.coroutines.cancel
-import ru.terrakok.cicerone.Router
 
 class EventListViewModel(
+    application: Application,
     private val router: Router,
     private val getEventsUseCase: GetEventsInteractor,
     private val deleteEventUseCase: DeleteEventInteractor
-) : BaseCalcViewModel(router) {
+) : BaseCalcViewModel(application, router) {
 
     val eventsVisibility = ObservableField(true)
     val eventsContainer = ObservableField<List<Event>>()
