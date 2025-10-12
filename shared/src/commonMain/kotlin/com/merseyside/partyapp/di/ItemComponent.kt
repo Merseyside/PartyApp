@@ -6,7 +6,6 @@ import com.merseyside.partyapp.domain.repository.ItemRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import org.kodein.di.*
 
-@ExperimentalCoroutinesApi
 internal val itemModule = DI.Module("event") {
 
     bind<ItemDao>() with singleton { ItemDao( instance() ) }
@@ -16,7 +15,6 @@ internal val itemModule = DI.Module("event") {
     }
 }
 
-@ExperimentalCoroutinesApi
 internal val itemComponent = DI {
     extend(appComponent)
     import(itemModule)

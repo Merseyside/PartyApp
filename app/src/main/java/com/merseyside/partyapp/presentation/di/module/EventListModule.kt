@@ -7,14 +7,14 @@ import com.github.terrakok.cicerone.Router
 import com.merseyside.partyapp.domain.interactor.DeleteEventInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventsInteractor
 import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventListViewModel
-import com.merseyside.archy.presentation.fragment.BaseFragment
+import com.merseyside.archy.presentation.fragment.BaseDialogFragment
 import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
 
 @Module
 class EventListModule(
-    private val fragment: BaseFragment,
+    private val fragment: BaseDialogFragment,
     private val bundle: Bundle?
 ) {
 

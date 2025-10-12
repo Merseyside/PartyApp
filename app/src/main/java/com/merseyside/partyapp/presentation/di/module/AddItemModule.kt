@@ -6,7 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.github.terrakok.cicerone.Router
 import com.merseyside.partyapp.domain.interactor.AddItemInteractor
 import com.merseyside.partyapp.presentation.view.fragment.addItem.model.AddItemViewModel
-import com.merseyside.archy.presentation.fragment.BaseFragment
+import com.merseyside.archy.presentation.fragment.BaseDialogFragment
 import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
 import com.merseyside.partyapp.utils.PrefsHelper
 import dagger.Module
@@ -14,7 +14,7 @@ import dagger.Provides
 
 @Module
 class AddItemModule(
-    private val fragment: BaseFragment,
+    private val fragment: BaseDialogFragment,
     private val bundle: Bundle?
 ) {
 

@@ -4,14 +4,14 @@ import android.app.Application
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.StatisticMemberViewModel
-import com.merseyside.archy.presentation.fragment.BaseFragment
+import com.merseyside.archy.presentation.fragment.BaseDialogFragment
 import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
 
 @Module
 class StatisticMemberModule(
-    private val fragment: BaseFragment,
+    private val fragment: BaseDialogFragment,
     private val bundle: Bundle?
 ) {
     @Provides

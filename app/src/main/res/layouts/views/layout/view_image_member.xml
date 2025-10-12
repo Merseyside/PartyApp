@@ -15,19 +15,20 @@
         android:layout_height="@dimen/member_item_height"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="@{view -> obj.onClick()}"
+        android:onClick="@{view -> obj.selectState.select()}"
         android:foreground="@drawable/card_view_ripple"
         android:gravity="center">
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <ImageView
             android:id="@+id/circle"
             android:layout_width="@dimen/circle_size"
             android:layout_height="@dimen/circle_size"
             android:layout_marginStart="@dimen/small_spacing"
             android:layout_marginEnd="@dimen/small_spacing"
-            bind:imageUrl="@{obj.imageUrl}"
-            bind:civ_border_width="@dimen/very_small_spacing"
-            bind:customBorderColor="@{obj.circleColor}"/>
+            bind:imageUri="@{obj.imageUrl}"
+            bind:cropCircle="@{true}"
+            bind:cropStrokeWidth="@{@dimen/very_small_spacing}"
+            bind:cropStrokeColor="@{obj.circleColor}" />
 
         <TextView
             android:id="@+id/title"

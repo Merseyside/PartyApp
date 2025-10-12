@@ -5,6 +5,8 @@ import androidx.annotation.AttrRes
 import androidx.cardview.widget.CardView
 import androidx.databinding.BindingAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.merseyside.adapters.core.async.doAsync
+import com.merseyside.merseyLib.kotlin.logger.log
 import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter.OrderAdapter
@@ -25,8 +27,8 @@ fun setViewGroupBackgroundColor(viewGroup: ViewGroup, @AttrRes res: Int) {
 fun setOrderList(recyclerView: RecyclerView, orders: List<Order>?) {
     if (!orders.isNullOrEmpty()) {
         val adapter = recyclerView.adapter ?: OrderAdapter().also { recyclerView.adapter = it }
-
-        (adapter as OrderAdapter).apply {
+        orders.log()
+        (adapter as OrderAdapter).doAsync {
             clear()
             add(orders)
         }
@@ -39,7 +41,7 @@ fun setResults(recyclerView: RecyclerView, results: List<Result>?) {
         recyclerView.postDelayed({
             val adapter = recyclerView.adapter ?: ResultAdapter().also { recyclerView.adapter = it }
 
-            (adapter as ResultAdapter).apply {
+            (adapter as ResultAdapter).doAsync {
                 clear()
                 add(results)
             }

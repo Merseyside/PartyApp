@@ -6,9 +6,8 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.lifecycle.ViewModelProviders
-import com.merseyside.adapters.base.OnItemClickListener
-import com.merseyside.adapters.base.BaseAdapter
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.ViewModelProvider
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -22,19 +21,24 @@ import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventL
 
 class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListViewModel>() {
 
-    private lateinit var sharedViewModel: SharedViewModel
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
-    override fun hasTitleBackButton(): Boolean {
-        return false
+    private val adapter by lazy {
+        EventAdapter { event ->
+            sharedViewModel.eventContainer = event
+            viewModel.onEventClick()
+        }
     }
-
-    private val adapter = EventAdapter()
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
-    override fun performInjection(bundle: Bundle?) {
+    override fun isAppBarNavigateUpEnabled(): Boolean {
+        return false
+    }
+
+    override fun performInjection(bundle: Bundle?, vararg params: Any) {
         DaggerEventListComponent.builder()
             .appComponent(appComponent)
             .eventListModule(getEventListModule(bundle))
@@ -58,23 +62,15 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
-
-        init()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         doLayout()
     }
 
-    private fun init() {
-        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
-    }
-
     private fun doLayout() {
-        binding.eventList.adapter = adapter
-        adapter.setOnItemClickListener(onItemClickListener)
+        requireBinding().eventList.adapter = adapter
 
         adapter.setOnEventOptionsClickListener(object: EventAdapter.OnEventOptionsClickListener {
             override fun onEditClick(event: Event) {
@@ -93,19 +89,6 @@ class EventListFragment : BaseCalcFragment<FragmentEventListBinding, EventListVi
         })
 
         viewModel.showEvents()
-    }
-
-    private val onItemClickListener = object: OnItemClickListener<Event> {
-        override fun onItemClicked(obj: Event) {
-            sharedViewModel.eventContainer = obj
-            viewModel.onEventClick()
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        adapter.removeOnItemClickListener(onItemClickListener)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

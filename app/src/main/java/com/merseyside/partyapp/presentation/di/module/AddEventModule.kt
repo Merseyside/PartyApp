@@ -4,11 +4,11 @@ import android.app.Application
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.github.terrakok.cicerone.Router
+import com.merseyside.archy.presentation.fragment.BaseDialogFragment
 import com.merseyside.partyapp.domain.interactor.AddEventInteractor
 import com.merseyside.partyapp.domain.interactor.CloseEventInteractor
 import com.merseyside.partyapp.domain.interactor.GetEventByIdInteractor
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
-import com.merseyside.archy.presentation.fragment.BaseFragment
 import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
 import com.merseyside.partyapp.domain.interactor.GetContactsInteractor
 import dagger.Module
@@ -16,7 +16,7 @@ import dagger.Provides
 
 @Module
 class AddEventModule(
-    private val fragment: BaseFragment,
+    private val fragment: BaseDialogFragment,
     private val bundle: Bundle?
 ) {
 

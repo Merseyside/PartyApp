@@ -18,11 +18,10 @@ import com.merseyside.partyapp.utils.isNameValid
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.Contact
 import com.merseyside.partyapp.domain.interactor.GetContactsInteractor
-import com.merseyside.utils.Logger
 import com.merseyside.utils.mvvm.SingleLiveEvent
-import com.merseyside.utils.serialization.deserialize
-import com.merseyside.utils.serialization.serialize
-import kotlinx.coroutines.cancel
+import com.merseyside.merseyLib.kotlin.serialization.deserialize
+import com.merseyside.merseyLib.kotlin.serialization.serialize
+import com.merseyside.partyapp.data.db.event.exception.MemberExistsException
 import kotlinx.serialization.builtins.ListSerializer
 
 class AddEventViewModel(
@@ -52,7 +51,7 @@ class AddEventViewModel(
 
     val eventLiveData = MutableLiveData<Event>()
 
-    val contacts = ObservableField<List<Contact>>()
+    val contactsObservable = ObservableField<List<Contact>>()
 
     val contactsLoadedSingleEvent = SingleLiveEvent<Any>()
 
@@ -162,7 +161,7 @@ class AddEventViewModel(
     fun getContacts() {
         getContactsUseCase.execute(
             onComplete = {
-                contacts.set(it)
+                contactsObservable.set(it)
             },
             onPostExecute = { contactsLoadedSingleEvent.call() }
         )
@@ -206,7 +205,9 @@ class AddEventViewModel(
             },
 
             onError = { throwable ->
-                showErrorMsg(errorMsgCreator.createErrorMsg(throwable))
+                if (throwable is MemberExistsException) {
+                    showErrorMsg(getString(R.string.member_exists_error, throwable.name))
+                } else showErrorMsg(errorMsgCreator.createErrorMsg(throwable))
             }
         )
 
@@ -231,7 +232,7 @@ class AddEventViewModel(
             params = CloseEventInteractor.Params(event!!.id),
             onComplete = {
                 event!!.status = Status.COMPLETE
-                eventLiveData.value = event
+                eventLiveData.value = requireNotNull(event)
                 showMsg(getString(R.string.complete))
             },
             onError = {

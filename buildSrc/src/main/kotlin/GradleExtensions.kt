@@ -1,5 +1,5 @@
 import org.gradle.api.Project
-import org.gradle.internal.impldep.com.amazonaws.services.kms.model.NotFoundException
+import java.io.File
 
 inline fun <reified T> Project.findTypedProperty(propertyName: String): T {
 
@@ -12,5 +12,10 @@ inline fun <reified T> Project.findTypedProperty(propertyName: String): T {
             Float::class -> stringProperty
             else -> it
         }
-    } as? T ?: throw NotFoundException("Property $propertyName not found")
+    } as? T ?: throw Exception("Property $propertyName not found")
 }
+
+fun Project.getKeyAlias(): String = findTypedProperty("RELEASE_KEY_ALIAS")
+fun Project.getSigningPassword(): String = findTypedProperty("RELEASE_KEY_PASSWORD")
+fun Project.getKeystoreFile(): File = file(findTypedProperty("RELEASE_STORE_FILE"))
+fun Project.getStorePassword(): String = findTypedProperty("RELEASE_STORE_PASSWORD")

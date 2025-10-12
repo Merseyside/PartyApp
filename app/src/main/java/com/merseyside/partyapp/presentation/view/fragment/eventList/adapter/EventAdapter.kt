@@ -1,14 +1,21 @@
 package com.merseyside.partyapp.presentation.view.fragment.eventList.adapter
 
 import androidx.appcompat.widget.PopupMenu
-import com.merseyside.adapters.base.BaseSortedAdapter
-import com.merseyside.adapters.view.TypedBindingHolder
+import com.merseyside.adapters.SimpleAdapter
+import com.merseyside.adapters.core.base.callback.click.onClick
+import com.merseyside.adapters.core.config.AdapterConfig
+import com.merseyside.adapters.core.config.init.initAdapter
+import com.merseyside.adapters.core.feature.sorting.Sorting
+import com.merseyside.adapters.core.feature.sorting.comparator.Comparator
+import com.merseyside.adapters.core.holder.ViewHolder
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.presentation.view.fragment.eventList.model.EventItemViewModel
 
-class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
+class EventAdapter(
+    adapterConfig: AdapterConfig<Event, EventItemViewModel>
+) : SimpleAdapter<Event, EventItemViewModel>(adapterConfig) {
 
     interface OnEventOptionsClickListener {
         fun onEditClick(event: Event)
@@ -20,23 +27,21 @@ class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
 
     private var optionsListener: OnEventOptionsClickListener? = null
 
-    override fun getLayoutIdForPosition(position: Int): Int {
+    override fun getLayoutIdForViewType(viewType: Int): Int {
         return R.layout.view_event
     }
 
-    override fun getBindingVariable(): Int {
-        return BR.obj
-    }
+    override fun getBindingVariable(): Int = BR.obj
 
-    override fun createItemViewModel(obj: Event): EventItemViewModel {
-        return EventItemViewModel(obj)
+    override fun createItemViewModel(item: Event): EventItemViewModel {
+        return EventItemViewModel(item)
     }
 
     fun setOnEventOptionsClickListener(listener: OnEventOptionsClickListener) {
         this.optionsListener = listener
     }
 
-    override fun onBindViewHolder(holder: TypedBindingHolder<EventItemViewModel>, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder<Event, EventItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
         
         val item = getItemByPosition(position)
@@ -70,6 +75,26 @@ class EventAdapter : BaseSortedAdapter<Event, EventItemViewModel>() {
             popup.show()
 
             true
+        }
+    }
+
+    companion object {
+
+        operator fun invoke(onClick: (Event) -> Unit): EventAdapter {
+            return initAdapter(::EventAdapter) {
+                Sorting {
+                    comparator = object : Comparator<Event, EventItemViewModel>() {
+                        override fun compare(
+                            model1: EventItemViewModel,
+                            model2: EventItemViewModel
+                        ): Int {
+                            return 0
+                        }
+                    }
+                }
+            }.apply {
+                onClick(onClick)
+            }
         }
     }
 }

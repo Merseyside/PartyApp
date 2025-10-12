@@ -4,7 +4,7 @@ import android.app.Application
 import android.os.Bundle
 import androidx.lifecycle.ViewModelProvider
 import com.github.terrakok.cicerone.Router
-import com.merseyside.archy.presentation.fragment.BaseFragment
+import com.merseyside.archy.presentation.fragment.BaseDialogFragment
 import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
 import com.merseyside.partyapp.domain.interactor.DeleteItemInteractor
 import com.merseyside.partyapp.domain.interactor.GetItemsByEventIdInteractor
@@ -14,7 +14,7 @@ import dagger.Provides
 
 @Module
 class ItemListModule(
-    private val fragment: BaseFragment,
+    private val fragment: BaseDialogFragment,
     private val bundle: Bundle?
 ) {
     @Provides

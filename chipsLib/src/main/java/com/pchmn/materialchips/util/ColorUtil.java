@@ -32,7 +32,7 @@ public class ColorUtil {
 
     public static int getThemeAccentColor (final Context context) {
         final TypedValue value = new TypedValue ();
-        context.getTheme ().resolveAttribute (R.attr.colorAccent, value, true);
+        context.getTheme ().resolveAttribute (android.R.attr.colorAccent, value, true);
         return value.data;
     }
 }

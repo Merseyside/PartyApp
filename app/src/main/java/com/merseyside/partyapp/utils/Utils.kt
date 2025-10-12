@@ -2,22 +2,19 @@
 package com.merseyside.partyapp.utils
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.os.Build
 import android.util.Log
 import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.SnapHelper
+import com.merseyside.merseyLib.kotlin.extensions.isNotZero
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.data.entity.Order
 import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.data.entity.Statistic
-import com.merseyside.utils.ext.isNotZero
-import java.lang.IllegalStateException
 import java.math.BigDecimal
 import java.math.RoundingMode
 import java.text.SimpleDateFormat
@@ -64,7 +61,7 @@ fun isPercentValid(percentStr: String): Boolean {
     if (percentStr.isNotEmpty()) {
         val percentFloat = percentStr.toFloat() / 100f
 
-        return percentFloat > 0f && percentFloat <= 1f
+        return percentFloat in 0f..1f
     }
 
     return false
@@ -145,6 +142,10 @@ fun doubleToFloatPercent(double: Double, scale: Int = 2): Float {
     return bigInteger.setScale(scale, RoundingMode.HALF_UP).toFloat()
 }
 
+fun convertFloatPercentToHuman(percent: Float): String {
+    return (percent * 100).toString()
+}
+
 fun RecyclerView.attachSnapHelperWithListener(
     snapHelper: SnapHelper,
     behavior: SnapOnScrollListener.Behavior = SnapOnScrollListener.Behavior.NOTIFY_ON_SCROLL,
@@ -191,7 +192,7 @@ fun getCircleText(str: String): String {
         }
     }
 
-    return text.toString().toUpperCase(getCurrentLocale(CalcApplication.getInstance().context))
+    return text.toString().uppercase(getCurrentLocale(CalcApplication.getInstance().context))
 }
 
 fun getShareableStatistic(statistic: Statistic): String {
@@ -203,11 +204,25 @@ fun getShareableStatistic(statistic: Statistic): String {
     }
 
     statistic.let {
-        builder.appendln("${getString(R.string.total_spend)}: ${doubleToStringPrice(it.totalSpend)} ${it.currency}")
-        builder.appendln("${getString(R.string.total_debt)}: ${doubleToStringPrice(it.totalDebt)} ${it.currency}").appendln()
+        builder.appendLine("${getString(R.string.total_spend)}: ${doubleToStringPrice(it.totalSpend)} ${it.currency}")
+        builder.appendLine("${getString(R.string.total_debt)}: ${doubleToStringPrice(it.totalDebt)} ${it.currency}").appendLine()
+
+        builder.appendLine(getString(R.string.debit1))
+        val debitMembers = it.membersStatistic.filter { stats -> stats.totalResult >= 0.0 }
+        debitMembers.forEachIndexed { i, member->
+            builder.append("${i+1}. ").append(member.member.name).append(": ").appendLine(doubleToStringPrice(member.totalResult))
+        }
+
+        builder.appendLine(getString(R.string.credit))
+        val creditMembers = it.membersStatistic.filter { stats -> stats.totalResult < 0.0 }
+        creditMembers.forEachIndexed { i, member->
+            builder.append("${i+1}. ").append(member.member.name).append(": ").appendLine(doubleToStringPrice(member.totalResult))
+        }
+
+        builder.appendLine()
 
         it.membersStatistic.forEachIndexed { i, member->
-            builder.appendln(getMemberStatistic(context, member, i + 1))
+            builder.appendLine(getMemberStatistic(context, member, i + 1))
         }
     }
 
@@ -225,21 +240,18 @@ fun getMemberStatistic(
         return context.getString(resId, *args)
     }
 
-    val number = if (index != null) {
-        "$index. "
-    } else {
-        ""
-    }
+    val number = if (index != null) "$index. " else ""
 
-    val memberBuilder = StringBuilder("$number${member.member.name}").appendln()
+    val memberBuilder = StringBuilder("$number${member.member.name}").appendLine()
 
-    if (member.totalSpend.isNotZero()) memberBuilder.appendln("${getString(R.string.spend)} ${doubleToStringPrice(member.totalSpend)} ${member.currency}")
-    if (member.totalDebt.isNotZero())  memberBuilder.appendln("${getString(R.string.owed)} ${doubleToStringPrice(member.totalDebt)} ${member.currency}")
-    if (member.totalLend.isNotZero())  memberBuilder.appendln("${getString(R.string.lend)} ${doubleToStringPrice(member.totalLend)} ${member.currency}")
+    if (member.totalSpend.isNotZero()) memberBuilder.appendLine("${getString(R.string.spend) } ${doubleToStringPrice(member.totalSpend)} ${member.currency}")
+    if (member.totalDebt.isNotZero())  memberBuilder.appendLine("${getString(R.string.owed)} ${doubleToStringPrice(member.totalDebt)} ${member.currency}")
+    if (member.totalLend.isNotZero())  memberBuilder.appendLine("${getString(R.string.lend)} ${doubleToStringPrice(member.totalLend)} ${member.currency}")
+    if (member.totalResult.isNotZero()) memberBuilder.appendLine("${getString(R.string.result)} ${doubleToStringPrice(member.totalResult)} ${member.currency}")
 
-    memberBuilder.appendln()
+    memberBuilder.appendLine()
 
-    val ordersBuilder = StringBuilder(getString(R.string.all_orders)).appendln(" ${member.member.name}")
+    val ordersBuilder = StringBuilder(getString(R.string.all_orders)).appendLine(" ${member.member.name}")
 
     member.orders.forEach { order ->
         val opponent = when {
@@ -254,13 +266,15 @@ fun getMemberStatistic(
             }
         }
 
-        ordersBuilder.appendln("${order.title} $opponent ${doubleToStringPrice(order.price)} ${member.currency}")
+        ordersBuilder.append("${order.title} $opponent ${doubleToStringPrice(order.price)} ${member.currency}")
+        if (order.hasServiceFee) ordersBuilder.appendLine(" (${getString(R.string.fee, getHumanReadablePercents(order.serviceFee))}%)")
+        else ordersBuilder.appendLine()
     }
 
-    memberBuilder.appendln(ordersBuilder)
+    memberBuilder.appendLine(ordersBuilder)
     ordersBuilder.clear()
 
-    val resultBuilder = StringBuilder(getString(R.string.result)).appendln()
+    val resultBuilder = StringBuilder(getString(R.string.result)).appendLine()
 
     member.priceResult.forEach { result ->
 
@@ -273,7 +287,7 @@ fun getMemberStatistic(
             }
         }
 
-        resultBuilder.appendln("${result.member.name} $opponent")
+        resultBuilder.appendLine("${result.member.name} $opponent")
     }
 
     memberBuilder.append(resultBuilder)
@@ -312,7 +326,7 @@ fun checkPriceForCalculation(expression: String): String? {
 
         calculate(formattedExpression)?.let {
             if (convertPriceToDouble(it) < 0) throw IllegalStateException("Price can not be negative")
-            return it + endingOperator
+            return it
         }
     }
 

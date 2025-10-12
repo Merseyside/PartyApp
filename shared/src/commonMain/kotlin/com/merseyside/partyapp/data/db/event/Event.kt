@@ -1,17 +1,19 @@
 package com.merseyside.partyapp.data.db.event
 
+import com.merseyside.merseyLib.kotlin.contract.Identifiable
+import com.merseyside.merseyLib.kotlin.utils.Id
 import com.merseyside.partyapp.data.entity.Status
 import kotlinx.serialization.Serializable
 
 @Serializable
 data class Event(
-    val id: Long,
+    override val id: Id,
     var name: String,
     var members: MutableList<Member>,
     var notes: String,
     var status: Status,
     val timestamp: Long
-) {
+): Identifiable<Id> {
 
     override fun equals(other: Any?): Boolean {
         if (this === other) return true

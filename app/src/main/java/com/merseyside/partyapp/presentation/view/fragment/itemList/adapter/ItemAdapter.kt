@@ -1,14 +1,19 @@
 package com.merseyside.partyapp.presentation.view.fragment.itemList.adapter
 
 import androidx.appcompat.widget.PopupMenu
+import com.merseyside.adapters.SimpleAdapter
+import com.merseyside.adapters.core.base.callback.click.onClick
+import com.merseyside.adapters.core.config.AdapterConfig
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.presentation.view.fragment.itemList.model.ItemViewModel
-import com.merseyside.adapters.base.BaseSortedAdapter
-import com.merseyside.adapters.view.TypedBindingHolder
+import com.merseyside.adapters.core.config.init.initAdapter
+import com.merseyside.adapters.core.feature.sorting.Sorting
+import com.merseyside.adapters.core.feature.sorting.comparator.Comparator
+import com.merseyside.adapters.core.holder.ViewHolder
 
-class ItemAdapter : BaseSortedAdapter<Item, ItemViewModel>() {
+class ItemAdapter(adapterConfig: AdapterConfig<Item, ItemViewModel>) : SimpleAdapter<Item, ItemViewModel>(adapterConfig) {
 
     interface OnItemOptionsClickListener {
 
@@ -17,13 +22,11 @@ class ItemAdapter : BaseSortedAdapter<Item, ItemViewModel>() {
 
     private var optionsListener: OnItemOptionsClickListener? = null
 
-    override fun getLayoutIdForPosition(position: Int): Int {
+    override fun getLayoutIdForViewType(viewType: Int): Int {
         return R.layout.view_item
     }
 
-    override fun getBindingVariable(): Int {
-        return BR.obj
-    }
+    override fun getBindingVariable() = BR.obj
 
     override fun createItemViewModel(obj: Item): ItemViewModel {
         return ItemViewModel(obj)
@@ -33,7 +36,7 @@ class ItemAdapter : BaseSortedAdapter<Item, ItemViewModel>() {
         this.optionsListener = listener
     }
 
-    override fun onBindViewHolder(holder: TypedBindingHolder<ItemViewModel>, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder<Item, ItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
 
         getModelByPosition(position).apply {
@@ -64,6 +67,24 @@ class ItemAdapter : BaseSortedAdapter<Item, ItemViewModel>() {
             popup.show()
 
             true
+        }
+    }
+
+    companion object {
+
+        operator fun invoke(onClick: (Item) -> Unit): ItemAdapter {
+            return initAdapter(::ItemAdapter) {
+                Sorting {
+                    comparator = object : Comparator<Item, ItemViewModel>() {
+                        override fun compare(model1: ItemViewModel, model2: ItemViewModel): Int {
+                            return if (model1.item.timestamp.gmtTimeUnit < model2.item.timestamp.gmtTimeUnit) -1
+                            else 1
+                        }
+                    }
+                }
+            }.apply {
+                onClick(onClick)
+            }
         }
     }
 }

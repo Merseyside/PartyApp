@@ -1,7 +1,10 @@
 package com.merseyside.partyapp.di
 
+import android.content.Context
+import app.cash.sqldelight.db.SqlDriver
 import com.merseyside.partyapp.utils.ContentResolver
-import com.squareup.sqldelight.db.SqlDriver
+
+actual var mContext: Context? = null
 
 actual var sqlDriver: SqlDriver? = null
 

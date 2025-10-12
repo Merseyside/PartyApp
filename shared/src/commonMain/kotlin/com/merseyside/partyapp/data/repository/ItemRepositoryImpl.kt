@@ -22,13 +22,14 @@ class ItemRepositoryImpl(
         name: String,
         description: String,
         price: Double,
+        serviceFee: Float,
         payMember: Member,
         membersInfo: List<MemberInfo>
     ): Boolean {
         if (id == null) {
-            itemDao.insertItem(eventId, name, description, price, payMember, membersInfo)
+            itemDao.insertItem(eventId, name, description, price, serviceFee, payMember, membersInfo)
         } else {
-            itemDao.changeItem(id, name, description, price, payMember, membersInfo)
+            itemDao.changeItem(id, name, description, price, serviceFee, payMember, membersInfo)
         }
 
         return true

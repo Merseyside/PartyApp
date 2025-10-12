@@ -64,3 +64,5 @@
 -verbose
 -optimizations !code/simplification/arithmetic,!field
 -ignorewarnings
+
+-dontobfuscate

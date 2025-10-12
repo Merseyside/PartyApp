@@ -1,17 +1,20 @@
 package com.merseyside.partyapp.di
 
-import com.github.florent37.preferences.Preferences
+import android.content.Context
+import android.content.SharedPreferences
+import app.cash.sqldelight.db.SqlDriver
 import com.merseyside.partyapp.data.db.createDatabase
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.utils.ContentResolver
 import com.merseyside.partyapp.utils.PreferenceHelper
-import com.squareup.sqldelight.db.SqlDriver
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import com.russhwolf.settings.Settings
+import com.russhwolf.settings.SharedPreferencesSettings
 import org.kodein.di.DI
 import org.kodein.di.bind
 import org.kodein.di.instance
 import org.kodein.di.singleton
 
+expect var mContext: Context?
 expect var sqlDriver: SqlDriver?
 expect var baseContentResolver: ContentResolver?
 
@@ -23,8 +26,12 @@ internal val databaseModule = DI.Module("database") {
 }
 
 internal val appModule = DI.Module("app") {
-    bind<Preferences>() with singleton {
-        Preferences("calcPrefs")
+    bind<SharedPreferences>() with singleton {
+        mContext!!.getSharedPreferences("shared_prefs", Context.MODE_PRIVATE)
+    }
+
+    bind<Settings>() with singleton {
+        SharedPreferencesSettings(delegate = instance())
     }
 
     bind<PreferenceHelper>() with singleton {
@@ -36,7 +43,6 @@ internal val appModule = DI.Module("app") {
     }
 }
 
-@ExperimentalCoroutinesApi
 internal val appComponent = DI {
     import(appModule)
     import(databaseModule)

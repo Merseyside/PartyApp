@@ -1,32 +1,38 @@
 package com.merseyside.partyapp.presentation.view.fragment.statisticMember.adapter
 
-import com.merseyside.adapters.base.BaseAdapter
-import com.merseyside.adapters.view.TypedBindingHolder
+import com.merseyside.adapters.SimpleAdapter
+import com.merseyside.adapters.core.config.AdapterConfig
+import com.merseyside.adapters.core.config.init.initAdapter
+import com.merseyside.adapters.core.holder.ViewHolder
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.ResultItemViewModel
 import com.merseyside.partyapp.data.entity.Result
 
-class ResultAdapter : BaseAdapter<Result, ResultItemViewModel>() {
+class ResultAdapter(adapterConfig: AdapterConfig<Result, ResultItemViewModel>) : SimpleAdapter<Result, ResultItemViewModel>(adapterConfig) {
 
-    override fun getLayoutIdForPosition(position: Int): Int {
+    override fun getLayoutIdForViewType(viewType: Int): Int {
         return R.layout.view_result
     }
 
-    override fun getBindingVariable(): Int {
-        return BR.obj
+    override fun getBindingVariable() = BR.obj
+
+    override fun createItemViewModel(item: Result): ResultItemViewModel {
+        return ResultItemViewModel(item, CalcApplication.getInstance().prefsHelper.getCurrency())
     }
 
-    override fun createItemViewModel(obj: Result): ResultItemViewModel {
-        return ResultItemViewModel(obj, CalcApplication.getInstance().prefsHelper.getCurrency())
-    }
-
-    override fun onBindViewHolder(holder: TypedBindingHolder<ResultItemViewModel>, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder<Result, ResultItemViewModel>, position: Int) {
         super.onBindViewHolder(holder, position)
 
         if (position == itemCount - 1) {
             getModelByPosition(position).isVisible = false
+        }
+    }
+
+    companion object {
+        operator fun invoke(): ResultAdapter {
+            return initAdapter(::ResultAdapter)
         }
     }
 }

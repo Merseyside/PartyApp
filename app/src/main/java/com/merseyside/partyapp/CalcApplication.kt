@@ -3,17 +3,23 @@ package com.merseyside.partyapp
 import android.os.Bundle
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
+import app.cash.sqldelight.driver.android.AndroidSqliteDriver
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.merseyside.archy.BaseApplication
+import com.merseyside.merseyLib.kotlin.serialization.JsonConfigurator
+import com.merseyside.merseyLib.time.Time
+import com.merseyside.merseyLib.time.init
+import com.merseyside.merseyLib.time.setupWithLocale
+import com.merseyside.merseyLib.time.utils.Pattern
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.di.baseContentResolver
+import com.merseyside.partyapp.di.mContext
 import com.merseyside.partyapp.di.sqlDriver
 import com.merseyside.partyapp.presentation.di.component.AppComponent
 import com.merseyside.partyapp.presentation.di.component.DaggerAppComponent
 import com.merseyside.partyapp.presentation.di.module.AppModule
 import com.merseyside.partyapp.utils.ContentResolverImpl
 import com.merseyside.partyapp.utils.PrefsHelper
-import com.squareup.sqldelight.android.AndroidSqliteDriver
 import javax.inject.Inject
 
 class CalcApplication : BaseApplication() {
@@ -44,11 +50,13 @@ class CalcApplication : BaseApplication() {
         appComponent = buildComponent()
         appComponent.inject(this)
 
+        mContext = this
         initDB()
+        initTime()
         initContentResolver()
-
-        //initCrashlytics()
     }
+
+    override fun onLocaleChanged() {}
 
     private fun buildComponent() : AppComponent {
         return DaggerAppComponent.builder()
@@ -76,15 +84,21 @@ class CalcApplication : BaseApplication() {
         )
     }
 
+    private fun initTime() {
+        JsonConfigurator.addSerializersModule(Time.serializersModule)
+        Time.init(this)
+
+        Time.configuration.apply {
+            setupWithLocale(getLocale())
+            defaultPattern = Pattern.ISO_INSTANT
+        }
+    }
+
     private fun initContentResolver() {
         baseContentResolver = ContentResolverImpl(context.contentResolver)
     }
 
     fun logFirebaseEvent(event: String, bundle: Bundle) {
         firebaseAnalytics.logEvent(event, bundle)
-    }
-
-    private fun initCrashlytics() {
-
     }
 }

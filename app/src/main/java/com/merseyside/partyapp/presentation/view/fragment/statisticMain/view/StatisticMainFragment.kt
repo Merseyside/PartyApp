@@ -6,14 +6,10 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
-import androidx.fragment.app.FragmentStatePagerAdapter.BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProviders
-import com.merseyside.adapters.base.BaseAdapter
-import com.merseyside.adapters.base.OnItemClickListener
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
-import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.databinding.FragmentStatisticMainBinding
 import com.merseyside.partyapp.presentation.base.BaseCalcFragment
@@ -21,35 +17,35 @@ import com.merseyside.partyapp.presentation.di.component.DaggerStatisticMainComp
 import com.merseyside.partyapp.presentation.di.module.StatisticMainModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.addItem.adapter.MemberAdapter
-import com.merseyside.partyapp.presentation.view.fragment.statisticMain.adapter.MemberStatisticPagerAdapter
+import com.merseyside.partyapp.presentation.view.fragment.statisticMain.adapter.MemberStatisticFragmentAdapter
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.model.StatisticMainViewModel
 import com.merseyside.partyapp.utils.getShareableStatistic
 
 class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, StatisticMainViewModel>() {
 
-    private val adapter = MemberAdapter()
-    private lateinit var sharedViewModel: SharedViewModel
-
-    private lateinit var pagedAdapter: MemberStatisticPagerAdapter
-
-    private val memberStatisticObserver = Observer<List<MemberStatistic>> {
-        if (!it.isNullOrEmpty()) {
-            pagedAdapter = MemberStatisticPagerAdapter(childFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT)
-            pagedAdapter.setData(it)
-
-            binding.pageContainer.adapter = pagedAdapter
+    private val adapter by lazy {
+        MemberAdapter { member, position ->
+            requireBinding().pageContainer.currentItem = position
         }
     }
+    private val sharedViewModel: SharedViewModel by activityViewModels()
 
-    override fun hasTitleBackButton(): Boolean {
-        return true
+    private lateinit var pagedAdapter: MemberStatisticFragmentAdapter
+
+    private val memberStatisticObserver = Observer<List<MemberStatistic>> { members ->
+        if (members.isNotEmpty()) {
+            pagedAdapter = MemberStatisticFragmentAdapter(childFragmentManager, lifecycle, members.size)
+            pagedAdapter.setData(members)
+
+            requireBinding().pageContainer.adapter = pagedAdapter
+        }
     }
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
-    override fun performInjection(bundle: Bundle?) {
+    override fun performInjection(bundle: Bundle?, vararg args: Any) {
         DaggerStatisticMainComponent.builder()
             .appComponent(appComponent)
             .statisticMainModule(getStatisticMainModule(bundle))
@@ -64,50 +60,38 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         return R.layout.fragment_statistic_main
     }
 
-    override fun getTitle(context: Context): String? {
+    override fun getTitle(context: Context): String {
         return context.getString(R.string.statistic)
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        sharedViewModel = ViewModelProviders.of(baseActivity).get(SharedViewModel::class.java)
-
         retainInstance = true
+        setHasOptionsMenu(true)
+
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        requireBinding().pageContainer.offscreenPageLimit = 1
         doLayout()
     }
 
     private fun doLayout() {
         viewModel.memberStatisticLiveData.observe(viewLifecycleOwner, memberStatisticObserver)
-        binding.memberList.adapter = adapter
-
-        adapter.setOnItemClickListener(onMemberClickListener)
+        requireBinding().memberList.adapter = adapter
 
         viewModel.initWithEvent(sharedViewModel.eventContainer)
-    }
-
-    private val onMemberClickListener = object: OnItemClickListener<Member> {
-        override fun onItemClicked(obj: Member) {
-            val position = adapter.getPositionOfObj(obj)
-
-            binding.pageContainer.currentItem = position
-        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
         viewModel.memberStatisticLiveData.removeObserver(memberStatisticObserver)
-
-        adapter.removeOnItemClickListener(onMemberClickListener)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         baseActivity.menuInflater.inflate(R.menu.menu_statistic, menu)
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -115,9 +99,7 @@ class StatisticMainFragment : BaseCalcFragment<FragmentStatisticMainBinding, Sta
         viewModel.statistic?.let { statistic ->
             when (item.itemId) {
                 R.id.action_share -> {
-                    shareStatistic(getShareableStatistic(
-                        statistic
-                    ))
+                    shareStatistic(getShareableStatistic(statistic))
 
                     if (!prefsHelper.isRated()) showRateUsDialog()
 

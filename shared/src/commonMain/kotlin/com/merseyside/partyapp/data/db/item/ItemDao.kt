@@ -1,7 +1,6 @@
 package com.merseyside.partyapp.data.db.item
 
-import com.merseyside.kmpMerseyLib.utils.Logger
-import com.merseyside.kmpMerseyLib.utils.time.getCurrentTimeMillis
+import com.merseyside.merseyLib.time.Time
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.entity.mapper.ItemDataMapper
@@ -12,12 +11,51 @@ class ItemDao(database: CalcDatabase) {
 
     private val itemDataMapper = ItemDataMapper()
 
-    fun insertItem(eventId: Long, name: String, description: String, price: Double, payMember: Member, membersInfo: List<MemberInfo>) {
-        db.insertItem(eventId, name, description, price, payMember, MembersModel(membersInfo), getCurrentTimeMillis())
+    @Throws(IllegalStateException::class)
+    fun insertItem(
+        eventId: Long,
+        name: String,
+        description: String,
+        price: Double,
+        serviceFee: Float,
+        payMember: Member,
+        membersInfo: List<MemberInfo>
+    ) {
+        if (db.contains(name).executeAsOneOrNull() != null) {
+            throw IllegalStateException("Item with name $name already exists")
+        }
+
+        db.insertItem(
+            eventId,
+            name,
+            description,
+            price,
+            serviceFee.toString(),
+            payMember,
+            MembersModel(membersInfo),
+            Time.now
+        )
     }
 
-    fun changeItem(id: Long, name: String, description: String, price: Double, payMember: Member, membersInfo: List<MemberInfo>) {
-        db.changeItem(name, description, price, payMember, MembersModel(membersInfo), getCurrentTimeMillis(), id)
+    fun changeItem(
+        id: Long,
+        name: String,
+        description: String,
+        price: Double,
+        serviceFee: Float,
+        payMember: Member,
+        membersInfo: List<MemberInfo>
+    ) {
+        db.changeItem(
+            name,
+            description,
+            price,
+            serviceFee.toString(),
+            payMember,
+            MembersModel(membersInfo),
+            Time.now,
+            id
+        )
     }
 
     fun getItemsById(eventId: Long): List<Item> {

@@ -1,76 +1,60 @@
 plugins {
-    id("com.android.library")
-    kotlin("multiplatform")
-    kotlin("kapt")
-    id("kotlinx-serialization")
-    id("com.squareup.sqldelight")
-    id("dev.icerock.mobile.multiplatform")
-    id("maven-publish")
-}
-
-android {
-    compileSdkVersion(Versions.Android.compileSdk)
-
-    defaultConfig {
-        minSdkVersion(Versions.Android.minSdk)
-        targetSdkVersion(Versions.Android.targetSdk)
-    }
-
-    packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
-        exclude("META-INF/*.kotlin_module")
-    }
-
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+    with(catalogPlugins.plugins) {
+        plugin(android.kotlin.multiplatform.library)
+        plugin(kotlin.multiplatform)
+        plugin(kotlin.serialization)
+        plugin(sqldelight)
+        id(mersey.kotlin.extension.id())
+        plugin(kotlin.kapt)
     }
 }
 
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
-}
 
-val mppLibs = listOf(
-    Deps.Libs.MultiPlatform.kotlinStdLib,
-    Deps.Libs.MultiPlatform.coroutines,
-    Deps.Libs.MultiPlatform.serialization,
-    Deps.Libs.MultiPlatform.kodein,
-    Deps.Libs.MultiPlatform.sqlDelight,
-    Deps.Libs.MultiPlatform.preferences
-)
+//    packaging {
+//        packagingOptions.resources.excludes.addAll(
+//            setOf(
+//                "META-INF/DEPENDENCIES",
+//                "META-INF/*.kotlin_module"
+//            )
+//        )
+//    }
 
-val merseyModules = listOf(
-    LibraryModules.MultiPlatform.cleanMvvmArch,
-    LibraryModules.MultiPlatform.utils
-)
+kotlin {
+    androidLibrary {
+        namespace = "com.merseyside.partyapp"
+        compileSdk = androidLibs.versions.compileSdk.get().toInt()
 
-val merseyLibs = listOf(
-    Deps.Libs.MultiPlatform.MerseyLibs.cleanMvvmArch,
-    Deps.Libs.MultiPlatform.MerseyLibs.utils
-)
-
-dependencies {
-    mppLibs.forEach { mppLibrary(it) }
-
-    if (isLocalDependencies()) {
-        merseyModules.forEach { module -> mppModule(module) }
-    } else {
-        merseyLibs.forEach { lib -> mppLibrary(lib) }
+        minSdk = androidLibs.versions.compileMinSdk.get().toInt()
     }
 
-    kaptLibrary(Deps.Libs.Android.daggerCompiler)
-    compileOnly("javax.annotation:jsr250-api:1.0")
+    sourceSets {
+        commonMain.dependencies {
+            val commonLibs = listOf(
+                common.kotlin.stdlib,
+                common.serialization,
+                common.coroutines
+            ).forEach(::implementation)
+
+
+            val mppLibs = listOf(
+                multiplatformLibs.kodein,
+                multiplatformLibs.sqldelight,
+                multiplatformLibs.settings
+            ).forEach(::implementation)
+
+            implementation(multiplatformLibs.bundles.merseyLibs)
+            implementation(common.mersey.time)
+        }
+    }
 }
 
 sqldelight {
-    database("CalcDatabase") {
-        packageName = "com.merseyside.partyapp.data.db"
-        sourceFolders = listOf("sqldelight")
-        schemaOutputDirectory = file("build/dbs")
-        //dependency(project(":OtherProject"))
+    databases {
+        create("CalcDatabase") {
+            packageName.set("com.merseyside.partyapp.data.db")
+            schemaOutputDirectory = file("build/dbs")
+            dialect(multiplatformLibs.sqldelight.dialects.sqlite)
+        }
     }
-    linkSqlite = false
+    linkSqlite = true
 }

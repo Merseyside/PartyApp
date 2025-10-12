@@ -8,8 +8,12 @@ import android.util.Log
 import androidx.databinding.Observable
 import androidx.databinding.ObservableField
 import com.github.terrakok.cicerone.Router
-import com.merseyside.kmpMerseyLib.utils.serialization.deserialize
-import com.merseyside.kmpMerseyLib.utils.serialization.serialize
+import com.merseyside.merseyLib.kotlin.extensions.isZero
+import com.merseyside.merseyLib.kotlin.extensions.trimTrailingZero
+import com.merseyside.merseyLib.kotlin.logger.log
+import com.merseyside.merseyLib.kotlin.serialization.deserialize
+import com.merseyside.merseyLib.kotlin.serialization.serialize
+import com.merseyside.merseyLib.kotlin.utils.randomBool
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
@@ -18,9 +22,6 @@ import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.domain.interactor.AddItemInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.*
-import com.merseyside.utils.ext.isZero
-import com.merseyside.utils.randomBool
-import kotlinx.coroutines.cancel
 import kotlinx.serialization.builtins.ListSerializer
 
 class AddItemViewModel(
@@ -39,7 +40,12 @@ class AddItemViewModel(
     val price = ObservableField("")
     val priceErrorText = ObservableField("")
     val isPriceValid = ObservableField(true)
-    val priceHint = ObservableField(getString(R.string.item_total_price))
+    val priceHint = ObservableField(getString(R.string.item_price))
+
+    // With service fee
+    val serviceFee = ObservableField("")
+    val serviceFeeHint = ObservableField("")
+    val totalPrice = ObservableField("")
 
     val description = ObservableField<String>()
 
@@ -62,7 +68,7 @@ class AddItemViewModel(
     val currency = ObservableField<String>()
 
     init {
-        name.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+        name.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 if (!nameErrorText.get().isNullOrEmpty()) {
                     nameErrorText.set("")
@@ -70,8 +76,9 @@ class AddItemViewModel(
             }
         })
 
-        price.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+        price.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                "new price".log()
                 val priceStr = price.get()
 
                 if (!priceStr.isNullOrEmpty()) {
@@ -83,22 +90,34 @@ class AddItemViewModel(
                     }
 
                     try {
-                        val doublePrice = convertPriceToDouble(priceStr)
-                        if (percent.get().isNullOrEmpty()) {
-                            val percent = convertPercentToFloat(percentHint.get() ?: "0")
-
-                            memberPriceHint.set(doubleToStringPrice(convertPercentToPrice(percent, doublePrice)))
+                        val price = convertPriceToDouble(priceStr)
+                        val percent = 1f + if (serviceFee.get().isNullOrEmpty()) {
+                            convertPercentToFloat(serviceFeeHint.get() ?: "0")
                         } else {
-                            val percent = convertPercentToFloat(percent.get()!!)
-
-                            memberPrice.set(doubleToStringPrice(convertPercentToPrice(percent, doublePrice)))
+                            convertPercentToFloat(requireNotNull(serviceFee.get()))
                         }
 
+                        totalPrice.set(doubleToStringPrice(convertPercentToPrice(percent, price)))
                         additionalSettingsError.set("")
-
                     } catch (e: NumberFormatException) {
                         additionalSettingsError.set(getString(R.string.fill_price_error))
                     }
+
+//                    try {
+//                        val doublePrice = convertPriceToDouble(priceStr)
+//                        if (percent.get().isNullOrEmpty()) {
+//                            val percent = convertPercentToFloat(percentHint.get() ?: "0")
+//                            memberPriceHint.set(doubleToStringPrice(convertPercentToPrice(percent, doublePrice)))
+//                        } else {
+//                            val percent = convertPercentToFloat(percent.get()!!)
+//                            memberPrice.set(doubleToStringPrice(convertPercentToPrice(percent, doublePrice)))
+//                        }
+//
+//                        additionalSettingsError.set("")
+//
+//                    } catch (e: NumberFormatException) {
+//                        additionalSettingsError.set(getString(R.string.fill_price_error))
+//                    }
 
                     val calculatedPrice: String?
 
@@ -109,22 +128,23 @@ class AddItemViewModel(
                             try {
                                 val result = calculate(formattedString)
                                 if (result != null) {
-                                    price.set(result)
+                                    setPrice(result)
                                     return
                                 } else {
                                     try {
-                                        price.set(doubleToStringPrice(formattedString.toDouble()))
-                                    } catch (e: NumberFormatException) {}
+                                        setPrice(doubleToStringPrice(formattedString.toDouble()))
+                                    } catch (e: NumberFormatException) {
+                                    }
                                 }
                             } catch (e: NumberFormatException) {
                                 priceErrorText.set(getString(R.string.price_error_msg))
                             }
                         } else {
-                            price.set(formattedString.dropLast(1)+"\n")
+                            setPrice(formattedString.dropLast(1) + "\n")
                             return
                         }
 
-                        price.set(formattedString)
+                        setPrice(formattedString)
                     } else {
 
                         try {
@@ -133,18 +153,20 @@ class AddItemViewModel(
                             priceErrorText.set(getString(R.string.wrong_format))
                             return
                         } catch (e: IllegalStateException) {
-                            price.set(priceStr.dropLast(1))
+                            setPrice(priceStr.dropLast(1))
                             return
                         }
 
                         if (calculatedPrice != null) {
-                            price.set(calculatedPrice)
+                            setPrice(calculatedPrice)
                         } else {
 
                             if (!priceStr.last().isDigit()) {
 
-                                if (priceStr.length > 1 && !priceStr.substring(priceStr.length - 2).toCharArray()[0].isDigit()) {
-                                    price.set(priceStr.dropLast(1))
+                                if (priceStr.length > 1 && !priceStr.substring(priceStr.length - 2)
+                                        .toCharArray()[0].isDigit()
+                                ) {
+                                    setPrice(priceStr.dropLast(1))
                                 }
                             }
                         }
@@ -156,7 +178,8 @@ class AddItemViewModel(
             }
         })
 
-        selectedMembers.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+        selectedMembers.addOnPropertyChangedCallback(object :
+            Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 if (!selectableMembersErrorText.get().isNullOrEmpty()) {
                     selectableMembersErrorText.set("")
@@ -172,7 +195,14 @@ class AddItemViewModel(
 
 
                     if (isPriceValid(price.get())) {
-                        memberPriceHint.set(doubleToStringPrice(convertPercentToPrice(calculatedPercent, convertPriceToDouble(price.get()!!))))
+                        memberPriceHint.set(
+                            doubleToStringPrice(
+                                convertPercentToPrice(
+                                    calculatedPercent,
+                                    convertPriceToDouble(price.get()!!)
+                                )
+                            )
+                        )
                     }
                 } else {
                     spinnerSelectedMembers.set(null)
@@ -180,7 +210,8 @@ class AddItemViewModel(
             }
         })
 
-        spinnerSelectedMember.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+        spinnerSelectedMember.addOnPropertyChangedCallback(object :
+            Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 spinnerSelectedMember.get()?.let {
                     percent.set(getHumanReadablePercents(it.percent))
@@ -188,7 +219,7 @@ class AddItemViewModel(
             }
         })
 
-        percent.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+        percent.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
                 if (spinnerSelectedMember.get() != null) {
                     val percentStr = percent.get()
@@ -221,10 +252,16 @@ class AddItemViewModel(
                         } else {
                             if (isPriceValid(totalPrice)) {
 
-                                spinnerSelectedMember.get()!!.percent = convertPercentToFloat(percentStr)
+                                spinnerSelectedMember.get()!!.percent =
+                                    convertPercentToFloat(percentStr)
 
-                                if (memberPrice.get().isNullOrEmpty() || isPercentsAreDifferent(convertPercentToFloat(percentStr), convertPriceToPercent(
-                                        convertPriceToDouble(memberPrice.get()!!), convertPriceToDouble(totalPrice!!)))) {
+                                if (memberPrice.get().isNullOrEmpty() || isPercentsAreDifferent(
+                                        convertPercentToFloat(percentStr), convertPriceToPercent(
+                                            convertPriceToDouble(memberPrice.get()!!),
+                                            convertPriceToDouble(totalPrice!!)
+                                        )
+                                    )
+                                ) {
                                     memberPrice.set(
                                         doubleToStringPrice(
                                             convertPercentToPrice(
@@ -255,7 +292,7 @@ class AddItemViewModel(
             }
         })
 
-        memberPrice.addOnPropertyChangedCallback(object: Observable.OnPropertyChangedCallback() {
+        memberPrice.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
             override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
 
                 if (spinnerSelectedMember.get() != null) {
@@ -280,7 +317,10 @@ class AddItemViewModel(
                         }
 
                     } else {
-                        if (convertPriceToDoubleWithFormat(memberPriceStr!!) != convertPriceToDouble(memberPriceStr)) {
+                        if (convertPriceToDoubleWithFormat(memberPriceStr!!) != convertPriceToDouble(
+                                memberPriceStr
+                            )
+                        ) {
                             memberPrice.set(doubleToStringPrice(convertPriceToDouble(memberPriceStr)))
                             return
                         }
@@ -347,6 +387,97 @@ class AddItemViewModel(
                 }
             }
         })
+
+        serviceFee.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                val percentStr = serviceFee.get()
+                val price = price.get()
+
+                if (percentStr != null && isPriceValid(price)) {
+
+                    if (percentStr == ".") {
+                        serviceFee.set("0.")
+                        return
+                    }
+
+                    if (percentStr == "") {
+                        serviceFeeHint.set("0")
+                    }
+
+                    if (isPercentValid(percentStr)) {
+                        val price = convertPriceToDouble(price!!)
+                        val percent = 1f + convertPercentToFloat(percentStr)
+
+                        val totalPriceDouble = convertPercentToPrice(percent, price)
+                        totalPrice.set(doubleToStringPrice(totalPriceDouble))
+                    } else {
+                        val serviceFee = serviceFeeHint.get()?.let { convertPercentToFloat(it) }
+                        val percent = 1f + (serviceFee ?: 0f)
+                        totalPrice.set(
+                            doubleToStringPrice(
+                                convertPercentToPrice(
+                                    percent,
+                                    convertPriceToDouble(price!!)
+                                )
+                            )
+                        )
+                    }
+                }
+            }
+        })
+
+        totalPrice.addOnPropertyChangedCallback(object : Observable.OnPropertyChangedCallback() {
+            override fun onPropertyChanged(sender: Observable?, propertyId: Int) {
+                val total = totalPrice.get()
+
+                if (isPriceValid(total)) {
+                    try {
+                        val doublePrice = total?.let { convertPriceToDouble(total) } ?: 0.0
+                        if (percent.get().isNullOrEmpty()) {
+                            val percent = convertPercentToFloat(percentHint.get() ?: "0")
+                            memberPriceHint.set(
+                                doubleToStringPrice(
+                                    convertPercentToPrice(
+                                        percent,
+                                        doublePrice
+                                    )
+                                )
+                            )
+                        } else {
+                            val percent = convertPercentToFloat(percent.get()!!)
+                            memberPrice.set(
+                                doubleToStringPrice(
+                                    convertPercentToPrice(
+                                        percent,
+                                        doublePrice
+                                    )
+                                )
+                            )
+                        }
+
+                        additionalSettingsError.set("")
+
+                    } catch (e: NumberFormatException) {
+                        additionalSettingsError.set(getString(R.string.fill_price_error))
+                    }
+                }
+            }
+        })
+    }
+
+    private fun setPrice(priceStr: String) {
+        val serviceFee: Float = convertPercentToFloat(getServiceFee())
+        val servicePercent: Float = 1 + serviceFee / 100f
+        val priceWithFee = convertPercentToPrice(servicePercent, convertPriceToDouble(priceStr))
+
+        totalPrice.set(doubleToStringPrice(priceWithFee))
+        price.set(priceStr)
+    }
+
+    private fun getServiceFee(): String {
+        return (if (serviceFee.get().isNullOrBlank()) {
+            serviceFeeHint.get()
+        } else requireNotNull(serviceFee.get())) ?: "0"
     }
 
     private fun calculatePercentHint(): Float {
@@ -382,7 +513,13 @@ class AddItemViewModel(
             description.set(getString(DESCRIPTION_KEY)!!)
             price.set(getString(PRICE_KEY)!!)
 
-            selectableMembers.set(getString(SELECTED_MEMBERS_KEY)!!.deserialize(ListSerializer(MemberInfo.serializer())))
+            selectableMembers.set(
+                getString(SELECTED_MEMBERS_KEY)!!.deserialize(
+                    ListSerializer(
+                        MemberInfo.serializer()
+                    )
+                )
+            )
             payMember.set(getString(PAY_MEMBER_KEY)!!.deserialize())
         }
     }
@@ -401,7 +538,10 @@ class AddItemViewModel(
             putString(PAY_MEMBER_KEY, (payMember.get() ?: event.members.first()).serialize())
 
             if (selectableMembers.get() != null) {
-                putString(SELECTED_MEMBERS_KEY, selectableMembers.get()!!.serialize(ListSerializer(MemberInfo.serializer())))
+                putString(
+                    SELECTED_MEMBERS_KEY,
+                    selectableMembers.get()!!.serialize(ListSerializer(MemberInfo.serializer()))
+                )
             }
         }
     }
@@ -413,11 +553,13 @@ class AddItemViewModel(
         currency.set(prefsHelper.getCurrency())
         membersContainer.set(event.members)
 
-        if (item != null) {
+        serviceFeeHint.set(convertFloatPercentToHuman(prefsHelper.getServiceFee()).trimTrailingZero())
 
+        if (item != null) {
             name.set(item.name)
             price.set(doubleToStringPrice(item.price))
             description.set(item.description)
+            serviceFee.set(convertFloatPercentToHuman(item.serviceFee).trimTrailingZero())
 
             selectableMembers.set(event.members.map { member ->
                 item.membersInfo.forEach { info ->
@@ -429,7 +571,10 @@ class AddItemViewModel(
                 return@map MemberInfo(member.id, member.name, member.avatarUrl, member.phone, 0f)
             })
 
-            Handler(Looper.getMainLooper()).postDelayed({selectedMembers.set(item.membersInfo) }, 50)
+            Handler(Looper.getMainLooper()).postDelayed(
+                { selectedMembers.set(item.membersInfo) },
+                50
+            )
 
             Handler(Looper.getMainLooper()).postDelayed({
                 setPayMember(item.payMember)
@@ -438,7 +583,15 @@ class AddItemViewModel(
         } else {
             setPayMember()
 
-            selectableMembers.set(event.members.map { MemberInfo(it.id, it.name, it.avatarUrl, it.phone, 0f)}.also { Log.d(TAG, it.toString()) })
+            selectableMembers.set(event.members.map {
+                MemberInfo(
+                    it.id,
+                    it.name,
+                    it.avatarUrl,
+                    it.phone,
+                    0f
+                )
+            }.also { Log.d(TAG, it.toString()) })
         }
     }
 
@@ -466,27 +619,37 @@ class AddItemViewModel(
         var totalPercent = 0f
         var containsZeroPercentMember = false
         selectableMembers.get()!!.forEach {
-                if (it.percent.isZero()) {
-                    containsZeroPercentMember = true
-                } else {
-                    totalPercent += it.percent
-                }
+            if (it.percent.isZero()) {
+                containsZeroPercentMember = true
+            } else {
+                totalPercent += it.percent
             }
+        }
 
         if (containsZeroPercentMember) {
             if (totalPercent > 1f) {
-                showErrorMsg(getString(R.string.members_price_too_much_error), getString(R.string.reset)) { resetMembersPercents() }
+                showErrorMsg(
+                    getString(R.string.members_price_too_much_error),
+                    getString(R.string.reset)
+                ) { resetMembersPercents() }
                 return
             }
         } else {
             if (totalPercent < 0.95f) {
-                showErrorMsg(getString(R.string.members_price_too_few_error), getString(R.string.reset)) { resetMembersPercents() }
+                showErrorMsg(
+                    getString(R.string.members_price_too_few_error),
+                    getString(R.string.reset)
+                ) { resetMembersPercents() }
                 return
             } else if (totalPercent > 1f) {
-                showErrorMsg(getString(R.string.members_price_too_much_error), getString(R.string.reset)) { resetMembersPercents() }
+                showErrorMsg(
+                    getString(R.string.members_price_too_much_error),
+                    getString(R.string.reset)
+                ) { resetMembersPercents() }
                 return
             }
         }
+
 
         addItemUseCase.execute(
             params = AddItemInteractor.Params(
@@ -495,17 +658,22 @@ class AddItemViewModel(
                 name = name.get()!!,
                 description = description.get() ?: "",
                 price = convertPriceToDouble(price.get()!!),
-                payMember = payMember.get()?.let {Member(it.id, it.name, it.avatarUrl, it.phone) } ?: throw IllegalStateException("Pay member is null!"),
+                serviceFee = convertPercentToFloat(getServiceFee()),
+                payMember = payMember.get()?.let { Member(it.id, it.name, it.avatarUrl, it.phone) }
+                    ?: throw IllegalStateException("Pay member is null!"),
                 membersInfo = spinnerSelectedMembers.get()!!
             ),
             onComplete = {
+
+                prefsHelper.setServiceFee(convertPercentToFloat(getServiceFee()))
                 logItemEvent(item?.id)
-
                 if (randomBool(0.25f)) showInterstitial()
-
                 goBack()
             },
-            onError = {showErrorMsg(errorMsgCreator.createErrorMsg(it))}
+            onError = { throwable ->
+                if (throwable is IllegalStateException) showErrorMsg(getString(R.string.existing_item_name_error))
+                else showErrorMsg(errorMsgCreator.createErrorMsg(throwable))
+            }
         )
     }
 
@@ -525,11 +693,8 @@ class AddItemViewModel(
     }
 
     private fun logItemEvent(id: Long?) {
-        val eventName = if (id != null) {
-            "edit_item"
-        } else {
-            "add_item"
-        }
+        val eventName = if (id != null) "edit_item"
+        else "add_item"
 
         logEvent(eventName, Bundle().apply {
             putString("event_name", event.name)

@@ -19,15 +19,11 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
-    override fun hasTitleBackButton(): Boolean {
-        return true
-    }
-
     override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
-    override fun performInjection(bundle: Bundle?) {
+    override fun performInjection(bundle: Bundle?, vararg args: Any) {
         DaggerAddItemComponent.builder()
             .appComponent(appComponent)
             .addItemModule(getAddItemModule(bundle))
@@ -53,35 +49,38 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
     }
 
     private fun doLayout() {
-        binding.additionalContainer.setOnClickListener {
-            if (binding.expandedGroup.visibility == View.VISIBLE) {
-                binding.expandedGroup.visibility = View.GONE
-                binding.expandableIcon.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        baseActivity,
-                        R.drawable.ic_arrow_down
+        with(requireBinding()) {
+            additionalContainer.setOnClickListener {
+                if (expandedGroup.visibility == View.VISIBLE) {
+                    expandedGroup.visibility = View.GONE
+                    expandableIcon.setImageDrawable(
+                        ContextCompat.getDrawable(baseActivity, R.drawable.ic_arrow_down)
                     )
+                } else {
+                    expandedGroup.visibility = View.VISIBLE
+                    expandableIcon.setImageDrawable(
+                        ContextCompat.getDrawable(
+                            baseActivity,
+                            R.drawable.ic_arrow_up
+                        )
+                    )
+                    scrollView.post { scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
+                }
+            }
+
+
+            if (requireArguments().getInt(MODE_KEY) == EDIT_VALUE) {
+                this@AddItemFragment.viewModel.init(
+                    sharedViewModel.eventContainer!!,
+                    sharedViewModel.itemContainer
                 )
             } else {
-                binding.expandedGroup.visibility = View.VISIBLE
-                binding.expandableIcon.setImageDrawable(
-                    ContextCompat.getDrawable(
-                        baseActivity,
-                        R.drawable.ic_arrow_up
-                    )
-                )
-                binding.scrollView.post { binding.scrollView.fullScroll(ScrollView.FOCUS_DOWN) }
+                this@AddItemFragment.viewModel.init(sharedViewModel.eventContainer!!)
             }
-        }
 
-        if (requireArguments().getInt(MODE_KEY) == EDIT_VALUE) {
-            viewModel.init(sharedViewModel.eventContainer!!, sharedViewModel.itemContainer)
-        } else {
-            viewModel.init(sharedViewModel.eventContainer!!)
-        }
-
-        binding.price.setOnFocusChangeListener { v, hasFocus ->
-            if (!hasFocus) binding.price.setText("${binding.price.text}\n")
+            price.setOnFocusChangeListener { v, hasFocus ->
+                if (!hasFocus) price.setText("${price.text}\n")
+            }
         }
     }
 
@@ -101,6 +100,4 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
             }
         }
     }
-
-
 }

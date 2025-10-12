@@ -13,6 +13,9 @@ data class MemberStatistic(
     val priceResult: List<Result>,
     val currency: String
 ) {
+
+    val totalResult: Double = totalLend - totalDebt
+
     override fun toString(): String {
         return "MemberStatistic(member=$member, totalSpend=$totalSpend, totalDebt=$totalDebt, orders=$orders, priceResult=$priceResult)"
     }

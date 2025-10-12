@@ -3,12 +3,14 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMember.view
 import android.content.Context
 import android.os.Bundle
 import android.view.View
+import com.merseyside.animators.Anchor
+import com.merseyside.animators.AnimStrategy
 import com.merseyside.animators.AnimatorList
-import com.merseyside.animators.Approach
 import com.merseyside.animators.Axis
-import com.merseyside.animators.MainPoint
 import com.merseyside.animators.animator.AlphaAnimator
 import com.merseyside.animators.animator.TransitionAnimator
+import com.merseyside.merseyLib.kotlin.utils.randomBool
+import com.merseyside.merseyLib.time.units.Millis
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.MemberStatistic
@@ -18,10 +20,8 @@ import com.merseyside.partyapp.presentation.di.component.DaggerStatisticMemberCo
 import com.merseyside.partyapp.presentation.di.module.StatisticMemberModule
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.StatisticMemberViewModel
 import com.merseyside.partyapp.utils.getMemberStatistic
-import com.merseyside.utils.Logger
 import com.merseyside.utils.delayedMainThread
-import com.merseyside.utils.randomBool
-import com.merseyside.utils.time.Millis
+
 
 class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding, StatisticMemberViewModel>() {
 
@@ -29,15 +29,11 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
 
     private var animatorList: AnimatorList? = null
 
-    override fun hasTitleBackButton(): Boolean {
-        return true
-    }
-
     override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
-    override fun performInjection(bundle: Bundle?) {
+    override fun performInjection(bundle: Bundle?, vararg args: Any) {
         DaggerStatisticMemberComponent.builder()
             .appComponent(appComponent)
             .statisticMemberModule(getStatisticMemberModule(bundle))
@@ -58,7 +54,7 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        onBackPressedCallback.isEnabled = false
         doLayout()
     }
 
@@ -67,7 +63,7 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
             viewModel.initWithMemberStatistic(statistic!!)
         }
 
-        binding.shareMember.setOnClickListener {
+        requireBinding().shareMember.setOnClickListener {
             shareStatistic(getMemberStatistic(
                 member = viewModel.statistic
             ))
@@ -80,18 +76,20 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
         startAnimation()
     }
 
+    override fun setupAppBar() {}
+
     private fun startAnimation() {
         if (animatorList == null) {
-            animatorList = AnimatorList(Approach.TOGETHER).apply {
+            animatorList = AnimatorList(AnimStrategy.TOGETHER).apply {
                 addAnimator(
                     TransitionAnimator(
                         TransitionAnimator.Builder(
-                        view = binding.orders,
+                        view = requireBinding().orders,
                         duration = duration
                     ).apply {
                         setInPercents(
-                            0f to MainPoint.TOP_RIGHT,
-                            0f to MainPoint.TOP_LEFT,
+                            0f to Anchor.TOP_RIGHT,
+                            0f to Anchor.TOP_LEFT,
                             axis = Axis.X
                         )
                     })
@@ -99,7 +97,7 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
 
                 addAnimator(
                     AlphaAnimator(AlphaAnimator.Builder(
-                        view = binding.orders,
+                        view = requireBinding().orders,
                         duration = duration
                     ).apply {
                         values(0f, 1f)
@@ -109,7 +107,7 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
                 addAnimator(
                     AlphaAnimator(
                         AlphaAnimator.Builder(
-                        view = binding.stats,
+                        view = requireBinding().stats,
                         duration = duration
                     ).apply {
                         values(0f, 1f)
@@ -118,12 +116,12 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
 
                 addAnimator(
                     TransitionAnimator(TransitionAnimator.Builder(
-                        view = binding.results,
+                        view = requireBinding().results,
                         duration = duration
                     ).apply {
                         setInPercents(
-                            1f to MainPoint.TOP_LEFT,
-                            0f to MainPoint.TOP_LEFT,
+                            1f to Anchor.TOP_LEFT,
+                            0f to Anchor.TOP_LEFT,
                             axis = Axis.Y
                         )
                     })
@@ -131,7 +129,7 @@ class StatisticMemberFragment : BaseCalcFragment<FragmentMemberStatisticBinding,
 
                 addAnimator(
                     AlphaAnimator(AlphaAnimator.Builder(
-                        view = binding.results,
+                        view = requireBinding().results,
                         duration = duration
                     ).apply {
                         values(0f, 1f)

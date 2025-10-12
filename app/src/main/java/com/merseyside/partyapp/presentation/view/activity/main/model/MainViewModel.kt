@@ -9,7 +9,7 @@ import com.merseyside.partyapp.presentation.navigation.Screens
 class MainViewModel(
     application: Application,
     private val router: Router
-    ) : BaseCalcViewModel(application, router) {
+) : BaseCalcViewModel(application, router) {
     override fun readFrom(bundle: Bundle) {}
 
     override fun writeTo(bundle: Bundle) {}

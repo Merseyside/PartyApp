@@ -4,7 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:bind="http://schemas.android.com/apk/res-auto"
     tools:context="com.merseyside.partyapp.presentation.view.fragment.addItem.view.AddItemFragment">
+
     <data>
+
         <variable
             name="viewModel"
             type="com.merseyside.partyapp.presentation.view.fragment.addItem.model.AddItemViewModel" />
@@ -22,12 +24,15 @@
             android:layout_above="@+id/save"
             android:layout_marginBottom="@dimen/small_spacing"
             android:layout_alignParentTop="true"
-            android:overScrollMode="never">
+            android:overScrollMode="never"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:clipToPadding="false"
+                android:paddingBottom="@dimen/very_small_spacing">
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
@@ -73,7 +78,7 @@
                                 android:text="@={viewModel.description}"
                                 style="@style/TextInputEditText"
                                 android:maxLines="2"
-                                android:inputType="textCapSentences|textMultiLine|textAutoCorrect"/>
+                                android:inputType="textCapSentences|textMultiLine|textAutoCorrect" />
 
                         </com.merseyside.archy.presentation.view.localeViews.LocaleTextInputLayout>
 
@@ -148,8 +153,8 @@
                                 android:orientation="horizontal"
                                 android:overScrollMode="never"
                                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                                app:payMember="@={viewModel.payMember}"
-                                app:payMembers="@{viewModel.membersContainer}">
+                                app:payMembers="@{viewModel.membersContainer}"
+                                app:payMember="@={viewModel.payMember}">
 
                             </androidx.recyclerview.widget.RecyclerView>
 
@@ -160,34 +165,34 @@
                             android:layout_height="wrap_content"
                             android:orientation="vertical">
 
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content">
 
-                            <com.merseyside.archy.presentation.view.localeViews.LocaleTextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:text="@string/with_whom_share"
-                                android:layout_centerVertical="true"
-                                android:layout_toStartOf="@+id/select_all"
-                                android:layout_alignParentStart="true"
-                                android:ellipsize="marquee"
-                                tools:text="@string/with_whom_share"
-                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+                                <com.merseyside.archy.presentation.view.localeViews.LocaleTextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/with_whom_share"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toStartOf="@+id/select_all"
+                                    android:layout_alignParentStart="true"
+                                    android:ellipsize="marquee"
+                                    tools:text="@string/with_whom_share"
+                                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
-                            <com.merseyside.archy.presentation.view.localeViews.LocaleButton
-                                android:id="@+id/select_all"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_centerVertical="true"
-                                android:layout_alignParentEnd="true"
-                                android:minHeight="0dp"
-                                style="@style/Widget.MaterialComponents.Button.TextButton"
-                                android:text="@string/select_all"
-                                tools:text="@string/select_all"
-                                android:onClick="@{view -> viewModel.onSelectAllClick()}"/>
+                                <com.merseyside.archy.presentation.view.localeViews.LocaleButton
+                                    android:id="@+id/select_all"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_alignParentEnd="true"
+                                    android:minHeight="0dp"
+                                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                                    android:text="@string/select_all"
+                                    tools:text="@string/select_all"
+                                    android:onClick="@{view -> viewModel.onSelectAllClick()}" />
 
-                        </RelativeLayout>
+                            </RelativeLayout>
 
                             <com.pchmn.materialchips.ChipsInput
                                 android:id="@+id/chips"
@@ -244,7 +249,7 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="@string/additional_settings"
-                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
                             <ImageView
                                 android:id="@+id/expandable_icon"
@@ -252,23 +257,101 @@
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentEnd="true"
                                 tools:ignore="ContentDescription"
-                                app:srcCompat="@drawable/ic_arrow_down"/>
+                                app:srcCompat="@drawable/ic_arrow_down" />
 
                         </RelativeLayout>
 
                         <LinearLayout
-                            android:id="@+id/percent_container"
+                            android:id="@+id/service_fee_container"
                             android:orientation="vertical"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            app:layout_constraintTop_toBottomOf="@+id/additional_container"
+                            app:layout_constraintTop_toBottomOf="@id/additional_container"
                             android:padding="@dimen/small_spacing">
 
                             <com.merseyside.archy.presentation.view.localeViews.LocaleTextView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
-                                android:text="@string/percent_setting"/>
+                                android:text="@string/service_fee" />
+
+                            <LinearLayout
+                                android:orientation="horizontal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center">
+
+                                <LinearLayout
+                                    android:id="@+id/service_fee_percent_field"
+                                    android:orientation="horizontal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent">
+
+                                    <com.merseyside.archy.presentation.view.localeViews.LocaleTextInputEditText
+                                        android:layout_width="@dimen/percent_field_width"
+                                        android:layout_height="wrap_content"
+                                        bind:text="@={viewModel.serviceFee}"
+                                        style="@style/TextInputEditText"
+                                        android:hint="@{viewModel.serviceFeeHint}"
+                                        android:enabled="@{!viewModel.price.empty}"
+                                        android:singleLine="true"
+                                        android:backgroundTint="?attr/colorPrimary"
+                                        android:inputType="numberDecimal"
+                                        android:textAlignment="viewEnd" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="% = "
+                                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:id="@+id/service_fee_price_field"
+                                    android:orientation="horizontal"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent">
+
+                                    <com.google.android.material.textfield.TextInputEditText
+                                        style="@style/TextInputEditText"
+                                        android:layout_width="@dimen/price_field_width"
+                                        android:layout_height="wrap_content"
+                                        android:backgroundTint="?attr/colorPrimary"
+                                        android:enabled="false"
+                                        android:inputType="numberDecimal"
+                                        android:singleLine="true"
+                                        android:textAlignment="viewEnd"
+                                        bind:text="@{viewModel.totalPrice}" />
+
+                                    <TextView
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:text="@{viewModel.currency}"
+                                        android:maxLength="10"
+                                        android:ellipsize="marquee"
+                                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/percent_container"
+                            android:orientation="vertical"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            app:layout_constraintTop_toBottomOf="@+id/service_fee_container"
+                            android:padding="@dimen/small_spacing">
+
+                            <com.merseyside.archy.presentation.view.localeViews.LocaleTextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+                                android:text="@string/percent_setting" />
 
                             <LinearLayout
                                 android:orientation="vertical"
@@ -286,7 +369,7 @@
                                     android:minWidth="@dimen/spinner_size"
                                     android:backgroundTint="@color/grey_dark"
                                     app:spinnerSelectableMembers="@{viewModel.spinnerSelectedMembers}"
-                                    app:spinnerSelectedMember="@={viewModel.spinnerSelectedMember}"/>
+                                    app:spinnerSelectedMember="@={viewModel.spinnerSelectedMember}" />
 
                                 <LinearLayout
                                     android:orientation="horizontal"
@@ -310,13 +393,13 @@
                                             android:hint="@{viewModel.percentHint}"
                                             android:backgroundTint="?attr/colorPrimary"
                                             android:inputType="numberDecimal"
-                                            android:textAlignment="viewEnd"/>
+                                            android:textAlignment="viewEnd" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:text="% = "
-                                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+                                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
                                     </LinearLayout>
 
@@ -336,7 +419,7 @@
                                             android:hint="@{viewModel.memberPriceHint}"
                                             android:backgroundTint="?attr/colorPrimary"
                                             android:inputType="numberDecimal"
-                                            android:textAlignment="viewEnd"/>
+                                            android:textAlignment="viewEnd" />
 
                                         <TextView
                                             android:layout_width="wrap_content"
@@ -344,7 +427,7 @@
                                             android:text="@{viewModel.currency}"
                                             android:maxLength="10"
                                             android:ellipsize="marquee"
-                                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"/>
+                                            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
 
                                     </LinearLayout>
 
@@ -356,7 +439,7 @@
                                     android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
                                     android:textColor="?attr/colorError"
                                     android:text="@{viewModel.additionalSettingsError}"
-                                    app:isVisibleOrGone="@{!viewModel.additionalSettingsError.empty}"/>
+                                    app:isVisibleOrGone="@{!viewModel.additionalSettingsError.empty}" />
 
                             </LinearLayout>
 
@@ -366,9 +449,9 @@
                             android:id="@+id/expanded_group"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            app:constraint_referenced_ids="percent_container"
+                            app:constraint_referenced_ids="service_fee_container, percent_container"
                             android:visibility="gone"
-                            tools:visibility="visible"/>
+                            tools:visibility="visible" />
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 

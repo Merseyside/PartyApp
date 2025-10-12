@@ -6,9 +6,9 @@ import android.os.Bundle
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.archy.presentation.model.ParcelableViewModel
-import com.merseyside.partyapp.CalcApplication
-import com.merseyside.utils.serialization.deserialize
-import com.merseyside.utils.serialization.serialize
+import com.merseyside.merseyLib.kotlin.serialization.deserialize
+import com.merseyside.merseyLib.kotlin.serialization.serialize
+
 
 class SharedViewModel(application: Application) : ParcelableViewModel(application) {
 
@@ -29,10 +29,7 @@ class SharedViewModel(application: Application) : ParcelableViewModel(applicatio
         bundle.apply {
 
             if (eventContainer != null) {
-                bundle.putString(
-                    EVENT_KEY,
-                    eventContainer!!.serialize()
-                )
+                bundle.putString(EVENT_KEY, eventContainer!!.serialize())
             }
 
             if (itemContainer != null) {
@@ -45,12 +42,9 @@ class SharedViewModel(application: Application) : ParcelableViewModel(applicatio
 
     override fun updateLanguage(context: Context) {}
 
-    override fun getLocaleContext(): Context {
-        return application
-    }
+    override fun getLocaleContext() = application
 
     var eventContainer: Event? = null
-
     var itemContainer: Item? = null
 
     companion object {

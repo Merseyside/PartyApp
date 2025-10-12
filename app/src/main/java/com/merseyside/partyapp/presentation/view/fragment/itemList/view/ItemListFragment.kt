@@ -7,7 +7,6 @@ import android.view.MenuInflater
 import android.view.MenuItem
 import android.view.View
 import androidx.fragment.app.activityViewModels
-import com.merseyside.adapters.base.OnItemClickListener
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.item.Item
@@ -24,17 +23,18 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
 
-    private val adapter = ItemAdapter()
-
-    override fun hasTitleBackButton(): Boolean {
-        return true
+    private val adapter by lazy {
+        ItemAdapter { item ->
+            sharedViewModel.itemContainer = item
+            viewModel.navigateToEditItemScreen()
+        }
     }
 
     override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
-    override fun performInjection(bundle: Bundle?) {
+    override fun performInjection(bundle: Bundle?, vararg args: Any) {
         DaggerItemListComponent.builder()
             .appComponent(appComponent)
             .itemListModule(getItemListModule(bundle))
@@ -57,12 +57,11 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
         super.onCreate(savedInstanceState)
 
         setHasOptionsMenu(true)
-        init()
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        init()
         doLayout()
     }
 
@@ -96,9 +95,7 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
     }
 
     private fun doLayout() {
-        binding.itemList.adapter = adapter
-
-        adapter.setOnItemClickListener(onItemClickListener)
+        requireBinding().itemList.adapter = adapter
     }
 
     override fun onStart() {
@@ -107,24 +104,9 @@ class ItemListFragment : BaseCalcFragment<FragmentItemListBinding, ItemListViewM
         viewModel.init(sharedViewModel.eventContainer!!)
     }
 
-    private val onItemClickListener = object: OnItemClickListener<Item> {
-        override fun onItemClicked(obj: Item) {
-            sharedViewModel.itemContainer = obj
-            viewModel.navigateToEditItemScreen()
-        }
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-
-        adapter.removeOnItemClickListener(onItemClickListener)
-    }
-
     companion object {
         fun newInstance(): ItemListFragment {
             return ItemListFragment()
         }
     }
-
 }

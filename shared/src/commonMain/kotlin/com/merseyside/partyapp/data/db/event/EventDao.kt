@@ -1,23 +1,25 @@
 package com.merseyside.partyapp.data.db.event
 
-import com.merseyside.kmpMerseyLib.utils.time.getCurrentTimeMillis
+import com.merseyside.merseyLib.time.Time
 import com.merseyside.partyapp.data.db.CalcDatabase
+import com.merseyside.partyapp.data.db.event.exception.MemberExistsException
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.data.entity.mapper.EventDataMapper
 
-class EventDao(database: CalcDatabase) {
+class EventDao(private val database: CalcDatabase) {
 
-    private val db = database.eventModelQueries
+    private val query = database.eventModelQueries
 
     private val eventDataMapper = EventDataMapper()
 
+    @Throws(MemberExistsException::class)
     internal fun insert(name: String, members: List<Member>, notes: String): Event {
-
         val membersModel = MembersModel(members)
+        query.insertItem(name, membersModel, notes, Status.IN_PROCESS.toString(), Time.systemTime.millis)
 
-        db.insertItem(name, membersModel, notes, Status.IN_PROCESS.toString(), getCurrentTimeMillis())
-
-        return getEventById(db.lastInsertRowId().executeAsOne())
+        return getAll().last()
+        // https://github.com/sqldelight/sqldelight/issues/5800
+        //return getEventById(query.lastInsertRowId().executeAsOne())
     }
 
     internal fun change(
@@ -28,6 +30,12 @@ class EventDao(database: CalcDatabase) {
         status: Status? = null
     ): Event {
 
+        val savedMembers = query.getMembers(id).executeAsOneOrNull()
+        if (savedMembers != null) {
+            members?.find { member -> savedMembers.members.map { it.name }.contains(member.name) }
+                ?.let { throw MemberExistsException(it.name) }
+        }
+
         val event = getEventById(id)
 
         name?.let {event.name = name}
@@ -36,27 +44,27 @@ class EventDao(database: CalcDatabase) {
         status?.let { event.status = status }
 
         event.let {
-            db.changeItem(it.id, it.name, MembersModel(it.members), it.notes, it.status.toString(), it.timestamp)
+            query.changeItem(it.id, it.name, MembersModel(it.members), it.notes, it.status.toString(), it.timestamp)
         }
 
         return event
     }
 
     internal fun getAll(): List<Event> {
-        return db.selectAll().executeAsList().let {
+        return query.selectAll().executeAsList().let {
             eventDataMapper.transform(it)
         }
     }
 
     internal fun remove(id: Long) {
-        db.deleteItem(id)
+        query.deleteItem(id)
     }
 
     internal fun getEventById(id: Long): Event {
-        return db.selectById(id).executeAsOne().let { eventDataMapper.transform(it) }
+        return query.selectById(id).executeAsOne().let { eventDataMapper.transform(it) }
     }
 
     internal fun deleteEvent(id: Long) {
-        return db.deleteItem(id)
+        query.deleteItem(id)
     }
 }

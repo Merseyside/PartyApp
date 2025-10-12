@@ -5,7 +5,6 @@ import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.db.event.MembersModel
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.db.model.EventModel
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 

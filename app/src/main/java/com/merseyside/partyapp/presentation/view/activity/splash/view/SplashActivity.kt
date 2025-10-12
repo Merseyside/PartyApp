@@ -23,7 +23,7 @@ class SplashActivity : BaseActivity() {
         return R.layout.activity_splash
     }
 
-    override fun getToolbar(): Toolbar? {
+    override fun getMainToolbar(): Toolbar? {
         return null
     }
 
@@ -31,7 +31,7 @@ class SplashActivity : BaseActivity() {
         return null
     }
 
-    override fun performInjection(bundle: Bundle?) {}
+    override fun performInjection(bundle: Bundle?, vararg params: Any) {}
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

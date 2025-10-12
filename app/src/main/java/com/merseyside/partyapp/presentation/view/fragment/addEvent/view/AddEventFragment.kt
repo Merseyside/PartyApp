@@ -2,19 +2,19 @@ package com.merseyside.partyapp.presentation.view.fragment.addEvent.view
 
 import android.Manifest
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import com.merseyside.animators.AnimatorList
-import com.merseyside.animators.Approach
+import com.merseyside.animators.AnimStrategy
 import com.merseyside.animators.Axis
-import com.merseyside.animators.MainPoint
+import com.merseyside.animators.Anchor
 import com.merseyside.animators.animator.AlphaAnimator
 import com.merseyside.animators.animator.TransitionAnimator
-import com.merseyside.archy.presentation.view.OnBackPressedListener
+import com.merseyside.merseyLib.time.units.Millis
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
@@ -24,11 +24,9 @@ import com.merseyside.partyapp.presentation.di.component.DaggerAddEventComponent
 import com.merseyside.partyapp.presentation.di.module.AddEventModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.AddEventViewModel
-import com.merseyside.utils.Logger
-import com.merseyside.utils.PermissionManager
-import com.merseyside.utils.time.Millis
+import com.merseyside.utils.ext.hasAnyPermissionGranted
 
-class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewModel>(), OnBackPressedListener {
+class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewModel>() {
 
     var animatorList: AnimatorList? = null
 
@@ -39,24 +37,23 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
     }
 
     private val isContactsLoadedObserver = Observer<Any?> {
-        binding.chips.editText.isEnabled = true
+        requireBinding().chips.editText.isEnabled = true
     }
 
     private val sharedViewModel: SharedViewModel by activityViewModels()
+
+    private val requestContactsPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            if (isGranted) getContacts()
+        }
 
     override fun isShowAdBanner(): Boolean {
         return false
     }
 
-    override fun hasTitleBackButton(): Boolean {
-        return true
-    }
+    override fun getBindingVariable(): Int = BR.viewModel
 
-    override fun getBindingVariable(): Int {
-        return BR.viewModel
-    }
-
-    override fun performInjection(bundle: Bundle?) {
+    override fun performInjection(bundle: Bundle?, vararg args: Any) {
         DaggerAddEventComponent.builder()
             .appComponent(appComponent)
             .addEventModule(getAddEventModule(bundle))
@@ -101,8 +98,8 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
 
             viewModel.initWithEventId(id)
         }
-        
-        binding.closeEvent.setOnClickListener { 
+
+        requireBinding().closeEvent.setOnClickListener {
             showAlertDialog(
                 title = getString(R.string.close_event_title),
                 message = getString(R.string.close_event_message),
@@ -110,58 +107,61 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
                 positiveButtonText = getString(R.string.close_event),
                 negativeButtonText = getString(R.string.cancel),
                 onPositiveClick = {
-                    startAnimation()
+                    startCloseAnimation()
                 }
             )
         }
 
-        binding.save.setOnClickListener {
-            binding.chips.editText.setText(StringBuilder(binding.chips.editText.text.toString()).append("\n").toString(), TextView.BufferType.EDITABLE)
+        requireBinding().save.setOnClickListener {
+            if (!requireBinding().chips.editText.text.isNullOrBlank()) {
+                requireBinding().chips.editText.setText(
+                    StringBuilder(requireBinding().chips.editText.text.toString()).append(
+                        "\n"
+                    ).toString(), TextView.BufferType.EDITABLE
+                )
+            }
             viewModel.onSaveClick()
         }
 
-        val permission = arrayOf(Manifest.permission.READ_CONTACTS)
-        if (PermissionManager.isPermissionsGranted(baseActivity, *permission)) {
+        val permission = Manifest.permission.READ_CONTACTS
+        if (requireContext().hasAnyPermissionGranted(permission)) {
             getContacts()
         } else {
-            PermissionManager.requestPermissions(
-                this,
-                *permission,
-                requestCode = PERMISSION_CODE)
+            requestContactsPermissionLauncher.launch(permission)
         }
     }
 
-    private fun startAnimation() {
+    private fun startCloseAnimation() {
 
         if (animatorList == null) {
-            animatorList = AnimatorList(Approach.TOGETHER).apply {
+            animatorList = AnimatorList(AnimStrategy.TOGETHER).apply {
                 addAnimator(
                     TransitionAnimator(
                         TransitionAnimator.Builder(
-                        view = binding.closeEvent,
-                        duration = duration
-                    ).apply {
-                        setInPercents(
-                            0f to MainPoint.TOP_LEFT,
-                            -1f to MainPoint.TOP_LEFT,
-                            axis = Axis.Y
-                        )
-                    })
+                            view = requireBinding().closeEvent,
+                            duration = duration
+                        ).apply {
+                            setInPercents(
+                                0f to Anchor.TOP_LEFT,
+                                -1f to Anchor.TOP_LEFT,
+                                axis = Axis.Y
+                            )
+                        })
                 )
 
                 addAnimator(
                     AlphaAnimator(
                         AlphaAnimator.Builder(
-                        view = binding.closeEvent,
-                        duration = Millis(190)
-                    ).apply {
-                        values(1f, 0f)
-                    })
+                            view = requireBinding().closeEvent,
+                            duration = Millis(190)
+                        ).apply {
+                            values(1f, 0f)
+                        })
                 )
 
                 addAnimator(
                     AlphaAnimator(AlphaAnimator.Builder(
-                        view = binding.chipsContainer,
+                        view = requireBinding().chipsContainer,
                         duration = Millis(250)
                     ).apply {
                         values(1f, 0f)
@@ -170,11 +170,11 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
 
                 addAnimator(
                     TransitionAnimator(TransitionAnimator.Builder(
-                        view = binding.buttonContainer,
+                        view = requireBinding().buttonContainer,
                         duration = Millis(1000)
                     ).apply {
                         setInPercents(
-                            0f to MainPoint.TOP_LEFT,
+                            0f to Anchor.TOP_LEFT,
                             axis = Axis.Y
                         )
                     })
@@ -187,22 +187,8 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
         viewModel.closeEvent()
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
-        when (requestCode) {
-            PERMISSION_CODE -> {
-                if (grantResults.isNotEmpty()
-                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-
-                    getContacts()
-                }
-            }
-        }
-    }
-
     private fun getContacts() {
-        binding.chips.editText.isEnabled = false
+        requireBinding().chips.editText.isEnabled = false
         viewModel.getContacts()
 
         viewModel.contactsLoadedSingleEvent.observe(viewLifecycleOwner, isContactsLoadedObserver)
@@ -210,11 +196,11 @@ class AddEventFragment : BaseCalcFragment<FragmentAddEventBinding, AddEventViewM
 
     override fun onDestroyView() {
         super.onDestroyView()
-
         viewModel.contactsLoadedSingleEvent.removeObserver(isContactsLoadedObserver)
     }
+
     override fun onBackPressed(): Boolean {
-        return binding.chips.onBackPressed()
+        return requireBinding().chips.onBackPressed()
     }
 
     companion object {

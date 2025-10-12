@@ -1,6 +1,6 @@
-import com.merseyside.partyapp.data.db.item.MembersModel;
-import com.merseyside.partyapp.data.db.item.MemberInfo;
+import com.merseyside.merseyLib.time.zone.ZonedTimeUnit;
 import com.merseyside.partyapp.data.db.event.Member;
+import com.merseyside.partyapp.data.db.item.MembersModel;
 
 CREATE TABLE ItemModel(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
@@ -8,21 +8,27 @@ CREATE TABLE ItemModel(
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     price REAL NOT NULL,
+    serviceFee TEXT NOT NULL,
     payMember TEXT AS Member NOT NULL,
     memberModel TEXT AS MembersModel NOT NULL,
-    timestamp INTEGER NOT NULL,
-            FOREIGN KEY (eventId) REFERENCES EventModel(id)
+    timestamp TEXT AS ZonedTimeUnit NOT NULL,
+    FOREIGN KEY (eventId) REFERENCES EventModel(id)
 );
 
 insertItem:
 INSERT INTO
-ItemModel(eventId, name, description, price, payMember, memberModel, timestamp)
-VALUES(?, ?, ?, ?, ?, ?, ?);
+ItemModel(eventId, name, description, price, serviceFee, payMember, memberModel, timestamp)
+VALUES(?, ?, ?, ?, ?, ?, ?, ?);
 
 changeItem:
 UPDATE ItemModel
-SET name = ?, description = ?, price = ?, payMember = ?, memberModel = ?, timestamp = ?
+SET name = ?, description = ?, price = ?, serviceFee = ?, payMember = ?, memberModel = ?, timestamp = ?
 WHERE id = ?;
+
+contains:
+SELECT *
+FROM ItemModel
+WHERE name = ?;
 
 selectItemsByEventId:
 SELECT *

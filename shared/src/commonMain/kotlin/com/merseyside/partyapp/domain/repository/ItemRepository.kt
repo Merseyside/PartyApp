@@ -12,6 +12,7 @@ interface ItemRepository {
         name: String,
         description: String,
         price: Double,
+        serviceFee: Float,
         payMember: Member,
         membersInfo: List<MemberInfo>
     ): Boolean

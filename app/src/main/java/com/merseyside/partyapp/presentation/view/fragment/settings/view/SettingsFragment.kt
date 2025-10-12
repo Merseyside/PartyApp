@@ -13,15 +13,11 @@ import com.merseyside.partyapp.presentation.view.fragment.settings.model.Setting
 
 class SettingsFragment : BaseCalcFragment<FragmentSettingsBinding, SettingsViewModel>() {
 
-    override fun hasTitleBackButton(): Boolean {
-        return true
-    }
-
     override fun getBindingVariable(): Int {
         return BR.viewModel
     }
 
-    override fun performInjection(bundle: Bundle?) {
+    override fun performInjection(bundle: Bundle?, vararg args: Any) {
         DaggerSettingsComponent.builder()
             .appComponent(appComponent)
             .settingsModule(getSettingsModule(bundle))
@@ -47,7 +43,7 @@ class SettingsFragment : BaseCalcFragment<FragmentSettingsBinding, SettingsViewM
     }
 
     private fun doLayout() {
-        binding.language.apply {
+        requireBinding().language.apply {
             currentEntryValue = getLanguage()
             setOnValueChangeListener {
                 setLanguage(it)
@@ -58,7 +54,7 @@ class SettingsFragment : BaseCalcFragment<FragmentSettingsBinding, SettingsViewM
     override fun updateLanguage(context: Context) {
         super.updateLanguage(context)
 
-        binding.language.updateLanguage(context)
+        requireBinding().language.updateLanguage(context)
     }
 
     companion object {

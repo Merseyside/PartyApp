@@ -264,8 +264,7 @@ public class ChipsAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public void setFilterableListView(FilterableListView filterableListView) {
-        if(mEditText != null)
-            mEditText.setFilterableListView(filterableListView);
+        mEditText.setFilterableListView(filterableListView);
     }
 
     public void addChip(ChipInterface chip) {

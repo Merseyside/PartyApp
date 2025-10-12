@@ -13,7 +13,7 @@
         android:layout_height="wrap_content"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="@{view -> obj.onClick()}"
+        android:onClick="@{view -> obj.click()}"
         android:paddingTop="@dimen/small_spacing"
         android:paddingStart="@dimen/normal_spacing"
         android:paddingEnd="@dimen/normal_spacing"

@@ -6,14 +6,14 @@ import androidx.lifecycle.ViewModelProvider
 import com.github.terrakok.cicerone.Router
 import com.merseyside.partyapp.presentation.view.fragment.settings.model.SettingsViewModel
 import com.merseyside.partyapp.utils.PrefsHelper
-import com.merseyside.archy.presentation.fragment.BaseFragment
+import com.merseyside.archy.presentation.fragment.BaseDialogFragment
 import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
 import dagger.Module
 import dagger.Provides
 
 @Module
 class SettingsModule(
-    private val fragment: BaseFragment,
+    private val fragment: BaseDialogFragment,
     private val bundle: Bundle?
 ) {
     @Provides

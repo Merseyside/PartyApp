@@ -118,7 +118,7 @@
                             app:chip_deleteIconColor="?attr/colorOnError"
                             app:textColor="?attr/calcTextColor"
                             android:layout_marginTop="@dimen/very_small_spacing"
-                            app:contacts="@{viewModel.contacts}"
+                            app:contacts="@{viewModel.contactsObservable}"
                             app:chip_filterable_container="@id/main_container"
                             app:memberNames="@={viewModel.members}" />
 

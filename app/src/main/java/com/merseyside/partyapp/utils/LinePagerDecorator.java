@@ -9,7 +9,6 @@ import android.util.TypedValue;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.Interpolator;
-
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -53,11 +52,11 @@ public class LinePagerDecorator extends RecyclerView.ItemDecoration {
         mPaint.setAntiAlias(true);
 
         TypedValue value = new TypedValue();
-        context.getTheme().resolveAttribute(R.attr.colorPrimary, value, true);
+        context.getTheme().resolveAttribute(android.R.attr.colorPrimary, value, true);
 
         colorActive = value.data;
 
-        context.getTheme().resolveAttribute(R.attr.colorPrimaryVariant, value, true);
+        context.getTheme().resolveAttribute(com.google.android.material.R.attr.colorPrimaryVariant, value, true);
         colorInactive = value.data;
         colorTransition =  ContextCompat.getColor(context, R.color.transparent);
     }

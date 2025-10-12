@@ -1,14 +1,15 @@
 package com.merseyside.partyapp.utils
 
-import com.github.florent37.preferences.Preferences
+import com.russhwolf.settings.Settings
 
-class PreferenceHelper(private val preferences: Preferences) {
+
+class PreferenceHelper(private val settings: Settings) {
 
     fun getCurrency(defaultValue: String): String {
-        return preferences.getString("currency", defaultValue)
+        return settings.getString("currency", defaultValue)
     }
 
     fun setCurrency(value: String) {
-        preferences.setString("currency", value)
+        settings.putString("currency", value)
     }
 }

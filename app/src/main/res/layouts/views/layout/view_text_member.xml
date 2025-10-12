@@ -15,7 +15,7 @@
         android:layout_height="@dimen/member_item_height"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="@{view -> obj.onClick()}"
+        android:onClick="@{view -> obj.selectState.select()}"
         android:foreground="@drawable/card_view_ripple"
         android:gravity="center">
 

@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import android.view.animation.DecelerateInterpolator
 import android.widget.Scroller
 import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.merseyside.partyapp.R
 
 class NonSwipeableViewPager : ViewPager {

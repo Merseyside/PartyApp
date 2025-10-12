@@ -3,7 +3,7 @@ package com.merseyside.partyapp.presentation.view.fragment.eventList.model
 import android.content.Context
 import androidx.annotation.DrawableRes
 import androidx.databinding.Bindable
-import com.merseyside.adapters.model.BaseComparableAdapterViewModel
+import com.merseyside.adapters.core.model.AdapterViewModel
 import com.merseyside.archy.presentation.interfaces.IStringHelper
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
@@ -11,12 +11,17 @@ import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.entity.Status
 import com.merseyside.partyapp.utils.getDateTime
+import com.google.android.material.R.attr as MaterialAttr
 
-class EventItemViewModel(override var obj: Event)
-    : BaseComparableAdapterViewModel<Event>(obj), IStringHelper {
+class EventItemViewModel(item: Event)
+    : AdapterViewModel<Event>(item), IStringHelper {
 
-    override fun notifyUpdate() {
+    override fun onUpdate(oldItem: Event, newItem: Event) {
+        super.onUpdate(oldItem, newItem)
+        notifyUpdate()
+    }
 
+    private fun notifyUpdate() {
         notifyPropertyChanged(BR.name)
         notifyPropertyChanged(BR.memberInfo)
         notifyPropertyChanged(BR.status)
@@ -24,38 +29,26 @@ class EventItemViewModel(override var obj: Event)
         notifyPropertyChanged(BR.statusIcon)
     }
 
-    override fun areContentsTheSame(obj: Event): Boolean {
-        return this.obj == obj
-    }
-
-    override fun compareTo(obj: Event): Int {
-        return 0
-    }
-
-    override fun areItemsTheSame(obj: Event): Boolean {
-        return this.obj.id == obj.id
-    }
-
     @Bindable
     fun getName(): String {
-        return obj.name
+        return item.name
     }
 
     @Bindable
     fun getMemberInfo(): String {
-        return "${getString(R.string.member_count)} ${obj.members.size}"
+        return "${getString(R.string.member_count)} ${item.members.size}"
     }
 
     @Bindable
     fun getDate(): String {
-        return "${getString(R.string.date)} ${getDateTime(obj.timestamp)}"
+        return "${getString(R.string.date)} ${getDateTime(item.timestamp)}"
     }
 
     @Bindable
     @DrawableRes
     fun getStatusIcon(): Int? {
 
-        return when(obj.status) {
+        return when(item.status) {
             Status.IN_PROCESS -> {
                 R.drawable.ic_process
             }
@@ -68,7 +61,7 @@ class EventItemViewModel(override var obj: Event)
     @Bindable
     fun getStatus(): String {
 
-        return when (obj.status) {
+        return when (item.status) {
             Status.IN_PROCESS -> {
                 getString(R.string.in_progress)
             }
@@ -80,18 +73,11 @@ class EventItemViewModel(override var obj: Event)
     @Bindable
     fun getStatusColor(): Int {
 
-        return when(obj.status) {
-            Status.IN_PROCESS -> {
-                R.attr.colorPrimary
-            }
-            else -> {
-                R.attr.colorSecondaryVariant
-            }
-        }
-    }
+        return when(item.status) {
+            Status.IN_PROCESS -> android.R.attr.colorPrimary
+            else -> MaterialAttr.colorSecondaryVariant
 
-    companion object {
-        private const val TAG = "EventItemViewModel"
+        }
     }
 
     override fun getLocaleContext(): Context {

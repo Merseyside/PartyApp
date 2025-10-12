@@ -1,14 +1,15 @@
 package com.merseyside.partyapp.data.db.event
 
+import com.merseyside.merseyLib.kotlin.contract.Identifiable
 import kotlinx.serialization.Serializable
 
 @Serializable
 open class Member(
-    val id: String,
+    override val id: String,
     val name: String,
     val avatarUrl: String? = null,
     val phone: String? = null
-) {
+): Identifiable<String> {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false

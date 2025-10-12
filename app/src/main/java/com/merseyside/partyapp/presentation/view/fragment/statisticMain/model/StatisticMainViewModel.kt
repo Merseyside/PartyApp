@@ -7,6 +7,7 @@ import androidx.databinding.ObservableField
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.github.terrakok.cicerone.Router
+import com.merseyside.merseyLib.kotlin.utils.randomBool
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Event
 import com.merseyside.partyapp.data.db.event.Member
@@ -15,7 +16,6 @@ import com.merseyside.partyapp.data.entity.Statistic
 import com.merseyside.partyapp.domain.interactor.GetStatisticInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.doubleToStringPrice
-import com.merseyside.utils.randomBool
 
 class StatisticMainViewModel(
     application: Application,

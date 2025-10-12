@@ -20,7 +20,7 @@
          android:layout_marginBottom="@dimen/very_small_spacing"
          app:cardBackgroundColor="?attr/colorOnBackground"
          android:foreground="@drawable/card_view_ripple"
-         android:onClick="@{view -> obj.onClick()}">
+         android:onClick="@{view -> obj.click()}">
 
         <RelativeLayout
             android:orientation="horizontal"

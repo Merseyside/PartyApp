@@ -21,8 +21,17 @@ class PrefsHelper(private val preferenceManager: PreferenceManager) {
         preferenceManager.put(RATE_KEY, isRated)
     }
 
+    fun setServiceFee(serviceFee: Float) {
+        preferenceManager.put(SERVICE_KEY, serviceFee)
+    }
+
+    fun getServiceFee(): Float {
+        return preferenceManager.getFloat(SERVICE_KEY, 0f)
+    }
+
     companion object {
         private const val CURRENCY_KEY = "currency"
         private const val RATE_KEY = "isRated"
+        private const val SERVICE_KEY = "service_fee"
     }
 }

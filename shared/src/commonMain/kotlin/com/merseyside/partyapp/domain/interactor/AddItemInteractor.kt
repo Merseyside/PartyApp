@@ -1,6 +1,6 @@
 package com.merseyside.partyapp.domain.interactor
 
-import com.merseyside.kmpMerseyLib.domain.coroutines.CoroutineUseCase
+import com.merseyside.merseyLib.kotlin.usecase.CoroutineUseCase
 import com.merseyside.partyapp.data.db.event.Member
 import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.di.itemComponent
@@ -11,13 +11,14 @@ class AddItemInteractor : CoroutineUseCase<Boolean, AddItemInteractor.Params>() 
 
     private val repository: ItemRepository by itemComponent.instance()
 
-    override suspend fun executeOnBackground(params: Params?): Boolean {
+    override suspend fun doWork(params: Params?): Boolean {
         return repository.addItem(
             params!!.id,
             params.eventId,
             params.name,
             params.description,
             params.price,
+            params.serviceFee,
             params.payMember,
             params.membersInfo
         )
@@ -29,6 +30,7 @@ class AddItemInteractor : CoroutineUseCase<Boolean, AddItemInteractor.Params>() 
         val name: String,
         val description: String,
         val price: Double,
+        val serviceFee: Float,
         val payMember: Member,
         val membersInfo: List<MemberInfo>
     )

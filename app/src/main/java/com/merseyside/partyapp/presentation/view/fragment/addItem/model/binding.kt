@@ -17,21 +17,24 @@ import com.pchmn.materialchips.ChipsInput
 import android.view.View
 import android.widget.EditText
 import android.widget.Spinner
-import androidx.annotation.AttrRes
-import com.merseyside.adapters.base.BaseSelectableAdapter
+import com.merseyside.adapters.core.async.addAsync
 import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.presentation.view.fragment.addEvent.model.ContactChip
 import com.merseyside.partyapp.utils.setTextWithCursor
-import com.merseyside.utils.ext.getColorFromAttr
-import de.hdodenhof.circleimageview.CircleImageView
+import com.merseyside.adapters.core.feature.selecting.callback.OnItemSelectedListener
+import com.merseyside.merseyLib.kotlin.logger.log
+
 
 @BindingAdapter("app:selectableMembers")
 fun setSelectableMembers(chipView: ChipsInput, members: List<MemberInfo>?) {
     members?.forEach { member ->
-        chipView.addChip(ContactChip(member.id, member.avatarUrl?.let {Uri.parse(it)}, member.name, member.phone, member))
+        chipView.addChip(
+            ContactChip(member.id, member.avatarUrl?.let {
+                Uri.parse(it)
+            }, member.name, member.phone, member)
+        )
     }
 }
-
 
 ///
 
@@ -40,8 +43,9 @@ fun setPayMembers(recyclerView: RecyclerView, members: List<Member>?) {
     if (members != null) {
         if (recyclerView.adapter is MemberAdapter) {
 
+            members.log("kek")
             val membersAdapter = recyclerView.adapter as MemberAdapter
-            membersAdapter.add(members)
+            membersAdapter.addAsync(members)
         }
     }
 }
@@ -71,15 +75,15 @@ fun getSelectedMembers(view: ChipsInput): List<MemberInfo> {
 
 @BindingAdapter("app:payMember")
 fun setPayMember(recyclerView: RecyclerView, member: Member?) {
+    member.log("kek1")
     if (member != null) {
-        if (recyclerView.adapter is MemberAdapter) {
-            val adapter = recyclerView.adapter!! as MemberAdapter
+        val adapter = recyclerView.adapter!! as MemberAdapter
 
-            adapter.selectItem(member)
+        adapter.selectFeature.changeItemStateAsync(member)
 
-            try {
-                recyclerView.scrollToPosition(adapter.getPositionOfObj(member))
-            } catch (e: IllegalArgumentException) {}
+        try {
+            recyclerView.scrollToPosition(adapter.getPositionOfItem(member))
+        } catch (e: IllegalArgumentException) {
         }
     }
 }
@@ -90,10 +94,10 @@ fun setPayMemberListener(recyclerView: RecyclerView, listener: InverseBindingLis
     val adapter = MemberAdapter()
     recyclerView.adapter = adapter
 
-    adapter.setOnItemSelectedListener(object: BaseSelectableAdapter.OnItemSelectedListener<Member> {
-
+    adapter.selectFeature.addOnItemSelectedListener(object : OnItemSelectedListener<Member> {
         override fun onSelected(item: Member, isSelected: Boolean, isSelectedByUser: Boolean) {
             if (isSelected) {
+                "here!!".log()
                 listener?.onChange()
             }
         }
@@ -102,15 +106,8 @@ fun setPayMemberListener(recyclerView: RecyclerView, listener: InverseBindingLis
 
 @InverseBindingAdapter(attribute = "app:payMember")
 fun getPayMember(recyclerView: RecyclerView): Member? {
-
-    if (recyclerView.adapter is MemberAdapter) {
-
-        val adapter = recyclerView.adapter!! as MemberAdapter
-
-        return adapter.getSelectedItem()
-    } else {
-        throw IllegalStateException()
-    }
+    val adapter = recyclerView.adapter!! as MemberAdapter
+    return adapter.selectFeature.selectedList.firstOrNull().log()
 }
 
 //
@@ -125,7 +122,7 @@ fun setSpinnerMembers(spinner: AppCompatSpinner, list: List<MemberInfo>?) {
 
 @BindingAdapter(value = ["spinnerSelectedMemberAttrChanged"]) // AttrChanged required postfix
 fun setSpinnerSelectedMemberListener(spinner: AppCompatSpinner, listener: InverseBindingListener?) {
-    spinner.onItemSelectedListener = object: AdapterView.OnItemSelectedListener {
+    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
         override fun onNothingSelected(parent: AdapterView<*>?) {}
 
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
@@ -147,7 +144,8 @@ fun getSpinnerSelectedMember(spinner: AppCompatSpinner): MemberInfo? {
 }
 
 @BindingAdapter("app:spinnerSelectedMember")
-fun setSpinnerSelectedMember(spinner: Spinner, member: MemberInfo?) {}
+fun setSpinnerSelectedMember(spinner: Spinner, member: MemberInfo?) {
+}
 
 //
 
@@ -158,7 +156,7 @@ fun setText(editText: EditText, text: String?) {
 
 @BindingAdapter(value = ["textAttrChanged"]) // AttrChanged required postfix
 fun setTextListener(editText: EditText, listener: InverseBindingListener?) {
-    editText.addTextChangedListener(object: TextWatcher {
+    editText.addTextChangedListener(object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {}
 
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -170,22 +168,22 @@ fun setTextListener(editText: EditText, listener: InverseBindingListener?) {
 }
 
 @InverseBindingAdapter(attribute = "bind:text")
-fun getText(editText: EditText): String? {
+fun getText(editText: EditText): String {
     return editText.text.toString()
 }
 
-@BindingAdapter("bind:imageUrl")
-fun setImageUrl(circleImageView: CircleImageView, uri: String?) {
-    if (uri != null) {
-        circleImageView.setImageURI(Uri.parse(uri))
-    }
-}
+//@BindingAdapter("bind:imageUrl")
+//fun setImageUrl(circleImageView: CircleImageView, uri: String?) {
+//    if (uri != null) {
+//        circleImageView.setImageURI(Uri.parse(uri))
+//    }
+//}
 
-@BindingAdapter("bind:customBorderColor")
-fun setBorderColor(circleImageView: CircleImageView, @AttrRes attrColor: Int?) {
-    if (attrColor != null) {
-        circleImageView.borderColor = circleImageView.context.getColorFromAttr(attrColor)
-    }
-}
+//@BindingAdapter("bind:customBorderColor")
+//fun setBorderColor(circleImageView: CircleImageView, @AttrRes attrColor: Int?) {
+//    if (attrColor != null) {
+//        circleImageView.borderColor = circleImageView.context.getColorFromAttr(attrColor)
+//    }
+//}
 
 private const val TAG = "AddItemBinding"

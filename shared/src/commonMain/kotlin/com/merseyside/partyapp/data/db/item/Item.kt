@@ -1,46 +1,30 @@
 package com.merseyside.partyapp.data.db.item
 
+import com.merseyside.merseyLib.kotlin.contract.Identifiable
+import com.merseyside.merseyLib.kotlin.utils.Id
+import com.merseyside.merseyLib.time.zone.ZonedTimeUnit
 import com.merseyside.partyapp.data.db.event.Member
 import kotlinx.serialization.Serializable
+import java.math.BigDecimal
+import java.math.RoundingMode
 
 @Serializable
 data class Item(
-    val id: Long,
+    override val id: Id,
     val eventId: Long,
     val name: String,
     val description: String,
     val price: Double,
+    val serviceFee: Float,
     val payMember: Member,
     val membersInfo: List<MemberInfo>,
-    val timestamp: Long
-): Any() {
-    override fun equals(other: Any?): Boolean {
-        if (this === other) return true
-        if (other == null || this::class != other::class) return false
+    val timestamp: ZonedTimeUnit
+): Identifiable<Id> {
 
-        other as Item
+    val totalPrice: Double by lazy { convertPercentToPrice(1f + serviceFee, price) }
 
-        if (id != other.id) return false
-        if (eventId != other.eventId) return false
-        if (name != other.name) return false
-        if (description != other.description) return false
-        if (price != other.price) return false
-        if (payMember != other.payMember) return false
-        if (membersInfo != other.membersInfo) return false
-        if (timestamp != other.timestamp) return false
-
-        return true
-    }
-
-    override fun hashCode(): Int {
-        var result = id.hashCode()
-        result = 31 * result + eventId.hashCode()
-        result = 31 * result + name.hashCode()
-        result = 31 * result + description.hashCode()
-        result = 31 * result + price.hashCode()
-        result = 31 * result + payMember.hashCode()
-        result = 31 * result + membersInfo.hashCode()
-        result = 31 * result + timestamp.hashCode()
-        return result
+    private fun convertPercentToPrice(percent: Float, total: Double): Double {
+        val bigInteger = BigDecimal(percent * total)
+        return bigInteger.setScale(2, RoundingMode.HALF_UP).toDouble()
     }
 }

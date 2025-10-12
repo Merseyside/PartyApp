@@ -3,7 +3,7 @@ package com.merseyside.partyapp.presentation.view.fragment.statisticMember.model
 import android.content.Context
 import androidx.annotation.AttrRes
 import androidx.databinding.Bindable
-import com.merseyside.adapters.model.BaseAdapterViewModel
+import com.merseyside.adapters.core.model.AdapterViewModel
 import com.merseyside.archy.presentation.interfaces.IStringHelper
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.CalcApplication
@@ -12,9 +12,9 @@ import com.merseyside.partyapp.data.entity.Result
 import com.merseyside.partyapp.utils.doubleToStringPrice
 
 class ResultItemViewModel(
-    override var obj: Result,
+    item: Result,
     private val currency: String
-) : BaseAdapterViewModel<Result>(obj), IStringHelper {
+) : AdapterViewModel<Result>(item), IStringHelper {
 
     var isVisible: Boolean = true
     set(value) {
@@ -23,26 +23,20 @@ class ResultItemViewModel(
         notifyPropertyChanged(BR.dividerVisible)
     }
 
-    override fun areItemsTheSame(obj: Result): Boolean {
-        return this.obj == obj
-    }
-
-    override fun notifyUpdate() {}
-
     @Bindable
     fun getName(): String {
-        return obj.member.name
+        return item.member.name
     }
 
     @Bindable
     fun getPrice(): String {
-        return when (obj) {
+        return when (item) {
             is Result.ResultDebtor -> {
-                getString(R.string.debt, doubleToStringPrice(obj.price), currency)
+                getString(R.string.debt, doubleToStringPrice(item.price), currency)
             }
 
             is Result.ResultLender -> {
-                getString(R.string.debit, doubleToStringPrice(obj.price), currency)
+                getString(R.string.debit, doubleToStringPrice(item.price), currency)
             }
         }
     }
@@ -50,13 +44,9 @@ class ResultItemViewModel(
     @Bindable
     @AttrRes
     fun getTextColor(): Int {
-        return when (obj) {
-            is Result.ResultLender -> {
-                R.attr.colorPrimary
-            }
-            else -> {
-                R.attr.colorError
-            }
+        return when (item) {
+            is Result.ResultLender -> android.R.attr.colorPrimary
+            else -> android.R.attr.colorError
         }
     }
 

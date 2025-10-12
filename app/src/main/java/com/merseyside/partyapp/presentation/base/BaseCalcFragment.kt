@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.CallSuper
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.ViewDataBinding
@@ -16,6 +17,7 @@ import com.merseyside.partyapp.CalcApplication
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.presentation.view.activity.main.view.HasAd
 import com.merseyside.partyapp.utils.PrefsHelper
+import com.merseyside.utils.fragment.onBackPressedDispatcher.setOnBackPressedCallback
 import javax.inject.Inject
 
 
@@ -27,8 +29,14 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
     val appComponent = CalcApplication.getInstance().appComponent
     private lateinit var adView: HasAd
 
+    protected lateinit var onBackPressedCallback: OnBackPressedCallback
+
     private val interstitialObserver = Observer<Boolean> {
         adView.showInterstitialAd()
+    }
+
+    override fun isAppBarNavigateUpEnabled(): Boolean {
+        return true
     }
 
     override fun onAttach(context: Context) {
@@ -37,18 +45,30 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
         if (context is HasAd) {
             adView = context
         }
+
+        addOnBackPressedCallback()
+    }
+
+    private fun addOnBackPressedCallback() {
+        onBackPressedCallback = setOnBackPressedCallback {
+            if (!onBackPressed()) {
+                navigateUp()
+            }
+        }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         keepOneFocusedView()
-
         viewModel.interstitialLiveEvent.observe(this, interstitialObserver)
     }
 
-    private fun goBack() {
+    override fun navigateUp() {
         viewModel.goBack()
+    }
+
+    open fun onBackPressed(): Boolean {
+        return false
     }
 
     override fun loadingObserver(isLoading: Boolean) {}
@@ -56,37 +76,13 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
     override fun onStart() {
         super.onStart()
 
-        setTitleBackButtonEnabled()
         adView.setShowAdBanner(isShowAdBanner())
-    }
-
-    abstract fun hasTitleBackButton(): Boolean
-
-    private fun setTitleBackButtonEnabled() {
-        if (getActionBar() != null) {
-            getActionBar()!!.setDisplayHomeAsUpEnabled(hasTitleBackButton())
-
-            if (hasTitleBackButton()) {
-                setHasOptionsMenu(true)
-            }
-        }
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
 
         viewModel.interstitialLiveEvent.removeObserver(interstitialObserver)
-    }
-
-    @CallSuper
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        val id = item.itemId
-
-        if (id == android.R.id.home) {
-            goBack()
-        }
-
-        return super.onOptionsItemSelected(item)
     }
 
     override fun getToolbar(): Toolbar? {

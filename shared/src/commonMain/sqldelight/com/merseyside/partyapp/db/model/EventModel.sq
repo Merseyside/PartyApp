@@ -3,7 +3,7 @@ import com.merseyside.partyapp.data.db.event.MembersModel;
 CREATE TABLE EventModel(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL,
-    members TEXT as MembersModel NOT NULL,
+    members TEXT AS MembersModel NOT NULL,
     notes TEXT NOT NULL,
     status TEXT NOT NULL,
     timestamp INTEGER NOT NULL
@@ -28,11 +28,17 @@ SELECT *
 FROM EventModel
 WHERE id = ?;
 
+getMembers:
+SELECT members
+FROM EventModel
+WHERE id = ?;
+
 deleteItem:
 DELETE
 FROM EventModel
 WHERE id = ?;
 
-lastInsertRowId:
-SELECT last_insert_rowid();
+-- https://github.com/sqldelight/sqldelight/issues/5800
+-- lastInsertRowId:
+-- SELECT last_insert_rowid();
 

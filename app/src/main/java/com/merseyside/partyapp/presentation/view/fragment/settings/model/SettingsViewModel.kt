@@ -61,6 +61,6 @@ class SettingsViewModel(
 
     private fun getAppVersion(): String {
         val pInfo: PackageInfo = application.packageManager.getPackageInfo(application.packageName, 0)
-        return pInfo.versionName
+        return requireNotNull(pInfo.versionName)
     }
 }

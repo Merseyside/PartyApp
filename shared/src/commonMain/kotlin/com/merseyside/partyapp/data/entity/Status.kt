@@ -9,7 +9,7 @@ enum class Status(val status: String) {
 
     companion object {
         fun getStatusByString(status: String): Status? {
-            values().forEach {
+            entries.forEach {
                 if (it.status == status) {
                     return it
                 }

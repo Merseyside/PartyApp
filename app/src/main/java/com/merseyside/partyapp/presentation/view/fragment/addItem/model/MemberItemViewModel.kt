@@ -1,72 +1,63 @@
 package com.merseyside.partyapp.presentation.view.fragment.addItem.model
+
+import android.net.Uri
 import androidx.annotation.AttrRes
 import androidx.databinding.Bindable
-import com.merseyside.adapters.model.BaseSelectableAdapterViewModel
+import com.merseyside.adapters.core.feature.selecting.SelectState
+import com.merseyside.adapters.core.feature.selecting.SelectableModel
+import com.merseyside.adapters.core.model.AdapterViewModel
+import com.merseyside.merseyLib.kotlin.logger.log
 import com.merseyside.partyapp.BR
-import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.db.event.Member
+import com.google.android.material.R.attr as MaterialAttr
 
-class MemberItemViewModel(override var obj: Member) : BaseSelectableAdapterViewModel<Member>(obj) {
+class MemberItemViewModel(item: Member, override val selectState: SelectState = SelectState()) :
+    AdapterViewModel<Member>(item), SelectableModel {
 
-    override fun areContentsTheSame(obj: Member): Boolean {
-        return this.obj == obj
+    init {
+        selectState.selectedObservable.observe {
+            it.log()
+            notifyChanged()
+        }
     }
 
-    override fun compareTo(obj: Member): Int {
-        return 0
-    }
-
-    override fun areItemsTheSame(obj: Member): Boolean {
-        return this.obj.id == obj.id
-    }
-
-    override fun notifyUpdate() {
-        notifyPropertyChanged(BR.circleColor)
-        notifyPropertyChanged(BR.circleTextColor)
+    override fun onUpdate(oldItem: Member, newItem: Member) {
+        super.onUpdate(oldItem, newItem)
+        notifyChanged()
     }
 
     @Bindable
     fun getName(): String {
-        return obj.name
+        return item.name
     }
 
     @Bindable
     fun getCircleText(): String {
-        return com.merseyside.partyapp.utils.getCircleText(obj.name)
+        return com.merseyside.partyapp.utils.getCircleText(item.name)
     }
 
     @Bindable
     @AttrRes
     fun getCircleTextColor(): Int {
-        return if (isSelected()) {
-            R.attr.colorOnBackground
-        } else {
-            R.attr.colorOnSurface
-        }
+        return if (isSelected()) MaterialAttr.colorOnBackground
+        else MaterialAttr.colorOnSurface
     }
 
     @Bindable
     @AttrRes
     fun getCircleColor(): Int {
-        return if (isSelected()) {
-            R.attr.colorPrimary
-        } else {
-            R.attr.colorSecondaryVariant
-        }
+        return if (isSelected()) android.R.attr.colorPrimary
+        else MaterialAttr.colorSecondaryVariant
+
     }
 
     @Bindable
-    fun getImageUrl(): String? {
-        return obj.avatarUrl
+    fun getImageUrl(): Uri? {
+        return item.avatarUrl?.let { Uri.parse(it) }
     }
 
-    companion object {
-        private const val TAG = "StatisticMemberItem"
-    }
-
-    override fun notifySelectEnabled(isEnabled: Boolean) {}
-
-    override fun onSelectedChanged(isSelected: Boolean) {
-        notifyUpdate()
+    private fun notifyChanged() {
+        notifyPropertyChanged(BR.circleColor)
+        notifyPropertyChanged(BR.circleTextColor)
     }
 }

@@ -24,8 +24,9 @@ class StatisticRepositoryImpl(
         val membersStatistic = event.members
             .mapNotNull { member ->
                 val orders = items
-                    .filter { item -> item.payMember.id == member.id || item.membersInfo.any { membersInfo ->
-                        membersInfo.id == member.id
+                    .filter { item ->
+                        item.payMember.id == member.id || item.membersInfo.any { membersInfo ->
+                            membersInfo.id == member.id
                         }
                     }
                     .flatMap { item -> // проходим по всем закупкам, в которых учавствует member
@@ -50,24 +51,28 @@ class StatisticRepositoryImpl(
 
                             if (isItemOwner || memberInfo.id == member.id) {
                                 val price = if (memberInfo.percent == 0f) {
-                                    item.price * equalPercent
+                                    item.totalPrice * equalPercent
                                 } else {
-                                    item.price * memberInfo.percent
+                                    item.totalPrice * memberInfo.percent
                                 }
 
                                 if (isItemOwner) {
                                     Order.OrderOwner(
+                                        item.id,
                                         member.id,
                                         memberInfo,
                                         item.name,
-                                        price
+                                        price,
+                                        item.serviceFee
                                     )
                                 } else {
                                     Order.OrderReceiver(
+                                        item.id,
                                         member.id,
                                         item.payMember,
                                         item.name,
-                                        price
+                                        price,
+                                        item.serviceFee
                                     )
                                 }
                             } else {
@@ -77,39 +82,39 @@ class StatisticRepositoryImpl(
                     }
 
                 val priceResult = event.members.mapNotNull priceResult@{ member1 ->
-                    var price = 0.0
+                    var totalPrice = 0.0
 
                     orders.forEach { order ->
                         if (order.ownerId == order.member.id) return@forEach
                         if (member1.id == order.member.id) {
                             if (order is Order.OrderOwner) {
-                                price += order.price
+                                totalPrice += order.totalPrice
                             } else {
-                                price -= order.price
+                                totalPrice -= order.totalPrice
                             }
                         }
                     }
 
                     when {
-                        price > 0 -> Result.ResultLender(member1, price)
-                        price < 0 -> Result.ResultDebtor(member1, price * -1)
+                        totalPrice > 0 -> Result.ResultLender(member1, totalPrice)
+                        totalPrice < 0 -> Result.ResultDebtor(member1, totalPrice * -1)
                         else -> null
                     }
                 }
 
-                var totalSpend  = 0.0
-                var totalOwed   = 0.0
+                var totalSpend = 0.0
+                var totalOwed = 0.0
                 var totalLend = 0.0
 
                 orders.forEach { order ->
                     if (order is Order.OrderOwner) {
-                        totalSpend += order.price
+                        totalSpend += order.totalPrice
 
                         if (order.ownerId != order.member.id) {
-                            totalLend += order.price
+                            totalLend += order.totalPrice
                         }
                     } else {
-                        totalOwed += order.price
+                        totalOwed += order.totalPrice
                     }
                 }
 
@@ -146,7 +151,7 @@ class StatisticRepositoryImpl(
         )
     }
 
-    companion object  {
+    companion object {
         private const val TAG = "StatisticRepository"
     }
 }

@@ -4,7 +4,6 @@ import com.merseyside.partyapp.data.db.item.Item
 import com.merseyside.partyapp.data.db.item.MemberInfo
 import com.merseyside.partyapp.data.db.item.MembersModel
 import com.merseyside.partyapp.db.model.ItemModel
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -43,6 +42,7 @@ class ItemDataMapper {
                 it.name,
                 it.description,
                 it.price,
+                it.serviceFee.toFloat(),
                 it.payMember,
                 it.memberModel.members,
                 it.timestamp

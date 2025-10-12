@@ -1,60 +1,70 @@
 plugins {
-    id ("com.android.application")
-    kotlin("android")
-    kotlin("kapt")
+    with(catalogPlugins.plugins) {
+        plugin(android.application)
+        plugin(kotlin.android)
+        id(mersey.android.extension.id())
+        id(mersey.kotlin.extension.id())
+        id(firebase.crashlytics.id())
+        plugin(kotlin.kapt)
+    }
 }
 
 android {
-    compileSdkVersion(Versions.Android.compileSdk)
+    namespace = "com.merseyside.partyapp"
+    compileSdk = androidLibs.versions.compileSdk.get().toInt()
 
     defaultConfig {
-        minSdkVersion(Versions.Android.minSdk)
-        targetSdkVersion(Versions.Android.targetSdk)
-        versionCode = Versions.Android.versionCode
-        versionName = Versions.Android.version
+        minSdk = androidLibs.versions.compileMinSdk.get().toInt()
+        targetSdk = androidLibs.versions.compileTargetSdk.get().toInt()
+
+        applicationId = "com.merseyside.partyapp"
+
+        versionCode = Application.VERSION_CODE
+        versionName = Application.VERSION
 
         vectorDrawables.useSupportLibrary = true
+    }
 
-        multiDexEnabled = true
+    signingConfigs {
+        create("release") {
+            keyAlias = getKeyAlias()
+            keyPassword = getSigningPassword()
+            storeFile = getKeystoreFile()
+            storePassword = getStorePassword()
+        }
     }
 
     buildTypes {
-        getByName("debug") {
-            isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
-        }
-
         getByName("release") {
-            isMinifyEnabled = true
-            consumerProguardFiles("proguard-rules.pro")
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            isMinifyEnabled = false
+            proguardFiles("proguard-rules.pro")
+            signingConfig = signingConfigs.getByName("release")
+            isDebuggable = false
+        }
+        getByName("debug") {
+            isDebuggable = true
+            applicationIdSuffix = ""
         }
     }
 
-    packagingOptions {
-        exclude("META-INF/DEPENDENCIES")
-        exclude("META-INF/LICENSE")
-        exclude("META-INF/LICENSE.txt")
-        exclude("META-INF/license.txt")
-        exclude("META-INF/NOTICE")
-        exclude("META-INF/NOTICE.txt")
-        exclude("META-INF/notice.txt")
-        exclude("META-INF/ASL2.0")
-        exclude("META-INF/*.kotlin_module")
+    buildFeatures {
+        dataBinding = true
+        buildConfig = true
     }
 
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+    packaging {
+        packagingOptions.resources.excludes.addAll(
+            setOf(
+                "META-INF/INDEX.LIST",
+                "META-INF/*.kotlin_module",
+                "META-INF/DEPENDENCIES",
+                "META-INF/NOTICE",
+                "META-INF/LICENSE",
+                "META-INF/LICENSE.txt",
+                "META-INF/NOTICE.txt"
+            )
+        )
     }
-
-    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions {
-            jvmTarget = "1.8"
-        }
-    }
-
-    buildFeatures.dataBinding = true
 
     sourceSets.getByName("main") {
         res.srcDir("src/main/res/")
@@ -67,59 +77,60 @@ android {
     }
 }
 
-val androidLibs = listOf(
-    Deps.Libs.Android.kotlinStdLib.name,
-    Deps.Libs.Android.recyclerView.name,
-    Deps.Libs.MultiPlatform.serialization.android!!,
-    Deps.Libs.Android.coroutines.name,
-    Deps.Libs.Android.constraintLayout.name,
-    Deps.Libs.Android.appCompat.name,
-    Deps.Libs.Android.material.name,
-    Deps.Libs.Android.fragmentKtx.name,
-    Deps.Libs.Android.lifecycleViewModel.name,
-    Deps.Libs.Android.lifecycle.name,
-    Deps.Libs.Android.cardView.name,
-    Deps.Libs.Android.annotation.name,
-    Deps.Libs.Android.dagger.name,
-    Deps.Libs.MultiPlatform.sqlDelight.android!!,
-    Deps.Libs.Android.gson.name,
-    Deps.Libs.Android.horizontalSelector.name,
-    Deps.Libs.Android.playServicesAds.name,
-    Deps.Libs.Android.firebaseFirestore.name,
-    Deps.Libs.Android.firebaseAnalytics.name,
-//    Deps.Libs.Android.crashlytics.name,
-    Deps.Libs.Android.circleImage.name,
-    Deps.Libs.Android.cicerone.name
-    //Deps.Libs.Android.MerseyLibs.firestore_coroutines.name
+kotlinExtension {
+    setCompilerArgs(
+        "-Xinline-classes",
+        "-opt-in=kotlin.RequiresOptIn",
+        "-Xcontext-parameters",
+        "-Xjvm-default=all" // In order to use @JvmOverloads annotation
+    )
+}
+
+val commonLibs = listOf(
+    common.kotlin.stdlib,
+    common.serialization,
+    common.coroutines
 )
+
+val androidLibz = with(androidLibs) {
+    listOf(
+        recyclerView,
+        constraintLayout,
+        material,
+        fragment,
+        lifecycleViewModel,
+        cardView,
+        dagger,
+        sqldelight.driver,
+        gson,
+        play.ads,
+        cicerone,
+        insetter,
+        firebase.crashlytics,
+        firebase.analytics,
+        firebase.firestore
+    )
+}
 
 val merseyLibs = listOf(
-    Deps.Libs.Android.MerseyLibs.archy.name,
-    Deps.Libs.Android.MerseyLibs.adapters.name,
-    Deps.Libs.Android.MerseyLibs.animators.name,
-    Deps.Libs.Android.MerseyLibs.utils.name
-)
-
-val modulez = listOf(
-    LibraryModules.Android.archy,
-    LibraryModules.Android.adapters,
-    LibraryModules.Android.animators,
-    LibraryModules.Android.utils
+    androidLibs.mersey.adapters,
+    androidLibs.mersey.firestore.coroutines
 )
 
 dependencies {
-    implementation(project(":shared"))
-    implementation(project(":chipsLib"))
+    commonLibs.forEach(::implementation)
+    androidLibz.forEach(::implementation)
+    merseyLibs.forEach(::implementation)
 
-    if (isLocalDependencies()) {
-        modulez.forEach { module -> implementation(project(module)) }
-    } else {
-        merseyLibs.forEach { lib -> implementation(lib) }
-    }
+    implementation(platform(androidLibs.firebase.bom))
 
-    androidLibs.forEach { lib -> implementation(lib)}
-    kaptLibrary(Deps.Libs.Android.daggerCompiler)
-    compileOnly("javax.annotation:jsr250-api:1.0")
+    implementation(androidLibs.bundles.mersey.android)
+    implementation(projects.shared)
+    implementation(projects.chipsLib)
+
+    kapt(androidLibs.dagger.compiler)
+
+    implementation("com.github.Merseyside.horizontal-selector-view:HorizontalSelectorView:1.13")
 }
 
-apply("plugin" to "com.google.gms.google-services")
+apply(plugin = "com.google.gms.google-services")
