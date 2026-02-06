@@ -6,6 +6,7 @@ plugins {
         id(mersey.kotlin.extension.id())
         id(firebase.crashlytics.id())
         plugin(kotlin.kapt)
+        plugin(google.services)
     }
 }
 
@@ -31,6 +32,16 @@ android {
             keyPassword = getSigningPassword()
             storeFile = getKeystoreFile()
             storePassword = getStorePassword()
+        }
+    }
+
+    flavorDimensions("default")
+    productFlavors {
+        create("admin") {
+            dimension = "default"
+        }
+        create("user") {
+            dimension = "default"
         }
     }
 
@@ -105,11 +116,12 @@ val androidLibz = with(androidLibs) {
         gson,
         play.ads,
         cicerone,
-        insetter,
-        firebase.crashlytics,
-        firebase.analytics,
-        firebase.firestore
+        insetter
     )
+}
+
+val firebaseLibs = with(androidLibs.firebase) {
+    listOf(crashlytics, analytics, firestore)
 }
 
 val merseyLibs = listOf(
@@ -123,6 +135,7 @@ dependencies {
     merseyLibs.forEach(::implementation)
 
     implementation(platform(androidLibs.firebase.bom))
+    firebaseLibs.forEach(::implementation)
 
     implementation(androidLibs.bundles.mersey.android)
     implementation(projects.shared)
@@ -132,5 +145,3 @@ dependencies {
 
     implementation("com.github.Merseyside.horizontal-selector-view:HorizontalSelectorView:1.13")
 }
-
-apply(plugin = "com.google.gms.google-services")

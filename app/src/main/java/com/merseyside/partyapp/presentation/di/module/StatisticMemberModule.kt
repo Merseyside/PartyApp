@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.merseyside.partyapp.presentation.view.fragment.statisticMember.model.StatisticMemberViewModel
 import com.merseyside.archy.presentation.fragment.BaseDialogFragment
 import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
+import com.merseyside.partyapp.utils.PrefsHelper
 import dagger.Module
 import dagger.Provides
 
@@ -16,9 +17,10 @@ class StatisticMemberModule(
 ) {
     @Provides
     internal fun statisticMemberViewModelProvider(
-        application: Application
+        application: Application,
+        prefsHelper: PrefsHelper
     ): ViewModelProvider.Factory {
-        return StatisticMemberViewModelProviderFactory(bundle, application)
+        return StatisticMemberViewModelProviderFactory(bundle, application, prefsHelper)
     }
 
     @Provides
@@ -28,10 +30,11 @@ class StatisticMemberModule(
 
     class StatisticMemberViewModelProviderFactory(
         bundle: Bundle?,
-        private val application: Application
+        private val application: Application,
+        private val prefsHelper: PrefsHelper
     ): BundleAwareViewModelFactory<StatisticMemberViewModel>(bundle) {
         override fun getViewModel(): StatisticMemberViewModel {
-            return StatisticMemberViewModel(application)
+            return StatisticMemberViewModel(application, prefsHelper)
         }
     }
 }

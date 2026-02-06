@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ad-services-config>
+    <gma-sdk-config
+        allow-app-open-ad="true"
+        allow-audio="true"
+        allow-custom-close="true"
+        allow-display-ad="true"
+        allow-rewarded-ad="true"
+        allow-video="true" />
+</ad-services-config>

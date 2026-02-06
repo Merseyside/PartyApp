@@ -7,7 +7,7 @@ import org.kodein.di.*
 internal val statisticModule = DI.Module("statistic") {
 
     bind<StatisticRepository>() with singleton {
-        StatisticRepositoryImpl(instance(), instance(), instance())
+        StatisticRepositoryImpl(instance(), instance())
     }
 }
 

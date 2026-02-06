@@ -15,11 +15,13 @@ import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.data.entity.Statistic
 import com.merseyside.partyapp.domain.interactor.GetStatisticInteractor
 import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
+import com.merseyside.partyapp.utils.PrefsHelper
 import com.merseyside.partyapp.utils.doubleToStringPrice
 
 class StatisticMainViewModel(
     application: Application,
     router: Router,
+    private val prefsHelper: PrefsHelper,
     private val getStatisticUseCase: GetStatisticInteractor
 ) : BaseCalcViewModel(application, router) {
 
@@ -89,23 +91,17 @@ class StatisticMainViewModel(
         logEvent("statistic", Bundle().apply {
             putString("total_spend", doubleToStringPrice(stats.totalSpend))
             putString("total_debt", doubleToStringPrice(stats.totalDebt))
-            putString("currency", stats.currency)
+            putString("currency", prefsHelper.getCurrency())
         })
     }
 
     private fun showStats(stats: Statistic) {
         memberContainer.set(stats.membersStatistic.map { memberStatistic -> memberStatistic.member })
-
         setTotalSpend(stats.totalSpend)
-
         memberStatisticLiveData.value = stats.membersStatistic
     }
 
     private fun setTotalSpend(totalSpend: Double) {
         this.totalSpend.set(getString(R.string.spend, totalSpend.toString()))
-    }
-
-    companion object {
-        private const val TAG = "StatisticMainViewModel"
     }
 }

@@ -10,8 +10,7 @@ data class MemberStatistic(
     val totalDebt: Double,
     val totalLend: Double,
     val orders: List<Order>,
-    val priceResult: List<Result>,
-    val currency: String
+    val priceResult: List<Result>
 ) {
 
     val totalResult: Double = totalLend - totalDebt

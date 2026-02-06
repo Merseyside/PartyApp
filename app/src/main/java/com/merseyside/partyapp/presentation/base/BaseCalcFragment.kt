@@ -2,12 +2,9 @@ package com.merseyside.partyapp.presentation.base
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
-import android.view.MenuItem
 import android.view.View
 import androidx.activity.OnBackPressedCallback
-import androidx.annotation.CallSuper
 import androidx.appcompat.widget.Toolbar
 import androidx.databinding.ViewDataBinding
 import androidx.lifecycle.Observer
@@ -19,6 +16,8 @@ import com.merseyside.partyapp.presentation.view.activity.main.view.HasAd
 import com.merseyside.partyapp.utils.PrefsHelper
 import com.merseyside.utils.fragment.onBackPressedDispatcher.setOnBackPressedCallback
 import javax.inject.Inject
+import androidx.core.net.toUri
+import com.merseyside.partyapp.BuildConfig
 
 
 abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : BaseVMFragment<B, M>(), IFocusManager {
@@ -32,7 +31,13 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
     protected lateinit var onBackPressedCallback: OnBackPressedCallback
 
     private val interstitialObserver = Observer<Boolean> {
-        adView.showInterstitialAd()
+        showInterstitial()
+    }
+
+    private fun showInterstitial() {
+        if (BuildConfig.FLAVOR == "user") {
+            adView.showInterstitialAd()
+        }
     }
 
     override fun isAppBarNavigateUpEnabled(): Boolean {
@@ -105,6 +110,8 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
 
         val shareIntent = Intent.createChooser(sendIntent, null)
         startActivity(shareIntent)
+
+        showInterstitial()
     }
 
     fun showRateUsDialog() {
@@ -123,7 +130,7 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
     private fun goToGooglePlay() {
         val url = "https://play.google.com/store/apps/details?id=com.merseyside.partyapp"
         val i = Intent(Intent.ACTION_VIEW)
-        i.data = Uri.parse(url)
+        i.data = url.toUri()
         startActivity(i)
     }
 
@@ -134,9 +141,4 @@ abstract class BaseCalcFragment<B : ViewDataBinding, M : BaseCalcViewModel> : Ba
     open fun isShowAdBanner(): Boolean {
         return true
     }
-
-    companion object {
-        private const val TAG = "BaseCalcFragment"
-    }
-
 }

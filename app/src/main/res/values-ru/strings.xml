@@ -20,7 +20,7 @@
     <string name="additional_settings">Дополнительные параметры</string>
     <string name="percent_setting">Выберите доли участников</string>
     <string name="service_fee">Сервисный сбор и итоговая стоимость</string>
-    <string name="fee">Сбор: %1$s %</string>
+    <string name="fee">Сбор: %1$s</string>
     <string name="not_chosen">Не выбран</string>
     <string name="existing_item_name_error">Услуга с таким именем уже существует!</string>
 

@@ -106,9 +106,9 @@
     <string name="members_price_too_few_error">The set prices for members are less than the total cost</string>
     <string name="reset">Reset</string>
 
-    <string name="appId" translatable="false">ca-app-pub-2074462823823829~3546325123</string>
-    <string name="bannerId" translatable="false">ca-app-pub-2074462823823829/5945612978</string>
-    <string name="interstitialId" translatable="false">ca-app-pub-2074462823823829/2361591181</string>
+    <string name="appId" translatable="false">ca-app-pub-2495137316878884~7189558052</string>
+    <string name="bannerId" translatable="false">ca-app-pub-2495137316878884/9884606792</string>
+    <string name="interstitialId" translatable="false">ca-app-pub-2495137316878884/3872473031</string>
 
     <string name="rate_title">Thank you for using or app!</string>
     <string name="rate_description">Our team hopes you have the best experience from using Party Calculator! Please rate us on Google Play, also you can leave a comment with your wishes.</string>

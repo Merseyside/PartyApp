@@ -11,12 +11,15 @@ import com.github.terrakok.cicerone.Navigator
 import com.github.terrakok.cicerone.NavigatorHolder
 import com.github.terrakok.cicerone.androidx.AppNavigator
 import com.github.terrakok.cicerone.androidx.FragmentScreen
+import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.MobileAds
-import com.google.android.gms.ads.interstitial.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.merseyside.merseyLib.kotlin.logger.Logger
+import com.merseyside.merseyLib.kotlin.logger.log
 import com.merseyside.partyapp.BR
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.databinding.ActivityMainBinding
@@ -134,10 +137,13 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>(), Has
             loadAd(AdRequest.Builder().build())
         }
 
+        loadInterstitialAd()
+    }
+
+    private fun loadInterstitialAd() {
         val adRequest = AdRequest.Builder().build()
         InterstitialAd.load(
             this,
-            //"ca-app-pub-3940256099942544/1033173712", // test id
             getString(R.string.interstitialId),
             adRequest,
             object : InterstitialAdLoadCallback() {
@@ -146,22 +152,28 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>(), Has
                     interstitialAd = null
                 }
 
-                override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                override fun onAdLoaded(loadedAd: InterstitialAd) {
                     Logger.log(TAG, "Ad was loaded.")
-                    this@MainActivity.interstitialAd = interstitialAd
+                    interstitialAd = loadedAd
+
+                    interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                        override fun onAdDismissedFullScreenContent() {
+                            Log.d(TAG, "Ad was dismissed.")
+                            interstitialAd = null
+                            loadInterstitialAd()
+                        }
+
+                        override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                            Log.d(TAG, "Ad failed to show.")
+                            interstitialAd = null
+                        }
+
+                        override fun onAdShowedFullScreenContent() {
+                            Log.d(TAG, "Ad showed fullscreen content.")
+                        }
+                    }
                 }
             })
-
-//        interstitialAd.apply {
-//            adUnitId = getString(R.string.interstitialId)
-//            loadAd(AdRequest.Builder().build())
-//        }
-
-//        interstitialAd.adListener = object : AdListener() {
-//            override fun onAdClosed() {
-//                interstitialAd.loadAd(AdRequest.Builder().build())
-//            }
-//        }
     }
 
     override fun showRewardedAd() {
@@ -169,13 +181,11 @@ class MainActivity : BaseCalcActivity<ActivityMainBinding, MainViewModel>(), Has
     }
 
     override fun showInterstitialAd() {
-        interstitialAd?.show(this)
-
-        interstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
-            override fun onAdDismissedFullScreenContent() {
-                Log.d(TAG, "Ad was dismissed.")
-                interstitialAd = null
-            }
+        interstitialAd.log("kek")
+        if (interstitialAd != null) {
+            interstitialAd?.show(this)
+        } else {
+            Log.d(TAG, "The interstitial ad wasn't ready yet.")
         }
     }
 

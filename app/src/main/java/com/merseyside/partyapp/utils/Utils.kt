@@ -197,6 +197,7 @@ fun getCircleText(str: String): String {
 
 fun getShareableStatistic(statistic: Statistic): String {
     val context = CalcApplication.getInstance().context
+    val prefsHelper = CalcApplication.getInstance().prefsHelper
     val builder = StringBuilder()
 
     fun getString(@StringRes resId: Int, vararg args: String): String {
@@ -204,8 +205,8 @@ fun getShareableStatistic(statistic: Statistic): String {
     }
 
     statistic.let {
-        builder.appendLine("${getString(R.string.total_spend)}: ${doubleToStringPrice(it.totalSpend)} ${it.currency}")
-        builder.appendLine("${getString(R.string.total_debt)}: ${doubleToStringPrice(it.totalDebt)} ${it.currency}").appendLine()
+        builder.appendLine("${getString(R.string.total_spend)}: ${doubleToStringPrice(it.totalSpend)} ${prefsHelper.getCurrency()}")
+        builder.appendLine("${getString(R.string.total_debt)}: ${doubleToStringPrice(it.totalDebt)} ${prefsHelper.getCurrency()}").appendLine()
 
         builder.appendLine(getString(R.string.debit1))
         val debitMembers = it.membersStatistic.filter { stats -> stats.totalResult >= 0.0 }
@@ -236,6 +237,9 @@ fun getMemberStatistic(
     member: MemberStatistic,
     index: Int? = null
 ): String {
+    val prefsHelper = CalcApplication.getInstance().prefsHelper
+    val currency = prefsHelper.getCurrency()
+
     fun getString(@StringRes resId: Int, vararg args: String): String {
         return context.getString(resId, *args)
     }
@@ -244,10 +248,10 @@ fun getMemberStatistic(
 
     val memberBuilder = StringBuilder("$number${member.member.name}").appendLine()
 
-    if (member.totalSpend.isNotZero()) memberBuilder.appendLine("${getString(R.string.spend) } ${doubleToStringPrice(member.totalSpend)} ${member.currency}")
-    if (member.totalDebt.isNotZero())  memberBuilder.appendLine("${getString(R.string.owed)} ${doubleToStringPrice(member.totalDebt)} ${member.currency}")
-    if (member.totalLend.isNotZero())  memberBuilder.appendLine("${getString(R.string.lend)} ${doubleToStringPrice(member.totalLend)} ${member.currency}")
-    if (member.totalResult.isNotZero()) memberBuilder.appendLine("${getString(R.string.result)} ${doubleToStringPrice(member.totalResult)} ${member.currency}")
+    if (member.totalSpend.isNotZero()) memberBuilder.appendLine("${getString(R.string.spend) } ${doubleToStringPrice(member.totalSpend)} $currency")
+    if (member.totalDebt.isNotZero())  memberBuilder.appendLine("${getString(R.string.owed)} ${doubleToStringPrice(member.totalDebt)} $currency")
+    if (member.totalLend.isNotZero())  memberBuilder.appendLine("${getString(R.string.lend)} ${doubleToStringPrice(member.totalLend)} $currency")
+    if (member.totalResult.isNotZero()) memberBuilder.appendLine("${getString(R.string.result)} ${doubleToStringPrice(member.totalResult)} $currency")
 
     memberBuilder.appendLine()
 
@@ -266,7 +270,7 @@ fun getMemberStatistic(
             }
         }
 
-        ordersBuilder.append("${order.title} $opponent ${doubleToStringPrice(order.price)} ${member.currency}")
+        ordersBuilder.append("${order.title} $opponent ${doubleToStringPrice(order.price)} $currency")
         if (order.hasServiceFee) ordersBuilder.appendLine(" (${getString(R.string.fee, getHumanReadablePercents(order.serviceFee))}%)")
         else ordersBuilder.appendLine()
     }
@@ -280,10 +284,10 @@ fun getMemberStatistic(
 
         val opponent = when (result) {
             is Result.ResultLender -> {
-                getString(R.string.debit, doubleToStringPrice(result.price), member.currency)
+                getString(R.string.debit, doubleToStringPrice(result.price), currency)
             }
             else -> {
-                getString(R.string.debt, doubleToStringPrice(result.price), member.currency)
+                getString(R.string.debt, doubleToStringPrice(result.price), currency)
             }
         }
 
@@ -339,9 +343,7 @@ fun calculate(expr: String): String? {
 
         var isFirstNegative = false
         val splits = expr.split("[*+\\-/]".toRegex()).mapNotNull {
-            if (it.isNotEmpty()) {
-                it
-            } else {
+            it.ifEmpty {
                 isFirstNegative = true
                 null
             }

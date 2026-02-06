@@ -14,6 +14,7 @@ import com.merseyside.partyapp.presentation.di.component.DaggerAddItemComponent
 import com.merseyside.partyapp.presentation.di.module.AddItemModule
 import com.merseyside.partyapp.presentation.view.activity.main.model.SharedViewModel
 import com.merseyside.partyapp.presentation.view.fragment.addItem.model.AddItemViewModel
+import androidx.core.view.isVisible
 
 class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewModel>() {
 
@@ -23,7 +24,7 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
         return BR.viewModel
     }
 
-    override fun performInjection(bundle: Bundle?, vararg args: Any) {
+    override fun performInjection(bundle: Bundle?, vararg params: Any) {
         DaggerAddItemComponent.builder()
             .appComponent(appComponent)
             .addItemModule(getAddItemModule(bundle))
@@ -38,7 +39,7 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
         return R.layout.fragment_add_item
     }
 
-    override fun getTitle(context: Context): String? {
+    override fun getTitle(context: Context): String {
         return context.getString(R.string.add_items_title)
     }
 
@@ -51,7 +52,7 @@ class AddItemFragment : BaseCalcFragment<FragmentAddItemBinding, AddItemViewMode
     private fun doLayout() {
         with(requireBinding()) {
             additionalContainer.setOnClickListener {
-                if (expandedGroup.visibility == View.VISIBLE) {
+                if (expandedGroup.isVisible) {
                     expandedGroup.visibility = View.GONE
                     expandableIcon.setImageDrawable(
                         ContextCompat.getDrawable(baseActivity, R.drawable.ic_arrow_down)

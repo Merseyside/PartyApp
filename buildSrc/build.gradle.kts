@@ -9,7 +9,6 @@ dependencies {
         implementation(android.gradle)
         implementation(kotlin.serialization)
         implementation(mersey.gradlePlugins)
-        implementation(maven.publish.plugin)
         implementation(google.services)
         implementation(crashlytics)
     }

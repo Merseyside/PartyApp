@@ -664,10 +664,9 @@ class AddItemViewModel(
                 membersInfo = spinnerSelectedMembers.get()!!
             ),
             onComplete = {
-
                 prefsHelper.setServiceFee(convertPercentToFloat(getServiceFee()))
                 logItemEvent(item?.id)
-                if (randomBool(0.25f)) showInterstitial()
+                if (randomBool(0.5f)) showInterstitial()
                 goBack()
             },
             onError = { throwable ->

@@ -1,5 +1,6 @@
 package com.merseyside.partyapp
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.sqlite.db.SupportSQLiteDatabase
 import androidx.sqlite.db.SupportSQLiteOpenHelper
@@ -25,6 +26,7 @@ import javax.inject.Inject
 class CalcApplication : BaseApplication() {
 
     companion object {
+        @SuppressLint("StaticFieldLeak")
         private lateinit var instance: CalcApplication
         fun getInstance() : CalcApplication {
             return instance

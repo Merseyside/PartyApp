@@ -8,6 +8,7 @@ import com.merseyside.partyapp.domain.interactor.GetStatisticInteractor
 import com.merseyside.partyapp.presentation.view.fragment.statisticMain.model.StatisticMainViewModel
 import com.merseyside.archy.presentation.fragment.BaseDialogFragment
 import com.merseyside.archy.presentation.model.BundleAwareViewModelFactory
+import com.merseyside.partyapp.utils.PrefsHelper
 import dagger.Module
 import dagger.Provides
 
@@ -21,9 +22,16 @@ class StatisticMainModule(
     internal fun itemListViewModelProvider(
         router: Router,
         application: Application,
+        prefsHelper: PrefsHelper,
         getStatisticUseCase: GetStatisticInteractor
     ): ViewModelProvider.Factory {
-        return StatisticMainViewModelProviderFactory(bundle, application, router, getStatisticUseCase)
+        return StatisticMainViewModelProviderFactory(
+            bundle,
+            application,
+            router,
+            prefsHelper,
+            getStatisticUseCase
+        )
     }
 
     @Provides
@@ -40,10 +48,11 @@ class StatisticMainModule(
         bundle: Bundle?,
         private val application: Application,
         private val router: Router,
+        private val prefsHelper: PrefsHelper,
         private val getStatisticUseCase: GetStatisticInteractor
     ) : BundleAwareViewModelFactory<StatisticMainViewModel>(bundle) {
         override fun getViewModel(): StatisticMainViewModel {
-            return StatisticMainViewModel(application, router, getStatisticUseCase)
+            return StatisticMainViewModel(application, router, prefsHelper, getStatisticUseCase)
         }
     }
 }

@@ -9,16 +9,6 @@ plugins {
     }
 }
 
-
-//    packaging {
-//        packagingOptions.resources.excludes.addAll(
-//            setOf(
-//                "META-INF/DEPENDENCIES",
-//                "META-INF/*.kotlin_module"
-//            )
-//        )
-//    }
-
 kotlin {
     androidLibrary {
         namespace = "com.merseyside.partyapp"

@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.merseyside.partyapp" >
 
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="android.permission.READ_CONTACTS" />
@@ -33,15 +34,15 @@
             </intent-filter>
         </activity>
 
-<!--        <property-->
-<!--            android:name="android.adservices.AD_SERVICES_CONFIG"-->
-<!--            android:resource="@xml/gma_ad_services_config"-->
-<!--            tools:replace="android:resource" />-->
+        <property
+            android:name="android.adservices.AD_SERVICES_CONFIG"
+            android:resource="@xml/gma_ad_services_config"
+            tools:replace="android:resource" />
 
 
         <meta-data
             android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="@string/appId"/>
+            android:value="@string/appId" />
 
     </application>
 

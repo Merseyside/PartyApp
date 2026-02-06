@@ -5,7 +5,6 @@ data class Statistic(
     val totalSpend: Double,
     val totalDebt: Double,
     val memberCount: Int,
-    val currency: String,
     val membersStatistic: List<MemberStatistic>
 ) {
     override fun toString(): String {

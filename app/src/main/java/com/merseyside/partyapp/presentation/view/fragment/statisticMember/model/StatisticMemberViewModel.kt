@@ -4,7 +4,6 @@ import android.app.Application
 import android.content.Context
 import android.os.Bundle
 import androidx.databinding.ObservableField
-import com.merseyside.merseyLib.kotlin.logger.log
 import com.merseyside.partyapp.R
 import com.merseyside.partyapp.data.entity.MemberStatistic
 import com.merseyside.partyapp.data.entity.Order
@@ -13,9 +12,11 @@ import com.merseyside.partyapp.presentation.base.BaseCalcViewModel
 import com.merseyside.partyapp.utils.doubleToStringPrice
 import com.merseyside.merseyLib.kotlin.serialization.deserialize
 import com.merseyside.merseyLib.kotlin.serialization.serialize
+import com.merseyside.partyapp.utils.PrefsHelper
 
 class StatisticMemberViewModel(
-    application: Application
+    application: Application,
+    private val prefsHelper: PrefsHelper
 ) : BaseCalcViewModel(application) {
 
     lateinit var statistic: MemberStatistic
@@ -36,8 +37,9 @@ class StatisticMemberViewModel(
     val totalLend = ObservableField<String>()
     val lendTitle = ObservableField(getString(R.string.lend))
 
-    val totalResult = ObservableField<String>("0")
-    val resultTitle = ObservableField<String>(getString(R.string.result))
+    val totalResultDouble = ObservableField(0.0)
+    val totalResult = ObservableField("0")
+    val resultTitle = ObservableField(getString(R.string.result))
 
     val shareMemberTitle = ObservableField(getString(R.string.share_member))
 
@@ -81,10 +83,13 @@ class StatisticMemberViewModel(
             resultsVisibility.set(true)
             resultsContainer.set(statistic.priceResult)
 
-            totalSpend.set("${doubleToStringPrice(statistic.totalSpend)} ${statistic.currency}")
-            totalDebt.set("${doubleToStringPrice(statistic.totalDebt)} ${statistic.currency}")
-            totalLend.set("${doubleToStringPrice(statistic.totalLend)} ${statistic.currency}")
-            totalResult.set("${doubleToStringPrice(statistic.totalResult)} ${statistic.currency}")
+            val currency = prefsHelper.getCurrency()
+
+            totalSpend.set("${doubleToStringPrice(statistic.totalSpend)} $currency")
+            totalDebt.set("${doubleToStringPrice(statistic.totalDebt)} $currency")
+            totalLend.set("${doubleToStringPrice(statistic.totalLend)} $currency")
+            totalResultDouble.set(statistic.totalResult)
+            totalResult.set("${doubleToStringPrice(statistic.totalResult)} $currency")
         }
     }
 

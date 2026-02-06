@@ -1,37 +1,26 @@
 {
   "project_info": {
-    "project_number": "153542971214",
-    "firebase_url": "https://party-calculator-8e9af.firebaseio.com",
-    "project_id": "party-calculator-8e9af",
-    "storage_bucket": "party-calculator-8e9af.appspot.com"
+    "project_number": "95281524547",
+    "project_id": "partyapp-761f0",
+    "storage_bucket": "partyapp-761f0.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:153542971214:android:d169a55b3fc88c0e02181f",
+        "mobilesdk_app_id": "1:95281524547:android:394ad567f36a9a890689f6",
         "android_client_info": {
           "package_name": "com.merseyside.partyapp"
         }
       },
-      "oauth_client": [
-        {
-          "client_id": "153542971214-lsphegie8caqs3kg9uqrit6el1oarhkt.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
+      "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyCK-kkFOc9wk-O0Klto5qcLCsUGM40J5gk"
+          "current_key": "AIzaSyDC7_Y6jupNNePVWVrZiniklfCVOwe2iIY"
         }
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "153542971214-lsphegie8caqs3kg9uqrit6el1oarhkt.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
+          "other_platform_oauth_client": []
         }
       }
     }

@@ -6,7 +6,6 @@ import app.cash.sqldelight.db.SqlDriver
 import com.merseyside.partyapp.data.db.createDatabase
 import com.merseyside.partyapp.data.db.CalcDatabase
 import com.merseyside.partyapp.utils.ContentResolver
-import com.merseyside.partyapp.utils.PreferenceHelper
 import com.russhwolf.settings.Settings
 import com.russhwolf.settings.SharedPreferencesSettings
 import org.kodein.di.DI
@@ -32,10 +31,6 @@ internal val appModule = DI.Module("app") {
 
     bind<Settings>() with singleton {
         SharedPreferencesSettings(delegate = instance())
-    }
-
-    bind<PreferenceHelper>() with singleton {
-        PreferenceHelper(instance())
     }
 
     bind<ContentResolver>() with singleton {
